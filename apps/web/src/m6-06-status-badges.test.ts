@@ -7,7 +7,7 @@ describe('M6-06: Badges de Estado sem Optimistic Truth', () => {
       { status: 'PROVISIONAL', label: 'PROVISIONAL', icon: '⏳', css: 'badge-provisional' },
       { status: 'VERIFYING', label: 'VERIFYING', icon: '⚙', css: 'badge-verifying' },
       { status: 'QUARANTINED', label: 'QUARANTINED', icon: '⚠', css: 'badge-quarantined' },
-      { status: 'COMMITTED', label: 'COMMITTED', icon: '✓', css: 'badge-committed' },
+      { status: 'COMMITTED', label: 'SALVO NO SUPERCÉREBRO', icon: '✓', css: 'badge-committed' },
       { status: 'BLOCKED', label: 'BLOCKED', icon: '🔒', css: 'badge-blocked' },
       { status: 'FAILED', label: 'FAILED', icon: '❌', css: 'badge-failed' }
     ];
@@ -52,7 +52,7 @@ describe('M6-06: Badges de Estado sem Optimistic Truth', () => {
     expect(html).toContain('id="chat-blocked-condition-text"');
 
     // Lógica client-side para alternar os 6 estados com ícones e textos
-    expect(html).toContain('✓ COMMITTED');
+    expect(html).toContain('✓ SALVO NO SUPERCÉREBRO');
     expect(html).toContain('⚙ VERIFYING');
     expect(html).toContain('⚠ QUARANTINED');
     expect(html).toContain('🔒 BLOCKED');

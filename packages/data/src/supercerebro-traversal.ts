@@ -338,6 +338,7 @@ export function getSupercerebroOperatorProfiles(options: {
   isPaused?: boolean;
   isReactivated?: boolean;
   delegationState?: { isDelegated: boolean; delegatedTo?: string } | null;
+  isSacReconciled?: boolean;
 } = {}): SupercerebroOperatorProfile[] {
   const personNodes = RAW_GRAPH_DATA.nodes.filter((n) => n.type === 'person');
 
@@ -372,6 +373,7 @@ export function getSupercerebroOperatorProfiles(options: {
 
     const isPaused = Boolean(options.isPaused);
     const isDelegated = Boolean(options.delegationState?.isDelegated);
+    const isSacReconciled = Boolean(options.isSacReconciled);
 
     if (id === 'p_aline') {
       const isDone = isPaused;
@@ -421,13 +423,16 @@ export function getSupercerebroOperatorProfiles(options: {
         sourceEventId: 'evt_tl_07'
       });
     } else if (id === 'p_luiza') {
+      const isDone = isSacReconciled;
       pendencies.push({
         title: 'Reconciliar Conversões SAC',
-        status: 'Pendente',
-        statusClass: 'tag-status-paused',
-        meta: 'Atendimentos WhatsApp Business',
+        status: isDone ? 'Concluído' : 'Pendente',
+        statusClass: isDone ? 'tag-status-active' : 'tag-status-paused',
+        meta: isDone
+          ? 'Reconciliação salva no Supercérebro (Commit no SQLite)'
+          : 'Atendimentos WhatsApp Business',
         prompt: 'Reconciliar conversões de leads do WhatsApp Business com as campanhas de Meta Ads',
-        btnText: 'Executar Tarefa →',
+        btnText: isDone ? 'Ver Auditoria →' : 'Executar Tarefa →',
         sourceEventId: 'evt_tl_05'
       });
     }

@@ -135,4 +135,16 @@ describe('Dataset & Prompt Integration Tests', () => {
     expect(response).toContain('Status de Governança: COMMITTED');
     expect(response).toContain('Transição de Governança: PROVISIONAL ➔ COMMITTED');
   });
+
+  it('deve responder com aviso de alçada e instrução de governança quando Luiza Valente solicita a pausa de anúncios', () => {
+    const question = 'estou operando como Luiza e pedi para pausar os anuncios';
+    const response = generateAuditedDatasetResponse(question, undefined, false, undefined, false, 'p_luiza', 'Luiza Valente');
+
+    expect(response).toContain('Diagnóstico & Limite de Governança por Perfil');
+    expect(response).toContain('Luiza Valente · Atendimento e Vendas');
+    expect(response).toContain('não possui autorização de governança');
+    expect(response).toContain('Aline Rocha');
+    expect(response).toContain('Marcos Silva');
+    expect(response).toContain('Enviar a Proposta de Pausa para Aline');
+  });
 });

@@ -141,7 +141,7 @@ describe('M6-09: Acessibilidade WCAG AA & Gate M6', () => {
       expect(provisional.icon).toBe('⏳');
       expect(provisional.cssClass).toBe('badge-provisional');
 
-      expect(committed.label).toBe('COMMITTED');
+      expect(committed.label).toBe('SALVO NO SUPERCÉREBRO');
       expect(committed.icon).toBe('✓');
       expect(committed.cssClass).toBe('badge-committed');
 

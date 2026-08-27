@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { TaskContract, validateTaskContract } from '@adzhub/contracts';
-import { getCurrentDatasetManifest, buildAccountGroundingContext } from '@adzhub/data';
+import { getCurrentDatasetManifest, buildAccountGroundingContext, getSupercerebroOperatorProfiles, SupercerebroOperatorProfile } from '@adzhub/data';
 import {
   BasicReactEngine,
   BasicReactRunMetrics,
@@ -781,15 +781,80 @@ export function determineExecutionTrace(goal: string, _scenario?: string): Execu
   };
 }
 
+export function evaluateOperatorGovernancePermission(
+  operatorId?: string,
+  operatorName?: string,
+  requestedCategory?: string
+): {
+  isAuthorizedForDirectWrite: boolean;
+  operatorProfile?: SupercerebroOperatorProfile;
+  requiredDelegate: string;
+  approver: string;
+} {
+  const profiles = getSupercerebroOperatorProfiles();
+  let found = profiles.find((p) => p.id === operatorId);
+  if (!found && operatorName) {
+    const nameLower = operatorName.toLowerCase();
+    found = profiles.find((p) => p.name.toLowerCase().includes(nameLower));
+  }
+
+  const role = found?.role || '';
+  const isDirectWriteCapable =
+    found?.id === 'p_aline' ||
+    role.includes('Tráfego') ||
+    role.includes('Gerente de Contas');
+
+  const requiresDirectWrite =
+    requestedCategory === 'EXTERNAL_WRITE_PAUSE' ||
+    requestedCategory === 'EXTERNAL_WRITE_REACTIVATE';
+
+  const delegateOp = profiles.find((p) => p.id === 'p_aline' || p.role.includes('Tráfego') || p.badge.includes('Meta Ads'));
+  const requiredDelegate = delegateOp ? `${delegateOp.name} (${delegateOp.role} ${delegateOp.company})` : 'Equipe de Tráfego SPOT';
+
+  const approverOp = profiles.find((p) => p.id === 'p_marcos' || p.role.includes('Head') || p.badge.includes('Aprovador'));
+  const approver = approverOp ? `${approverOp.name} (${approverOp.role} ${approverOp.company})` : 'Head de Marketing Housewhey';
+
+  return {
+    isAuthorizedForDirectWrite: !requiresDirectWrite || isDirectWriteCapable,
+    operatorProfile: found,
+    requiredDelegate,
+    approver
+  };
+}
+
 export function generateAuditedDatasetResponse(
   goal: string,
   scenario?: string,
   isReactivated?: boolean,
   delegationState?: GovernanceDelegationRecord,
-  isPaused?: boolean
+  isPaused?: boolean,
+  operatorId?: string,
+  operatorName?: string
 ): string {
   const intent = extractUserIntent(goal);
   const q = (goal || '').toLowerCase().trim();
+
+  // Avaliação dinâmica de governança e capacidade de escrita por perfil de operador
+  const effectiveOpId = operatorId || (q.includes('luiza') ? 'p_luiza' : undefined);
+  const effectiveOpName = operatorName || (q.includes('luiza') ? 'Luiza Valente' : undefined);
+  const govPerm = evaluateOperatorGovernancePermission(effectiveOpId, effectiveOpName, intent.category);
+
+  if (!govPerm.isAuthorizedForDirectWrite && govPerm.operatorProfile) {
+    const op = govPerm.operatorProfile;
+    const delegateFirstName = govPerm.requiredDelegate.split(' ')[0];
+
+    return `Diagnóstico & Limite de Governança por Perfil (Operadora: ${op.name} · ${op.role}):
+
+⚠ **Aviso de Alçada & Permissão de Governança:**
+Como operadora do perfil de **${op.role} (${op.company})**, você **não possui autorização de governança** para executar a pausa direta de anúncios ou alterações de tráfego no Gerenciador de Anúncios Meta Ads.
+
+📋 **O que você deve fazer e com quem falar:**
+• Esta alteração operacional exige a **formalização de uma proposta** encaminhada para a equipe de Tráfego SPOT (**${govPerm.requiredDelegate}**) ou a validação do Head de Marketing (**${govPerm.approver}**).
+• Você pode solicitar o envio da proposta/pedido de pausa para que a equipe técnica SPOT efetue a pausa no Meta Ads após a devida formalização.
+
+⚡ **Ação de Governança Disponível:**
+Disponibilizamos abaixo o botão para você **Enviar a Proposta de Pausa para ${delegateFirstName} (SPOT)** e registrar formalmente essa solicitação no sistema.`;
+  }
 
   // 0. Saudações e ajuda inicial
   const isGreeting =
@@ -822,6 +887,28 @@ Aqui estão algumas das análises e operações que você pode solicitar:
 • 💡 Sugestões Criativas: Gerar variações de CTA e copys para testes A/B.
 
 Como posso ajudar sua operação hoje?`;
+  }
+
+  const isSacPrompt =
+    (q.includes('reconciliar') && (q.includes('conversões') || q.includes('conversoes') || q.includes('whatsapp') || q.includes('sac') || q.includes('leads'))) ||
+    q.includes('reconciliar conversões de leads do whatsapp business');
+
+  if (isSacPrompt) {
+    return `Reconciliação Auditada SAC WhatsApp × Meta Ads (Atendimento Luiza Valente):
+
+• Volume & Conversões WhatsApp Business:
+  - 48 atendimentos convertidos diretamente em vendas finalizadas (Receita auditada: R$ 11.520,00 | Ticket Médio R$ 240,00).
+  - Produto Campeão de Atendimento: **Linha Whey Isolado Baunilha (ad_whey_baunilha_01)** (82% das dúvidas e fechamentos de carrinho).
+
+• Feedback Qualitativo & Atribuição de Tráfego:
+  - Clientes do WhatsApp elogiaram a alta solubilidade e laudo de pureza lote a lote do Whey Isolado.
+  - Saturação confirmada: Menos de 2% dos atendimentos mencionaram a oferta de Namorados ("ad_namorados_casal_03"), respaldando a recomendação de pausa por fadiga.
+
+• Reconciliação Cruzada Meta Ads × CRM HubSpot:
+  - Cobertura de rastreamento UTM em **86.4%**, com atribuição completa de leads entre os anúncios do Meta Ads e o WhatsApp Business.
+
+• Governança & Commit no Supercérebro:
+  - Proposta de reconciliação SAC gerada em rascunho. Confirme no card de governança abaixo (**⚡ Salvar no Supercérebro**) para efetivar o commit, concluir a pendência de Luiza Valente e registrar permanentemente os dados na memória do Supercérebro.`;
   }
 
   // If query is asking about proposal / delegation status / Marcos receiving proposal
@@ -1344,6 +1431,16 @@ export class RunsService {
     return this.pauseStore;
   }
 
+  private isSacReconciledStore = false;
+
+  public commitSacReconciliation(): void {
+    this.isSacReconciledStore = true;
+  }
+
+  public isSacReconciled(): boolean {
+    return this.isSacReconciledStore;
+  }
+
   public commitDelegation(data?: Partial<GovernanceDelegationRecord>): void {
     this.delegationStore = {
       isDelegated: true,
@@ -1773,6 +1870,19 @@ ${accountGrounding}
 
 Diretrizes de resposta:
 - Responda em português do Brasil de forma profissional, analítica, direta e natural.
+- **FORMATO DINÂMICO E CONCISO (REQUISITO CRÍTICO DE UX):**
+  • Garanta que a mensagem seja **curta, direta e dinâmica**, contendo apenas as informações essenciais.
+  • Evite blocos de texto longos, parágrafos extensos, saudações repetitivas ou detalhamentos exaustivos de variações a menos que o usuário peça expressamente.
+  • Use listas de tópicos (bullet points) breves e objetivas para facilitar a leitura imediata pelo usuário.
+- **Matriz de Alçada e Governança por Perfil de Operador:**
+  • Aline Rocha (Gestora de Tráfego SPOT): Autorizada a pausar e alterar anúncios diretamente no Meta Ads.
+  • Carolina Mendes (Gerente de Contas SPOT): Autorizada a formalizar propostas executivas e delegar tarefas.
+  • Marcos Silva (Head de Marketing Housewhey): Autorizado a aprovar propostas e emitir devolutivas formais.
+  • Luiza Valente (Atendimento & Vendas Housewhey): NÃO possui autorização de governança para pausar ou alterar anúncios diretamente no Meta Ads. Possui autorização para solicitar propostas e encaminhar pedidos de pausa para a equipe SPOT (Aline Rocha).
+- **Tratamento se a operadora ativa for Luiza Valente (ou perfil de Atendimento/Vendas) e pedir para pausar anúncios:**
+  1. Informe de forma curta e objetiva que Luiza Valente (Atendimento & Vendas) não possui autorização de governança para pausar anúncios diretamente no Meta Ads.
+  2. Informe em poucas linhas o que ela deve fazer: encaminhar a proposta de pausa para Aline Rocha (SPOT) ou solicitar aprovação de Marcos Silva.
+  3. Indique brevemente que ela pode acionar a ação de governança ("Enviar Proposta de Pausa para Aline Rocha") no card do chat.
 - Ao ser perguntado sobre os funcionários, equipe, time ou colaboradores envolvidos na conta Housewhey, mencione SEMPRE todos os 4 membros do Supercérebro: Marcos Silva (Head de Marketing Housewhey), Luiza Valente (Atendimento/Vendas Housewhey via WhatsApp), Aline Rocha (Gestora de Tráfego SPOT) e Carolina Mendes (Gerente de Contas SPOT).
 - Para solicitações de **documento de devolutiva**, **devolutiva de aprovação** ou **confirmação de pausa pelo Marcos**:
   • O documento deve ser emitido por **Marcos Silva** (Head de Marketing da Housewhey) e endereçado à **Carolina Mendes** (Gerente de Contas SPOT), com cópia para Aline Rocha (Gestora de Tráfego SPOT).
@@ -1780,7 +1890,7 @@ Diretrizes de resposta:
   • O documento devolve e delega formalmente à Carolina Mendes / equipe SPOT a execução das pausas e o monitoramento, orientando a confirmação via card de governança para que a decisão seja commitada no sistema. NUNCA afirme que os anúncios já foram pausados antes do commit do operador.
 - Para perguntas informativas (ex: "me fale mais sobre o Marcos", "quais são os funcionários", "resumo sobre a empresa"), forneça a resposta explicativa direta SEM propor ações operacionais, sem pedir confirmações de governança e sem propor pausas de anúncios.
 - Apresente a Proposta Formal de Alteração Operacional SOMENTE se o usuário tiver solicitado EXPLICITAMENTE uma AÇÃO no sistema (ex: "ativar", "reativar", "religar", "despausar", "pausar", "confirmar", "executar", "devolutiva", "delegar").
-- Seja analítico, conciso e conclusivo. Garanta que sua resposta atenda integralmente à pergunta do usuário e conclua todas as frases e seções com pontuação completa.`;
+- Seja analítico, conciso e conclusivo. Mantenha a resposta o mais curta e direta possível, atendendo integralmente à pergunta com pontuação completa.`;
 
             const historyMessages: any[] = [];
             if (Array.isArray(request.chatHistory) && request.chatHistory.length > 0) {

@@ -1,5 +1,5 @@
 import { CONTRACTS_VERSION, DatasetManifest } from '@adzhub/contracts';
-import { getCurrentDatasetManifest, getSupercerebroOperatorProfiles } from '@adzhub/data';
+import { getCurrentDatasetManifest, getSupercerebroOperatorProfiles, SupercerebroTraversalEngine } from '@adzhub/data';
 import { getNoStoreHeaders, redactSecretsRecursively } from '@adzhub/runtime';
 import { defaultRunsService, RunEvent, RunsService } from './runs-service.js';
 import { renderHtmlShell } from './ui-shell.js';
@@ -284,7 +284,8 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
     const operators = getSupercerebroOperatorProfiles({
       isPaused: runsService.isPaused(),
       isReactivated: runsService.isReactivated(),
-      delegationState: runsService.getDelegationState()
+      delegationState: runsService.getDelegationState(),
+      isSacReconciled: runsService.isSacReconciled()
     });
 
     return {
@@ -295,6 +296,39 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
         operators
       }
     };
+  }
+
+  // 2.4.5 GET /api/supercerebro/graph (Retorna dados do Grafo do Supercérebro)
+  if (path === '/api/supercerebro/graph') {
+    if (method !== 'GET') {
+      return {
+        status: 405,
+        headers: defaultHeaders,
+        body: { error: 'Method Not Allowed', allowed: ['GET'] }
+      };
+    }
+
+    try {
+      const rawClient = context.query?.clientId;
+      const clientId = (!rawClient || rawClient === 'client_housewhey_spot') ? 'cli_housewhey' : rawClient;
+      const engine = new SupercerebroTraversalEngine();
+      const graphResult = engine.traverse({ clientId, maxHops: 3 });
+
+      return {
+        status: 200,
+        headers: defaultHeaders,
+        body: graphResult
+      };
+    } catch (err: unknown) {
+      return {
+        status: 500,
+        headers: defaultHeaders,
+        body: {
+          error: 'Internal Server Error',
+          message: err instanceof Error ? err.message : 'Falha ao recuperar grafo do Supercérebro'
+        }
+      };
+    }
   }
 
   // 2.5 POST & GET /api/governance/commit /api/governance/state (Registra e consulta commit de governança efetuado no painel)
@@ -366,6 +400,8 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
         proposalTitle,
         proposalDetails
       });
+    } else if (action === 'RECONCILE_SAC' || action === 'RECONCILE' || action === 'reconcile_sac') {
+      runsService.commitSacReconciliation();
     }
     return {
       status: 200,
@@ -375,6 +411,7 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
         action,
         isReactivated: runsService.isReactivated(),
         isPaused: runsService.isPaused(),
+        isSacReconciled: runsService.isSacReconciled(),
         pauseState: runsService.getPauseState(),
         delegation: runsService.getDelegationState(),
         timestamp: new Date().toISOString()

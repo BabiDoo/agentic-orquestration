@@ -16,7 +16,7 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
     expect(html).toContain('id="top-bar"');
     expect(html).toContain('AdzHub Harness');
     expect(html).toContain('id="chat-empty-state"');
-    expect(html).toContain('PRONTA PARA O SEU TURNO');
+    expect(html).toContain('PRONTO PARA O SEU TURNO');
     expect(html).toContain('window.applyQuickPrompt');
     expect(html).toContain('id="btn-compare"');
     expect(html).toContain('id="btn-reset"');
@@ -162,10 +162,26 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
 
     for (const tag of scriptMatches) {
       const code = tag.replace(/<script[\s\S]*?>/i, '').replace(/<\/script>/i, '');
-      expect(() => {
-        new Function(code);
-      }).not.toThrow();
+      expect(() => new Function(code)).not.toThrow();
     }
   });
+
+  it('deve conter o botão do Supercérebro no Icon Rail e o modal do Grafo de Conhecimento', () => {
+    const html = renderHtmlShell();
+
+    expect(html).toContain('id="btn-rail-supercerebro"');
+    expect(html).toContain('🧠');
+    expect(html).toContain('id="supercerebro-modal"');
+    expect(html).toContain('id="supercerebro-canvas"');
+    expect(html).toContain('id="graph-filter-tabs"');
+    expect(html).toContain('id="graph-node-details-panel"');
+  });
+
+  it('deve interromper o envio no chat quando o campo de entrada estiver vazio', () => {
+    const html = renderHtmlShell();
+    expect(html).toContain('const goalVal = (interactiveInput?.value || goalInput?.value || \'\').trim();');
+    expect(html).toContain('if (!goalVal) return;');
+  });
 });
+
 

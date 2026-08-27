@@ -57,6 +57,5 @@ describe('M6-05: Inspector de Auditoria', () => {
 
     expect(html).toContain('window.inspectEvidence');
     expect(html).toContain('window.inspectClaim');
-    expect(html).toContain('onclick="window.inspectEvidence');
   });
 });

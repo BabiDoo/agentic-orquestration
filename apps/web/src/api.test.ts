@@ -511,5 +511,26 @@ describe('@adzhub/web API Router & Runs Engine (M2-08 & Gate M2)', () => {
       expect(body.source).toBe('supercerebro_canonical');
       expect(body.operators).toBeDefined();
     });
+
+    it('3. GET /api/supercerebro/graph retorna os nós e conexões do Grafo do Supercérebro', async () => {
+      const res = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/graph',
+        query: { clientId: 'cli_housewhey' },
+        runsService
+      });
+
+      expect(res.status).toBe(200);
+      const body = res.body as any;
+      expect(body.clientId).toBe('cli_housewhey');
+      expect(Array.isArray(body.nodes)).toBe(true);
+      expect(Array.isArray(body.edges)).toBe(true);
+      expect(Array.isArray(body.events)).toBe(true);
+      expect(body.nodes.length).toBeGreaterThan(0);
+      expect(body.edges.length).toBeGreaterThan(0);
+
+      const clientNode = body.nodes.find((n: any) => n.id === 'client_housewhey_spot' || n.id === 'cli_housewhey' || n.type === 'organization' || n.type === 'hub');
+      expect(clientNode).toBeDefined();
+    });
   });
 });
