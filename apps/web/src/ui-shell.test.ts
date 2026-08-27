@@ -311,8 +311,28 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
       expect(html).toContain('.reasoning-accordion-content');
       expect(html).toContain('window.toggleReasoningCard');
     });
+
+    it('deve conter estrutura, elementos e estilos para o tutorial de primeiro acesso focado no seletor de operador e chave de API', () => {
+      const html = renderHtmlShell();
+      expect(html).toContain('id="tutorial-backdrop"');
+      expect(html).toContain('id="tutorial-card"');
+      expect(html).toContain('id="btn-tutorial-ok"');
+      expect(html).toContain('Selecione aqui com quem você quer operar');
+      expect(html).toContain('Insira aqui a sua chave de API');
+      expect(html).toContain('.tutorial-backdrop');
+      expect(html).toContain('.tutorial-card');
+      expect(html).toContain('.tutorial-spotlight');
+      expect(html).toContain('.controls-key-box.tutorial-spotlight');
+      expect(html).toContain('window.startOperatorTutorial');
+    });
+
+    it('deve conter lógica para direcionar ao grafo do Supercérebro com o nó contextual selecionado', () => {
+      const html = renderHtmlShell();
+      expect(html).toContain('id="card-brain-context"');
+      expect(html).toContain('openSupercerebroModal(opId)');
+      expect(html).toContain('selectGraphNode(targetNode)');
+      expect(html).toContain('graphState.offsetX');
+      expect(html).toContain('graphState.offsetY');
+    });
   });
 });
-
-
-

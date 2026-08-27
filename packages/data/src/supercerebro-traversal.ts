@@ -337,7 +337,8 @@ export interface SupercerebroOperatorProfile {
 export function getSupercerebroOperatorProfiles(options: {
   isPaused?: boolean;
   isReactivated?: boolean;
-  delegationState?: { isDelegated: boolean; delegatedTo?: string } | null;
+  isApproved?: boolean;
+  delegationState?: { isDelegated: boolean; delegatedTo?: string; isApproved?: boolean } | null;
   isSacReconciled?: boolean;
 } = {}): SupercerebroOperatorProfile[] {
   const personNodes = RAW_GRAPH_DATA.nodes.filter((n) => n.type === 'person');
@@ -371,7 +372,8 @@ export function getSupercerebroOperatorProfiles(options: {
 
     const pendencies: SupercerebroPendency[] = [];
 
-    const isPaused = Boolean(options.isPaused);
+    const isApproved = Boolean(options.isApproved);
+    const isPaused = Boolean(options.isPaused) || isApproved;
     const isDelegated = Boolean(options.delegationState?.isDelegated);
     const isSacReconciled = Boolean(options.isSacReconciled);
 

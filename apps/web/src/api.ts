@@ -305,6 +305,7 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
     const operators = getSupercerebroOperatorProfiles({
       isPaused: runsService.isPaused(),
       isReactivated: runsService.isReactivated(),
+      isApproved: runsService.isApproved(),
       delegationState: runsService.getDelegationState(),
       isSacReconciled: runsService.isSacReconciled()
     });
@@ -362,8 +363,10 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
           status: 'OK',
           isReactivated: runsService.isReactivated(),
           isPaused: runsService.isPaused(),
+          isApproved: runsService.isApproved(),
           pauseState: runsService.getPauseState(),
           delegation: runsService.getDelegationState(),
+          isSacReconciled: runsService.isSacReconciled(),
           timestamp: new Date().toISOString()
         }
       };
@@ -380,6 +383,24 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
     const action = String(body.action || 'REACTIVATE');
     if (action === 'REACTIVATE' || action === 'reativar' || action === 'Reativar') {
       runsService.commitReactivation();
+    } else if (
+      action === 'APPROVE' ||
+      action === 'APPROVE_PROPOSAL' ||
+      action === 'CONFIRM_PROPOSAL' ||
+      action === 'aprovar' ||
+      action === 'Aprovar' ||
+      action === 'DEVOLUTIVA' ||
+      action === 'devolutiva'
+    ) {
+      const details =
+        typeof body.details === 'string'
+          ? body.details
+          : 'Aprovação formal da proposta de remanejamento e pausa de criativos commitada no SQLite.';
+      const targetPerson =
+        typeof body.targetPerson === 'string'
+          ? body.targetPerson
+          : 'Carolina Mendes';
+      runsService.commitApproval({ details, targetPerson });
     } else if (
       action === 'PAUSE' ||
       action === 'pausar' ||
@@ -432,6 +453,7 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
         action,
         isReactivated: runsService.isReactivated(),
         isPaused: runsService.isPaused(),
+        isApproved: runsService.isApproved(),
         isSacReconciled: runsService.isSacReconciled(),
         pauseState: runsService.getPauseState(),
         delegation: runsService.getDelegationState(),

@@ -307,6 +307,10 @@ export function extractUserIntent(goal: string): ExtractedIntent {
     q.includes('despacho') ||
     (q.includes('aprova') && (q.includes('pausa') || q.includes('proposta')));
 
+  const isBriefing =
+    (q.includes('briefing') || q.includes('resumo da reunião') || q.includes('resumo da reuniao') || q.includes('pauta da reunião') || q.includes('pauta da reuniao')) &&
+    (q.includes('mande') || q.includes('mandar') || q.includes('envie') || q.includes('enviar') || q.includes('despach') || q.includes('gerar') || q.includes('elabor') || q.includes('escreva') || q.includes('para ') || q.includes('devolva'));
+
   let targetPerson = 'Aline Rocha';
   let targetPersonId = 'p_aline';
 
@@ -321,18 +325,18 @@ export function extractUserIntent(goal: string): ExtractedIntent {
       targetPerson = 'Carolina Mendes';
       targetPersonId = 'p_carolina';
     }
-  } else if (q.includes('marcos') || q.includes('head ops')) {
-    targetPerson = 'Marcos Silva';
-    targetPersonId = 'p_marcos';
-  } else if (q.includes('carolina') || q.includes('carol')) {
-    targetPerson = 'Carolina Mendes';
-    targetPersonId = 'p_carolina';
   } else if (q.includes('luiza')) {
     targetPerson = 'Luiza Valente';
     targetPersonId = 'p_luiza';
   } else if (q.includes('aline')) {
     targetPerson = 'Aline Rocha';
     targetPersonId = 'p_aline';
+  } else if (q.includes('carolina') || q.includes('carol')) {
+    targetPerson = 'Carolina Mendes';
+    targetPersonId = 'p_carolina';
+  } else if (q.includes('marcos') || q.includes('head ops')) {
+    targetPerson = 'Marcos Silva';
+    targetPersonId = 'p_marcos';
   }
 
   let targetAsset: string | undefined;
@@ -376,15 +380,15 @@ export function extractUserIntent(goal: string): ExtractedIntent {
       targetPerson = 'Carolina Mendes';
       targetPersonId = 'p_carolina';
     }
+  } else if (q.includes('luiza')) {
+    targetPerson = 'Luiza Valente';
+    targetPersonId = 'p_luiza';
   } else if (q.includes('aline')) {
     targetPerson = 'Aline Rocha';
     targetPersonId = 'p_aline';
   } else if (q.includes('carolina') || q.includes('carol')) {
     targetPerson = 'Carolina Mendes';
     targetPersonId = 'p_carolina';
-  } else if (q.includes('luiza')) {
-    targetPerson = 'Luiza Valente';
-    targetPersonId = 'p_luiza';
   } else if (q.includes('marcos') || q.includes('head ops') || isSubmissionOrProposalAction) {
     targetPerson = 'Marcos Silva';
     targetPersonId = 'p_marcos';
@@ -402,16 +406,18 @@ export function extractUserIntent(goal: string): ExtractedIntent {
     q.includes('equipe') ||
     q.includes('time') ||
     q.includes('colaborad') ||
-    (q.includes('?') && !q.includes('delegar') && !q.includes('atribuir') && !q.includes('enviar') && !q.includes('submeter') && !q.includes('aprovar'));
+    (q.includes('?') && !q.includes('delegar') && !q.includes('atribuir') && !q.includes('enviar') && !q.includes('submeter') && !q.includes('aprovar') && !q.includes('mande') && !q.includes('briefing'));
 
   const isDelegation =
     !isQueryState &&
     (isDevolutiva ||
+      isBriefing ||
       isSubmissionOrProposalAction ||
       q.includes('deleg') ||
       q.includes('atribu') ||
       q.includes('escreva essa proposta') ||
       q.includes('escreva a proposta') ||
+      (q.includes('briefing') && (q.includes('mande') || q.includes('mandar') || q.includes('envie') || q.includes('enviar') || q.includes('despach') || q.includes('para '))) ||
       (q.includes('proposta') && (
         q.includes('escreva') ||
         q.includes('crie') ||
@@ -593,25 +599,49 @@ export function determineExecutionTrace(goal: string, _scenario?: string): Execu
       q.includes('despacho') ||
       (q.includes('aprova') && (q.includes('pausa') || q.includes('proposta')));
 
+    const isBriefing =
+      q.includes('briefing') ||
+      q.includes('resumo da reunião') ||
+      q.includes('resumo da reuniao') ||
+      q.includes('pauta da reunião') ||
+      q.includes('pauta da reuniao');
+
     const isDirectDispatch =
       q.includes('pode enviar') ||
       q.includes('pode mandar') ||
       q.includes('confirmar envio') ||
       q.includes('despachar proposta') ||
-      (q.includes('enviar') && q.includes('proposta')) ||
+      q.includes('despachar briefing') ||
+      (q.includes('enviar') && (q.includes('proposta') || q.includes('briefing'))) ||
+      (q.includes('mande') && (q.includes('proposta') || q.includes('briefing'))) ||
       (q.includes('submeter') && q.includes('proposta'));
 
     if (isDirectDispatch) {
       return {
         step1: {
-          reasoningText: 'Validar integridade da proposta e autorizações de alçada no Capability Broker.',
+          reasoningText: 'Validar integridade dos parâmetros e autorizações de alçada no Capability Broker.',
           tools: ['staging_writer:draft', 'capability_broker:check_approval'],
-          observation: 'Proposta executiva validada · Alçada de Carolina Mendes (SPOT) confirmada'
+          observation: `Ação validada · Alçada de ${intent.targetPerson} confirmada`
         },
         step2: {
-          reasoningText: 'Executar commit atômico no SQLite e despachar proposta para Marcos Silva no Supercérebro.',
+          reasoningText: `Executar commit atômico no SQLite e despachar para ${intent.targetPerson} no Supercérebro.`,
           tools: ['governed_pevc:eval', 'delegate_task'],
-          observation: 'Proposta despachada para Marcos Silva · Commit atômico gravado no Supercérebro'
+          observation: `Ação despachada para ${intent.targetPerson} · Commit atômico gravado no Supercérebro`
+        }
+      };
+    }
+
+    if (isBriefing) {
+      return {
+        step1: {
+          reasoningText: 'Consultar dados consolidados, histórico de campanhas e atas de decisão no Supercérebro.',
+          tools: ['read_memory_context', 'supercerebro:get_hierarchy'],
+          observation: `Contexto da conta Housewhey e perfil de ${intent.targetPerson} localizados`
+        },
+        step2: {
+          reasoningText: `Estruturar briefing executivo da reunião e despachar delegação para ${intent.targetPerson}.`,
+          tools: ['governed_pevc:eval', 'delegate_task'],
+          observation: `Briefing formatado com sucesso · Solicitação de despacho pronta para ${intent.targetPerson}`
         }
       };
     }
@@ -638,7 +668,7 @@ export function determineExecutionTrace(goal: string, _scenario?: string): Execu
         observation: 'Criativos saturados mapeados (ad_namorados_casal_03 e ad_whey_sabores_04) · Métricas de CPA auditadas'
       },
       step2: {
-        reasoningText: 'Preparar proposta formal de governança e requisição de despacho para Marcos Silva.',
+        reasoningText: `Preparar proposta formal de governança e requisição de despacho para ${intent.targetPerson}.`,
         tools: ['capability_broker:check_approval', 'staging_writer:draft'],
         observation: `Proposta executiva em rascunho aguardando confirmação de despacho para ${intent.targetPerson}`
       }
@@ -1035,7 +1065,7 @@ Conforme registrado nas atas de reunião e mensagens do WhatsApp no Supercérebr
     }
   }
 
-  // If prompt is requesting a proposal to be written and delegated or devolutiva
+  // If prompt is requesting a proposal to be written and delegated or devolutiva or briefing
   if (intent.category === 'PROPOSAL_DELEGATION') {
     const isDevolutiva =
       q.includes('devolutiva') ||
@@ -1043,12 +1073,21 @@ Conforme registrado nas atas de reunião e mensagens do WhatsApp no Supercérebr
       q.includes('despacho') ||
       (q.includes('aprova') && (q.includes('pausa') || q.includes('proposta')));
 
+    const isBriefing =
+      q.includes('briefing') ||
+      q.includes('resumo da reunião') ||
+      q.includes('resumo da reuniao') ||
+      q.includes('pauta da reunião') ||
+      q.includes('pauta da reuniao');
+
     const isDirectDispatch =
       q.includes('pode enviar') ||
       q.includes('pode mandar') ||
       q.includes('confirmar envio') ||
       q.includes('despachar proposta') ||
-      (q.includes('enviar') && q.includes('proposta')) ||
+      q.includes('despachar briefing') ||
+      (q.includes('enviar') && (q.includes('proposta') || q.includes('briefing'))) ||
+      (q.includes('mande') && (q.includes('proposta') || q.includes('briefing'))) ||
       (q.includes('submeter') && q.includes('proposta'));
 
     const target = intent.targetPerson;
@@ -1058,12 +1097,27 @@ Conforme registrado nas atas de reunião e mensagens do WhatsApp no Supercérebr
       return `Diagnóstico & Execução de Governança no Supercérebro (Commit Auditado no SQLite):
 
 ✓ Proposta executiva formalmente despachada e commitada no Supercérebro.
-• Destinatário: Marcos Silva (Head de Marketing Housewhey)
+• Destinatário: ${target} (${role})
 • Proponente: Carolina Mendes (Gerente de Contas SPOT)
 • Status de Governança: COMMITTED (Hash SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855)
-• Próxima Etapa: Aguardando validação formal de Marcos Silva para execução técnica no Meta Ads.
+• Próxima Etapa: Registro persistido na memória imutável do SQLite e adicionado à Linha do Tempo de Governança.
 
-O card de pendências da SPOT foi marcado como Concluído e a aprovação foi adicionada à fila de Marcos Silva no Supercérebro.`;
+O card de pendências da SPOT foi marcado como Concluído e a decisão foi registrada no Supercérebro.`;
+    }
+
+    if (isBriefing) {
+      return `Briefing para ${target} (${role}) — Próxima Reunião:
+
+• Situação Atual: A proposta de pausa dos anúncios saturados e realocação de verba foi aprovada por Marcos Silva e registrada no sistema.
+• Ações Delegadas: Pausa dos criativos saturados ad_namorados_casal_03 e ad_whey_sabores_04 , e realocação do orçamento para ad_whey_baunilha_01 e ad_omega3_alta_conc_02.
+• Performance dos Criativos:
+  - ad_whey_baunilha_01 : Excelente desempenho (ROAS 2.69, CPA saudável).
+  - ad_namorados_casal_03 : Saturado, alto CPA (>R$ 1.600,00). Pausa aprovada.
+  - ad_whey_sabores_04 : Alto CPA (R$ 950,00). Pausa aprovada.
+  - ad_omega3_alta_conc_02 : Bom desempenho, com recomendação de variação.
+• Próximos Passos: Monitorar a execução técnica das ações por Marcos Silva e planejar testes de criativos para Ômega 3.
+
+Para formalizar o envio deste briefing e registrar o commit auditado no SQLite do Supercérebro, confirme no card de governança abaixo.`;
     }
 
     if (isDevolutiva) {
@@ -1520,11 +1574,34 @@ export class RunsService {
   public commitReactivation(): void {
     this.isReactivatedStore = true;
     this.isPausedStore = false;
+    this.isApprovedStore = false;
     this.pauseStore.isPaused = false;
   }
 
   public isReactivated(): boolean {
     return this.isReactivatedStore;
+  }
+
+  private isApprovedStore: boolean = false;
+
+  public commitApproval(data?: { details?: string; targetPerson?: string }): void {
+    this.isApprovedStore = true;
+    this.isPausedStore = true;
+    this.isReactivatedStore = false;
+    this.pauseStore = {
+      isPaused: true,
+      pausedAds: ['ad_namorados_casal_03', 'ad_whey_sabores_04'],
+      details: data?.details || 'Aprovação formal da proposta de remanejamento e pausa de criativos commitada no SQLite.',
+      committedAt: new Date().toISOString(),
+      commitHash: `commit_appr_${randomUUID().slice(0, 8)}`
+    };
+    if (data?.targetPerson) {
+      this.delegationStore.delegatedTo = data.targetPerson;
+    }
+  }
+
+  public isApproved(): boolean {
+    return this.isApprovedStore || this.isPausedStore;
   }
 
   public commitPause(data?: Partial<GovernancePauseRecord>): void {

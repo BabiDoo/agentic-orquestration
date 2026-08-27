@@ -512,7 +512,61 @@ describe('@adzhub/web API Router & Runs Engine (M2-08 & Gate M2)', () => {
       expect(body.operators).toBeDefined();
     });
 
-    it('3. GET /api/supercerebro/graph retorna os nós e conexões do Grafo do Supercérebro', async () => {
+    it('3. Atualiza pendências dinamicamente quando proposta é submetida e aprovada', async () => {
+      // 1. Carolina despacha proposta para Marcos
+      await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: {
+          action: 'DELEGATE_PROPOSAL',
+          targetPerson: 'Marcos Silva',
+          proposalTitle: 'Proposta de Remanejamento SPOT'
+        },
+        runsService
+      });
+
+      let res = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        runsService
+      });
+      let body = res.body as any;
+      let marcos = body.operators.find((op: any) => op.id === 'p_marcos');
+      let aline = body.operators.find((op: any) => op.id === 'p_aline');
+      expect(marcos.pendencies[0].status).toBe('Pendente');
+      expect(marcos.pendencies[0].btnText).toBe('Aprovar Proposta →');
+      expect(aline.pendencies[0].status).toBe('Aguardando Aprovação');
+
+      // 2. Marcos aprova e commita no SQLite
+      await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: {
+          action: 'APPROVE_PROPOSAL',
+          targetPerson: 'Carolina Mendes'
+        },
+        runsService
+      });
+
+      res = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        runsService
+      });
+      body = res.body as any;
+      marcos = body.operators.find((op: any) => op.id === 'p_marcos');
+      aline = body.operators.find((op: any) => op.id === 'p_aline');
+      const carolina = body.operators.find((op: any) => op.id === 'p_carolina');
+
+      expect(marcos.pendencies[0].status).toBe('Concluído');
+      expect(marcos.pendencies[0].btnText).toBe('Ver Aprovação →');
+      expect(aline.pendencies[0].status).toBe('Concluído');
+      expect(aline.pendencies[0].btnText).toBe('Ver Auditoria →');
+      expect(carolina.pendencies[0].status).toBe('Concluído');
+      expect(carolina.pendencies[0].btnText).toBe('Ver Histórico →');
+    });
+
+    it('4. GET /api/supercerebro/graph retorna os nós e conexões do Grafo do Supercérebro', async () => {
       const res = await handleApiRequest({
         method: 'GET',
         path: '/api/supercerebro/graph',

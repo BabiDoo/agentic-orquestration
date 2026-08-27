@@ -126,7 +126,7 @@ describe('M6-02: Controles de Execução', () => {
       expect(html).toContain('id="key-status-text"');
     });
 
-    it('deve conter lógica client-side para validação, esquecimento de chave e reset de sessão', () => {
+    it('deve conter lógica client-side para validação, esquecimento de chave, reset de sessão e botão dinâmico de chat/nova conversa', () => {
       const html = renderHtmlShell();
 
       // Funções e listeners de controles
@@ -137,6 +137,10 @@ describe('M6-02: Controles de Execução', () => {
       expect(html).toContain('btnForgetKey');
       expect(html).toContain('btnChatBack');
       expect(html).toContain('resetChatToMainScreen');
+      expect(html).toContain('updateHeaderBackButton');
+      expect(html).toContain('is-new-chat');
+      expect(html).toContain('Nova Conversa');
+      expect(html).toContain('Voltar ao Chat');
     });
   });
 });

@@ -753,6 +753,16 @@ export function renderHtmlShell(): string {
       position: relative;
       display: inline-flex;
       align-items: center;
+      gap: 8px;
+    }
+
+    .operator-selector-label {
+      font-size: var(--label);
+      color: var(--ink-muted);
+      font-weight: 500;
+      font-family: var(--font-primary);
+      white-space: nowrap;
+      user-select: none;
     }
 
     .operator-dropdown-btn {
@@ -951,6 +961,152 @@ export function renderHtmlShell(): string {
 
     .operator-menu-item.active .operator-check-icon {
       display: block;
+    }
+
+    /* ========================================================= */
+    /* Sistema de Tutorial / Onboarding de Primeiro Acesso       */
+    /* ========================================================= */
+    .tutorial-backdrop {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 15, 29, 0.78);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 99990;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tutorial-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .tutorial-card {
+      position: fixed;
+      z-index: 99995;
+      width: min(380px, calc(100vw - 32px));
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-card);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      padding: 18px 20px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px) scale(0.96);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .tutorial-card.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .tutorial-card-arrow {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 16px;
+      height: 16px;
+      background: var(--surface);
+      border-top: 1px solid var(--line-strong);
+      border-left: 1px solid var(--line-strong);
+    }
+
+    .tutorial-card-arrow.arrow-bottom {
+      top: auto;
+      bottom: -8px;
+      border-top: none;
+      border-left: none;
+      border-bottom: 1px solid var(--line-strong);
+      border-right: 1px solid var(--line-strong);
+    }
+
+    .tutorial-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink-strong);
+      margin: 0 0 14px 0;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .tutorial-btn-ok {
+      width: auto;
+      min-width: 84px;
+      padding: 6px 18px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: var(--font-primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #F58934 0%, #FFB32B 100%);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(245, 137, 52, 0.3);
+      transition: all var(--duration-default) var(--ease-default);
+      margin: 0 auto;
+    }
+
+    .tutorial-btn-ok:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(245, 137, 52, 0.4);
+      filter: brightness(1.05);
+    }
+
+    .tutorial-btn-ok:active {
+      transform: translateY(0);
+    }
+
+    .operator-selector-container.tutorial-spotlight {
+      z-index: 99992 !important;
+      position: relative !important;
+      background: var(--surface) !important;
+      padding: 4px 10px !important;
+      border-radius: var(--radius-pill) !important;
+      box-shadow: 0 0 0 3px #F58934, 0 0 0 8px rgba(245, 137, 52, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+      animation: tutorialSpotlightPulse 2s infinite ease-in-out !important;
+    }
+
+    .controls-key-box.tutorial-spotlight {
+      z-index: 99992 !important;
+      position: relative !important;
+      background: var(--surface) !important;
+      border-color: #F58934 !important;
+      box-shadow: 0 0 0 3px #F58934, 0 0 0 8px rgba(245, 137, 52, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+      animation: tutorialSpotlightPulse 2s infinite ease-in-out !important;
+    }
+
+    @keyframes tutorialSpotlightPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 3px #F58934, 0 0 0 8px rgba(245, 137, 52, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 0 4px #F58934, 0 0 0 14px rgba(245, 137, 52, 0.45), 0 14px 40px rgba(245, 137, 52, 0.4);
+      }
+    }
+
+    header#top-bar.has-tutorial-spotlight {
+      z-index: 99991 !important;
+    }
+
+    section.controls-column.has-tutorial-spotlight {
+      z-index: 99991 !important;
+      position: relative !important;
     }
 
     /* ========================================================= */
@@ -1552,8 +1708,9 @@ export function renderHtmlShell(): string {
     .btn-chat-back {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
+      justify-content: center;
+      gap: 6px;
+      padding: 4px 11px;
       font-size: var(--label);
       font-weight: 500;
       color: var(--ink-strong);
@@ -1562,13 +1719,28 @@ export function renderHtmlShell(): string {
       border-radius: var(--radius-pill);
       cursor: pointer;
       font-family: var(--font-primary);
-      transition: all 0.15s ease-in-out;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      line-height: 1;
     }
     .btn-chat-back:hover {
       background: var(--navy-soft);
       border-color: var(--navy);
       color: var(--navy);
       transform: translateX(-2px);
+    }
+    .btn-chat-back.is-new-chat {
+      color: var(--navy, #2563eb);
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.25);
+      font-weight: 600;
+      padding: 4px 10px;
+    }
+    .btn-chat-back.is-new-chat:hover {
+      background: rgba(37, 99, 235, 0.16);
+      border-color: var(--navy, #2563eb);
+      color: var(--navy, #1e40af);
+      transform: translateY(-1px);
     }
 
     .chat-agent-info {
@@ -2186,7 +2358,7 @@ export function renderHtmlShell(): string {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 3px 10px;
+      padding: 3px 12px;
       border-radius: var(--radius-pill);
       background: #FFFFFF;
       border: 1px solid rgba(226, 232, 240, 0.95);
@@ -2194,7 +2366,7 @@ export function renderHtmlShell(): string {
       font-weight: 500;
       font-size: var(--label);
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
-      transition: all var(--duration-default) var(--ease-default);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .flow-pill:hover {
       border-color: var(--adzhub-navy-border);
@@ -2208,7 +2380,8 @@ export function renderHtmlShell(): string {
       color: #FFFFFF !important;
       font-weight: 600 !important;
       box-shadow: 0 3px 10px rgba(41, 74, 145, 0.35), 0 0 0 1px rgba(41, 74, 145, 0.4) !important;
-      transform: translateY(-1px);
+      transform: translateY(-1px) scale(1.02);
+      animation: pillPulse 2s infinite ease-in-out;
     }
     .flow-pill.active-success {
       background: var(--green) !important;
@@ -2216,7 +2389,7 @@ export function renderHtmlShell(): string {
       color: #FFFFFF !important;
       font-weight: 600 !important;
       box-shadow: 0 3px 10px rgba(83, 181, 138, 0.35), 0 0 0 1px rgba(83, 181, 138, 0.4) !important;
-      transform: translateY(-1px);
+      transform: translateY(-1px) scale(1.02);
     }
     .flow-pill-arrow {
       color: #94A3B8;
@@ -2224,6 +2397,7 @@ export function renderHtmlShell(): string {
       font-weight: 600;
       opacity: 0.85;
       user-select: none;
+      transition: color 0.25s ease;
     }
     .flow-dot {
       width: 6px;
@@ -2232,6 +2406,17 @@ export function renderHtmlShell(): string {
       background: currentColor;
       display: inline-block;
       opacity: 0.85;
+    }
+    .flow-pill.active .flow-dot {
+      animation: dotBlink 1.4s infinite ease-in-out;
+    }
+    @keyframes pillPulse {
+      0%, 100% { box-shadow: 0 3px 10px rgba(41, 74, 145, 0.35), 0 0 0 1px rgba(41, 74, 145, 0.4); }
+      50% { box-shadow: 0 4px 14px rgba(41, 74, 145, 0.55), 0 0 0 2px rgba(41, 74, 145, 0.6); }
+    }
+    @keyframes dotBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.7); }
     }
 
     /* Modal Comparador */
@@ -2935,6 +3120,7 @@ export function renderHtmlShell(): string {
 
     <!-- Dropdown de Seleção de Perfil Operacional (Quem está operando) -->
     <div class="operator-selector-container" id="operator-selector-wrapper">
+      <span class="operator-selector-label" id="operator-selector-label">Você está operando como:</span>
       <button id="operator-dropdown-btn" type="button" class="operator-dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-label="Selecionar perfil do operador" title="Clique para alternar o perfil de quem está operando">
         <span class="operator-active-name" id="operator-active-name">Aline Rocha</span>
         <span class="operator-dropdown-arrow" aria-hidden="true">▾</span>
@@ -3189,9 +3375,9 @@ export function renderHtmlShell(): string {
         <section class="chat-column" id="pane-chat" aria-label="AdzChat Agentico">
           <div class="chat-header">
             <div style="display: flex; align-items: center; gap: 10px;">
-              <button id="btn-chat-back" class="btn-chat-back" type="button" aria-label="Voltar para o chat" title="Voltar ao Chat do Agente AdzHub" style="display: none;">
-                <span style="font-size: 0.9rem; line-height: 1;">←</span>
-                <span>Voltar ao Chat</span>
+              <button id="btn-chat-back" class="btn-chat-back is-new-chat" type="button" aria-label="Nova conversa" title="Nova Conversa (Resetar Chat)">
+                <span style="font-size: 1.1rem; line-height: 1; font-weight: 700; display: inline-block;">+</span>
+                <span>Nova Conversa</span>
               </button>
               <div class="chat-agent-info">
                 <div class="chat-agent-name" id="center-pane-title">Agente AdzHub</div>
@@ -3574,13 +3760,9 @@ export function renderHtmlShell(): string {
     <div class="flow-sequence-bar" id="flow-sequence-container">
       <span class="flow-pill active" id="flow-pill-user"><span class="flow-dot"></span> Pedido do usuário</span>
       <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-reasoning-1"><span class="flow-dot"></span> Raciocínio</span>
+      <span class="flow-pill" id="flow-pill-reasoning"><span class="flow-dot"></span> Raciocínio</span>
       <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-tool-read"><span class="flow-dot"></span> Tool - ler dados</span>
-      <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-reasoning-2"><span class="flow-dot"></span> Raciocínio</span>
-      <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-tool-action"><span class="flow-dot"></span> Tool - agir</span>
+      <span class="flow-pill" id="flow-pill-tool"><span class="flow-dot"></span> Tool</span>
       <span class="flow-pill-arrow">→</span>
       <span class="flow-pill" id="flow-pill-response"><span class="flow-dot"></span> Resposta</span>
     </div>
@@ -3621,6 +3803,19 @@ export function renderHtmlShell(): string {
     <button id="btn-export-report-md" type="button">Export Report MD</button>
     <button id="btn-export-comparison-json" type="button">Export Comparison JSON</button>
     <button id="btn-export-comparison-md" type="button">Export Comparison MD</button>
+  </div>
+
+  <!-- Sistema de Tutorial / Onboarding de Primeiro Acesso -->
+  <div id="tutorial-backdrop" class="tutorial-backdrop" aria-hidden="true"></div>
+  <div id="tutorial-card" class="tutorial-card" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+    <div class="tutorial-card-arrow" id="tutorial-card-arrow"></div>
+    <h2 id="tutorial-title" class="tutorial-title">
+      Selecione aqui com quem você quer operar
+    </h2>
+    <button id="btn-tutorial-ok" type="button" class="tutorial-btn-ok md3-ripple">
+      ${getLucideSvg('check', { size: 16, strokeWidth: 2.5 })}
+      <span>Ok</span>
+    </button>
   </div>
 
   <!-- Modal Comparador (M6-07) -->
@@ -4006,6 +4201,7 @@ export function renderHtmlShell(): string {
         isExecuting: false,
         isReactivated: false,
         isPaused: false,
+        isApproved: false,
         delegation: null,
         currentOperator: OPERATOR_PROFILES[0],
         chatHistory: []
@@ -5594,6 +5790,8 @@ export function renderHtmlShell(): string {
 
         const qLower = (queryText || answer.question || '').toLowerCase();
         const concLower = (answer.conclusion || answer.error || '').toLowerCase();
+        const activeOpId = sessionState.currentOperator?.id || 'p_carolina';
+        const isUnauthorizedForDirectWrite = (activeOpId === 'p_luiza');
 
         const wantsCtas =
           qLower.includes('proponha cta') ||
@@ -5682,14 +5880,36 @@ export function renderHtmlShell(): string {
             qLower.includes('despacho') ||
             (qLower.includes('aprova') && (qLower.includes('pausa') || qLower.includes('proposta'))));
 
-        const isDelegationAction =
+        const isApprovalAction =
           !isInformationalQuery &&
           (isDevolutivaAction ||
-            isSubmissionOrProposalAction ||
+            qLower.includes('aprovar') ||
+            qLower.includes('aprova') ||
+            qLower.includes('aprovação') ||
+            qLower.includes('aprovado') ||
+            qLower.includes('homologar') ||
+            (activeOpId === 'p_marcos' && (
+              qLower.includes('alteração e realocação') ||
+              qLower.includes('remanejamento') ||
+              qLower.includes('verba de mídia') ||
+              qLower.includes('mudança de verba')
+            )));
+
+        const isBriefingAction =
+          !isInformationalQuery &&
+          (qLower.includes('briefing') || qLower.includes('resumo da reunião') || qLower.includes('resumo da reuniao') || qLower.includes('pauta da reunião') || qLower.includes('pauta da reuniao')) &&
+          (qLower.includes('mande') || qLower.includes('mandar') || qLower.includes('envie') || qLower.includes('enviar') || qLower.includes('despach') || qLower.includes('gerar') || qLower.includes('elabor') || qLower.includes('escreva') || qLower.includes('para ') || qLower.includes('devolva'));
+
+        const isDelegationAction =
+          !isInformationalQuery &&
+          !isApprovalAction &&
+          (isSubmissionOrProposalAction ||
+            isBriefingAction ||
             qLower.includes('deleg') ||
             qLower.includes('atribu') ||
             qLower.includes('escreva essa proposta') ||
             qLower.includes('escreva a proposta') ||
+            (qLower.includes('briefing') && (qLower.includes('mande') || qLower.includes('mandar') || qLower.includes('envie') || qLower.includes('enviar') || qLower.includes('despach') || qLower.includes('para '))) ||
             (qLower.includes('proposta') && (
               qLower.includes('escreva') ||
               qLower.includes('crie') ||
@@ -5703,16 +5923,16 @@ export function renderHtmlShell(): string {
             )));
 
         let targetPerson = 'Marcos Silva';
-        if (isDevolutivaAction) {
+        if (isApprovalAction || isDevolutivaAction) {
           if (qLower.includes('aline')) targetPerson = 'Aline Rocha';
           else if (qLower.includes('luiza')) targetPerson = 'Luiza Valente';
           else targetPerson = 'Carolina Mendes';
-        } else if (qLower.includes('carolina') || qLower.includes('carol')) {
-          targetPerson = 'Carolina Mendes';
         } else if (qLower.includes('luiza')) {
           targetPerson = 'Luiza Valente';
         } else if (qLower.includes('aline')) {
           targetPerson = 'Aline Rocha';
+        } else if (qLower.includes('carolina') || qLower.includes('carol')) {
+          targetPerson = 'Carolina Mendes';
         } else if (qLower.includes('marcos') || qLower.includes('head') || qLower.includes('marketing') || isSubmissionOrProposalAction) {
           targetPerson = 'Marcos Silva';
         }
@@ -5723,7 +5943,8 @@ export function renderHtmlShell(): string {
 
         const isExplicitActionRequested =
           !isInformationalQuery &&
-          (isDelegationAction ||
+          (isApprovalAction ||
+          isDelegationAction ||
           isPauseAction ||
           isReactivation ||
           isSacReconcileAction ||
@@ -5738,6 +5959,7 @@ export function renderHtmlShell(): string {
           (isExplicitActionRequested ||
            concLower.includes('proposta formal de alteração operacional') ||
            concLower.includes('documento de devolutiva') ||
+           concLower.includes('briefing para') ||
            concLower.includes('proposta de reativação operacional') ||
            concLower.includes('salvar no supercérebro') ||
            concLower.includes('confirmar no botão') ||
@@ -5804,7 +6026,7 @@ export function renderHtmlShell(): string {
         if (isDirectDispatch) {
           innerHtml +=
             '<div style="margin-top: 8px; color: #1E6B56; font-size: var(--label); font-weight: 600; padding: 10px 14px; background: var(--success-soft); border-radius: var(--radius-control); border: 1px solid var(--green); width: 100%; font-family: var(--font-mono); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">' +
-              '<span>✓ Proposta executiva despachada para Marcos Silva e commitada no SQLite (Supercérebro atualizado).</span>' +
+              '<span>✓ Documento despachado para ' + escapeHtml(targetPerson) + ' e commitado no SQLite (Supercérebro atualizado).</span>' +
               '<button type="button" class="btn-secondary" style="font-size: var(--micro); padding: 4px 10px; border-radius: var(--radius-pill); cursor: pointer;" onclick="if(window.switchView) window.switchView(&quot;timeline&quot;)">Ver na Linha do Tempo →</button>' +
             '</div>';
         }
@@ -5855,21 +6077,27 @@ export function renderHtmlShell(): string {
             '</div>';
         }
 
-        const activeOpId = sessionState.currentOperator?.id || 'p_aline';
-        const activeOpRole = sessionState.currentOperator?.role || 'Gestora de Tráfego';
-        const isUnauthorizedForDirectWrite = activeOpId === 'p_luiza' || activeOpRole.includes('Atendimento') || activeOpRole.includes('Vendas');
-
         if (isActionRequired && !isDirectDispatch && answer.status !== 'QUARANTINED') {
           let actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança de Tráfego: Confirmar Alteração';
           let actionSubtext = 'Ação: Executar proposta operacional e sincronizar no Meta Ads';
           let btnText = 'Confirmar alteração';
 
-          if (isDelegationAction) {
-            const firstName = targetPerson.split(' ')[0] || 'Marcos';
+          if (isApprovalAction) {
             if (isDevolutivaAction) {
               actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Devolutiva: Confirmar Devolutiva de Aprovação para ' + targetPerson;
               actionSubtext = 'Ação: Formalizar aprovação de Marcos Silva e delegar execução técnica a ' + targetPerson + ' (SPOT)';
               btnText = 'Confirmar Devolutiva de Aprovação';
+            } else {
+              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Aprovação: Homologar Alteração e Sincronizar Meta Ads';
+              actionSubtext = 'Ação: Formalizar aprovação executiva de Marcos Silva e commit no Supercérebro';
+              btnText = 'Confirmar alteração';
+            }
+          } else if (isDelegationAction) {
+            const firstName = targetPerson.split(' ')[0] || 'Marcos';
+            if (isBriefingAction || qLower.includes('briefing')) {
+              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Despacho: Enviar Briefing para ' + targetPerson;
+              actionSubtext = 'Ação: Formalizar briefing da próxima reunião e despachar para ' + targetPerson;
+              btnText = 'Enviar briefing para ' + firstName.toLowerCase() + '?';
             } else if (isSubmissionOrProposalAction || targetPerson === 'Marcos Silva') {
               actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Submissão: Enviar Proposta para Marcos Silva (Head de Marketing)';
               actionSubtext = 'Ação: Formalizar proposta executiva de realocação e despachar para validação de Marcos Silva';
@@ -5941,13 +6169,17 @@ export function renderHtmlShell(): string {
           const cardEl = document.getElementById('approval-card-' + turnId);
 
           let successMsg = '✓ Ação aprovada pelo operador. Alterações sincronizadas com o Meta Ads (Commit auditado no SQLite).';
-          if (isDelegationAction) {
+          if (isApprovalAction) {
             if (isDevolutivaAction) {
               successMsg = '✓ Devolutiva de aprovação confirmada e commitada com sucesso no sistema. Decisão oficialmente delegada de volta para ' + targetPerson + ' (Commit auditado no SQLite).';
-            } else if (isSubmissionOrProposalAction || targetPerson === 'Marcos Silva') {
-              successMsg = '✓ Proposta formalmente enviada para Marcos Silva (Head de Marketing) e registrada no Supercérebro (Commit auditado no SQLite). O status das pendências foi atualizado.';
             } else {
-              successMsg = '✓ Proposta aprovada e commitada com sucesso no sistema. Tarefa oficialmente delegada para ' + targetPerson + ' (Commit auditado no SQLite).';
+              successMsg = '✓ Ação aprovada pelo operador. Alterações sincronizadas com o Meta Ads (Commit auditado no SQLite).';
+            }
+          } else if (isDelegationAction) {
+            if (isBriefingAction || qLower.includes('briefing')) {
+              successMsg = '✓ Briefing formalmente despachado para ' + targetPerson + ' e commitado no SQLite (Supercérebro atualizado). O status das pendências foi atualizado.';
+            } else {
+              successMsg = '✓ Proposta formalmente enviada para ' + targetPerson + ' e registrada no Supercérebro (Commit auditado no SQLite). O status das pendências foi atualizado.';
             }
           } else if (isReactivation) {
             successMsg = '✓ Reativação aprovada pelo operador. Anúncios religados com sucesso no Meta Ads (Commit auditado no SQLite).';
@@ -5978,18 +6210,61 @@ export function renderHtmlShell(): string {
             };
             const nowStr = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-            if (isDelegationAction) {
+            if (isApprovalAction) {
+              sessionState.isApproved = true;
+              sessionState.isPaused = true;
+              sessionState.isReactivated = false;
+              sessionState.delegation = { isDelegated: true, delegatedTo: 'Carolina Mendes', isApproved: true };
+
+              fetch('/api/governance/commit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  action: 'APPROVE_PROPOSAL',
+                  targetPerson: 'Carolina Mendes',
+                  proposalTitle: 'Aprovação da Proposta de Remanejamento de Orçamento',
+                  details: isDevolutivaAction
+                    ? 'Devolutiva de aprovação expressa emitida por Marcos Silva autorizando a pausa de anúncios e remanejamento orçamentário.'
+                    : 'Marcos Silva aprovou a proposta #prop-8921 permitindo o remanejamento de R$ 500,00/dia e a pausa de criativos saturados.'
+                })
+              }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+
+              if (typeof window.addTimelineEvent === 'function') {
+                window.addTimelineEvent({
+                  category: 'governance',
+                  actor: {
+                    name: op.name,
+                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                    avatarBg: op.avatarBg || 'var(--tag-success-bg)',
+                    avatarColor: op.avatarColor || 'var(--tag-success-ink)',
+                    avatarInitials: op.initials || 'MS'
+                  },
+                  actionTitle: isDevolutivaAction ? 'Devolutiva de Aprovação para ' + targetPerson : 'Aprovação da Proposta de Remanejamento de Orçamento',
+                  badgeText: 'Proposta Aprovada',
+                  badgeBg: 'var(--tag-success-bg)',
+                  badgeBorder: 'var(--tag-success-border)',
+                  badgeColor: 'var(--tag-success-ink)',
+                  summary: isDevolutivaAction
+                    ? (op.name + ' confirmou a devolutiva de aprovação da proposta de realocação para ' + targetPerson + ' com commit auditado no SQLite.')
+                    : (op.name + ' aprovou a proposta #prop-8921 permitindo o remanejamento de R$ 500,00/dia da campanha Namorados para alavancar o lançamento de Whey Isolar.'),
+                  target: 'Proposta #prop-8921 · Aprovada por ' + op.name,
+                  timestamp: nowStr,
+                  provenance: 'Aprovação da Conta'
+                });
+              }
+            } else if (isDelegationAction) {
               sessionState.delegation = { isDelegated: true, delegatedTo: targetPerson };
+              const isBriefing = isBriefingAction || qLower.includes('briefing');
               fetch('/api/governance/commit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   action: 'DELEGATE_PROPOSAL',
                   targetPerson: targetPerson,
-                  proposalTitle: 'Proposta de Realocação de Verba Meta Ads',
-                  proposalDetails: isDevolutivaAction
-                    ? 'Devolutiva de aprovação expressa emitida por Marcos Silva autorizando a pausa de anúncios.'
-                    : 'Proposta formal de pausa de criativos e realocação orçamentária despachada para Marcos Silva.'
+                  proposalTitle: isBriefing ? 'Briefing da Próxima Reunião' : 'Proposta de Realocação de Verba Meta Ads',
+                  proposalDetails: isBriefing
+                    ? ('Briefing da próxima reunião despachado para ' + targetPerson + ' com commit auditado no SQLite.')
+                    : ('Proposta formal de alteração operacional despachada para ' + targetPerson + '.')
                 })
               }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
 
@@ -6003,15 +6278,15 @@ export function renderHtmlShell(): string {
                     avatarColor: op.avatarColor || 'var(--tag-info-ink)',
                     avatarInitials: op.initials || 'OP'
                   },
-                  actionTitle: isDevolutivaAction ? 'Devolutiva de Aprovação para ' + targetPerson : 'Submissão de Proposta para ' + targetPerson,
-                  badgeText: isDevolutivaAction ? 'Aprovação Confirmada' : 'Proposta Submetida',
+                  actionTitle: isBriefing ? ('Envio de Briefing para ' + targetPerson) : ('Submissão de Proposta para ' + targetPerson),
+                  badgeText: isBriefing ? 'Briefing Enviado' : 'Proposta Submetida',
                   badgeBg: 'var(--tag-success-bg)',
                   badgeBorder: 'var(--tag-success-border)',
                   badgeColor: 'var(--tag-success-ink)',
-                  summary: isDevolutivaAction 
-                    ? (op.name + ' confirmou a devolutiva de aprovação da proposta de realocação para ' + targetPerson + ' com commit auditado no SQLite.')
+                  summary: isBriefing
+                    ? (op.name + ' despachou formalmente o briefing da próxima reunião para ' + targetPerson + ' com commit auditado no SQLite.')
                     : (op.name + ' despachou formalmente a proposta executiva de realocação para ' + targetPerson + ' com commit auditado no SQLite.'),
-                  target: 'Proposta Operacional · ' + targetPerson,
+                  target: (isBriefing ? 'Briefing Operacional · ' : 'Proposta Operacional · ') + targetPerson,
                   timestamp: nowStr,
                   provenance: 'Governança da Conta'
                 });
@@ -6019,6 +6294,7 @@ export function renderHtmlShell(): string {
             } else if (isReactivation) {
               sessionState.isReactivated = true;
               sessionState.isPaused = false;
+              sessionState.isApproved = false;
               fetch('/api/governance/commit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -6136,6 +6412,14 @@ export function renderHtmlShell(): string {
                   provenance: 'Motor de Auditoria'
                 });
               }
+            } else {
+              sessionState.isPaused = true;
+              sessionState.isApproved = true;
+              fetch('/api/governance/commit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'APPROVE_PROPOSAL', details: 'Alteração operacional confirmada pelo operador com commit auditado no SQLite.' })
+              }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
             }
             if (cardEl) {
               cardEl.innerHTML = '<div style="color: #1E6B56; font-size: var(--label); font-weight: 600; padding: 8px 12px; background: var(--success-soft); border-radius: var(--radius-small); border: 1px solid var(--success); width: 100%; font-family: var(--font-mono);">' + successMsg + '</div>';
@@ -6350,29 +6634,59 @@ export function renderHtmlShell(): string {
       });
 
       function setFlowStep(stepIndex) {
-        const pills = [
-          { el: document.getElementById('flow-pill-user'), label: 'Pedido do usuário' },
-          { el: document.getElementById('flow-pill-reasoning-1'), label: 'Raciocínio' },
-          { el: document.getElementById('flow-pill-tool-read'), label: 'Tool - ler dados' },
-          { el: document.getElementById('flow-pill-reasoning-2'), label: 'Raciocínio' },
-          { el: document.getElementById('flow-pill-tool-action'), label: 'Tool - agir' },
-          { el: document.getElementById('flow-pill-response'), label: 'Resposta' }
-        ];
-        pills.forEach((p, idx) => {
-          if (!p.el) return;
-          p.el.classList.remove('active', 'active-success');
-          if (idx === stepIndex) {
-            if (idx === 5) {
-              p.el.classList.add('active-success');
-              p.el.textContent = '🟢 ' + p.label;
-            } else {
-              p.el.classList.add('active');
-              p.el.textContent = '🔘 ' + p.label;
-            }
-          } else {
-            p.el.textContent = '🔘 ' + p.label;
+        const pillUser = document.getElementById('flow-pill-user');
+        const pillReasoning = document.getElementById('flow-pill-reasoning') || document.getElementById('flow-pill-reasoning-1');
+        const pillTool = document.getElementById('flow-pill-tool') || document.getElementById('flow-pill-tool-read');
+        const pillResponse = document.getElementById('flow-pill-response');
+
+        const allPills = [pillUser, pillReasoning, pillTool, pillResponse].filter(Boolean);
+        allPills.forEach((p) => p.classList.remove('active', 'active-success'));
+
+        if (stepIndex === 0) {
+          if (pillUser) {
+            pillUser.classList.add('active');
+            pillUser.innerHTML = '<span class="flow-dot"></span> Pedido do usuário';
           }
-        });
+          if (pillReasoning) pillReasoning.innerHTML = '<span class="flow-dot"></span> Raciocínio';
+          if (pillTool) pillTool.innerHTML = '<span class="flow-dot"></span> Tool';
+          if (pillResponse) pillResponse.innerHTML = '<span class="flow-dot"></span> Resposta';
+        } else if (stepIndex === 1) {
+          // Raciocínio (fase inicial)
+          if (pillReasoning) {
+            pillReasoning.classList.add('active');
+            pillReasoning.innerHTML = '<span class="flow-dot"></span> Raciocínio';
+          }
+        } else if (stepIndex === 2) {
+          // Tool (leitura)
+          if (pillTool) {
+            pillTool.classList.add('active');
+            pillTool.innerHTML = '<span class="flow-dot"></span> Tool - ler dados';
+          }
+        } else if (stepIndex === 3) {
+          // Raciocínio (retorno dinâmico)
+          if (pillReasoning) {
+            pillReasoning.classList.add('active');
+            pillReasoning.innerHTML = '<span class="flow-dot"></span> Raciocínio';
+          }
+        } else if (stepIndex === 4) {
+          // Tool (ação/escrita)
+          if (pillTool) {
+            pillTool.classList.add('active');
+            pillTool.innerHTML = '<span class="flow-dot"></span> Tool - agir';
+          }
+        } else if (stepIndex === 5) {
+          // Resposta final
+          if (pillTool) {
+            pillTool.innerHTML = '<span class="flow-dot"></span> Tool';
+          }
+          if (pillReasoning) {
+            pillReasoning.innerHTML = '<span class="flow-dot"></span> Raciocínio';
+          }
+          if (pillResponse) {
+            pillResponse.classList.add('active-success');
+            pillResponse.innerHTML = '<span class="flow-dot"></span> Resposta';
+          }
+        }
       }
 
       const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -6395,7 +6709,15 @@ export function renderHtmlShell(): string {
           emptyState.style.display = 'flex';
           emptyState.style.flexDirection = 'column';
         }
-        if (btnChatBack) btnChatBack.style.display = 'none';
+        if (typeof updateHeaderBackButton === 'function') {
+          updateHeaderBackButton('chat');
+        } else if (btnChatBack) {
+          btnChatBack.style.display = 'inline-flex';
+          btnChatBack.classList.add('is-new-chat');
+          btnChatBack.title = 'Nova Conversa (Resetar Chat)';
+          btnChatBack.setAttribute('aria-label', 'Nova conversa');
+          btnChatBack.innerHTML = '<span style="font-size: 1.1rem; line-height: 1; font-weight: 700; display: inline-block;">+</span><span>Nova Conversa</span>';
+        }
 
         if (interactiveInput) interactiveInput.value = '';
         if (goalInput) goalInput.value = '';
@@ -6421,7 +6743,7 @@ export function renderHtmlShell(): string {
         if (interactiveInput) interactiveInput.focus();
       }
 
-      btnChatBack?.addEventListener('click', resetChatToMainScreen);
+      window.resetChatToMainScreen = resetChatToMainScreen;
 
       async function executeCurrentRun() {
         if (sessionState.isExecuting) return;
@@ -6456,19 +6778,30 @@ export function renderHtmlShell(): string {
             goalLower.includes('pode mandar') ||
             goalLower.includes('confirmar envio') ||
             goalLower.includes('despachar proposta') ||
-            (goalLower.includes('enviar') && goalLower.includes('proposta')) ||
+            goalLower.includes('despachar briefing') ||
+            (goalLower.includes('enviar') && (goalLower.includes('proposta') || goalLower.includes('briefing'))) ||
+            (goalLower.includes('mande') && (goalLower.includes('proposta') || goalLower.includes('briefing'))) ||
             (goalLower.includes('submeter') && goalLower.includes('proposta'));
 
           if (isDirectDispatch) {
-            sessionState.delegation = { isDelegated: true, delegatedTo: 'Marcos Silva' };
+            let dispatchTarget = 'Marcos Silva';
+            if (goalLower.includes('luiza')) dispatchTarget = 'Luiza Valente';
+            else if (goalLower.includes('aline')) dispatchTarget = 'Aline Rocha';
+            else if (goalLower.includes('carolina') || goalLower.includes('carol')) dispatchTarget = 'Carolina Mendes';
+            else if (goalLower.includes('marcos')) dispatchTarget = 'Marcos Silva';
+
+            const isBriefing = goalLower.includes('briefing') || goalLower.includes('resumo');
+            sessionState.delegation = { isDelegated: true, delegatedTo: dispatchTarget };
             fetch('/api/governance/commit', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 action: 'DELEGATE_PROPOSAL',
-                targetPerson: 'Marcos Silva',
-                proposalTitle: 'Proposta de Realocação de Verba Meta Ads',
-                proposalDetails: 'Proposta formal de pausa de criativos e realocação orçamentária despachada para Marcos Silva.'
+                targetPerson: dispatchTarget,
+                proposalTitle: isBriefing ? 'Briefing da Próxima Reunião' : 'Proposta de Realocação de Verba Meta Ads',
+                proposalDetails: isBriefing
+                  ? ('Briefing da próxima reunião despachado para ' + dispatchTarget + ' com commit auditado no SQLite.')
+                  : ('Proposta formal de alteração operacional despachada para ' + dispatchTarget + '.')
               })
             }).then(function() {
               loadSupercerebroPendencies();
@@ -6493,13 +6826,15 @@ export function renderHtmlShell(): string {
                   avatarColor: op.avatarColor || 'var(--tag-info-ink)',
                   avatarInitials: op.initials || 'CM'
                 },
-                actionTitle: 'Submissão de Proposta para Marcos Silva',
-                badgeText: 'Proposta Submetida',
+                actionTitle: isBriefing ? ('Envio de Briefing para ' + dispatchTarget) : ('Submissão de Proposta para ' + dispatchTarget),
+                badgeText: isBriefing ? 'Briefing Enviado' : 'Proposta Submetida',
                 badgeBg: 'var(--tag-success-bg)',
                 badgeBorder: 'var(--tag-success-border)',
                 badgeColor: 'var(--tag-success-ink)',
-                summary: op.name + ' despachou formalmente a proposta executiva de realocação de verba para Marcos Silva com commit auditado no SQLite.',
-                target: 'Proposta Operacional · Marcos Silva',
+                summary: isBriefing
+                  ? (op.name + ' despachou formalmente o briefing da próxima reunião para ' + dispatchTarget + ' com commit auditado no SQLite.')
+                  : (op.name + ' despachou formalmente a proposta executiva de realocação de verba para ' + dispatchTarget + ' com commit auditado no SQLite.'),
+                target: (isBriefing ? 'Briefing Operacional · ' : 'Proposta Operacional · ') + dispatchTarget,
                 timestamp: nowStr,
                 provenance: 'Governança da Conta'
               });
@@ -6983,7 +7318,8 @@ export function renderHtmlShell(): string {
       });
 
       document.getElementById('card-brain-context')?.addEventListener('click', () => {
-        openSupercerebroModal();
+        const opId = sessionState.currentOperator ? sessionState.currentOperator.id : 'p_aline';
+        openSupercerebroModal(opId);
         inspectItem('Supercérebro — Memória & Governança', {
           stakeholders: [
             { name: 'Aline Rocha', role: 'Gestora de Tráfego SPOT', domain: 'Meta Ads' },
@@ -6991,7 +7327,7 @@ export function renderHtmlShell(): string {
           ],
           governancePolicy: 'Escrita externa no Meta Ads exige aprovação formal expressa.',
           productStandards: ['100% Glanbia Grass-Fed', 'Creatina Creapure Alemã', 'Ômega 3 IFOS 5★']
-        }, 'supercerebro_memory');
+        }, opId);
       });
 
       // ==========================================
@@ -7401,6 +7737,10 @@ export function renderHtmlShell(): string {
 
             initGraphPositions(graphState.nodes);
             updateGraphStats();
+            if (graphState.selectedNodeId) {
+              const freshNode = graphState.nodes.find(n => n.id === graphState.selectedNodeId);
+              if (freshNode) selectGraphNode(freshNode);
+            }
             renderCanvasGraph();
             return;
           }
@@ -7410,11 +7750,41 @@ export function renderHtmlShell(): string {
 
         initGraphPositions(graphState.nodes);
         updateGraphStats();
+        if (graphState.selectedNodeId) {
+          const freshNode = graphState.nodes.find(n => n.id === graphState.selectedNodeId);
+          if (freshNode) selectGraphNode(freshNode);
+        }
         renderCanvasGraph();
       }
 
-      function openSupercerebroModal() {
+      function openSupercerebroModal(targetNodeId) {
         switchView('supercerebro');
+
+        let targetId = targetNodeId;
+        if (!targetId) {
+          const currentOpId = sessionState.currentOperator ? sessionState.currentOperator.id : 'p_aline';
+          const hasOpNode = graphState.nodes.some(n => n.id === currentOpId);
+          if (hasOpNode) {
+            targetId = currentOpId;
+          } else {
+            const orgNode = graphState.nodes.find(n => n.id === 'client_housewhey_spot' || n.id === 'cli_housewhey' || n.type === 'organization');
+            targetId = orgNode ? orgNode.id : (graphState.nodes[0] ? graphState.nodes[0].id : null);
+          }
+        }
+
+        if (targetId) {
+          const targetNode = graphState.nodes.find(n => n.id === targetId);
+          if (targetNode) {
+            selectGraphNode(targetNode);
+            if (graphCanvas) {
+              const width = graphCanvas.clientWidth || 800;
+              const height = graphCanvas.clientHeight || 550;
+              graphState.offsetX = (width / 2) - (targetNode.x * graphState.zoom);
+              graphState.offsetY = (height / 2) - (targetNode.y * graphState.zoom);
+              renderCanvasGraph();
+            }
+          }
+        }
       }
 
       function closeSupercerebroModal() {
@@ -7847,6 +8217,26 @@ export function renderHtmlShell(): string {
         }
       }
 
+      let currentActiveView = 'chat';
+
+      function updateHeaderBackButton(viewName) {
+        currentActiveView = viewName || 'chat';
+        const btn = document.getElementById('btn-chat-back');
+        if (!btn) return;
+        btn.style.display = 'inline-flex';
+        if (currentActiveView === 'chat') {
+          btn.classList.add('is-new-chat');
+          btn.title = 'Nova Conversa (Resetar Chat)';
+          btn.setAttribute('aria-label', 'Nova conversa');
+          btn.innerHTML = '<span style="font-size: 1.1rem; line-height: 1; font-weight: 700; display: inline-block;">+</span><span>Nova Conversa</span>';
+        } else {
+          btn.classList.remove('is-new-chat');
+          btn.title = 'Voltar ao Chat do Agente AdzHub';
+          btn.setAttribute('aria-label', 'Voltar para o chat');
+          btn.innerHTML = '<span style="font-size: 0.9rem; line-height: 1;">←</span><span>Voltar ao Chat</span>';
+        }
+      }
+
       function switchView(viewName) {
         const btnRailChat = document.getElementById('btn-rail-chat');
         const btnRailTasks = document.getElementById('btn-rail-tasks');
@@ -7871,7 +8261,6 @@ export function renderHtmlShell(): string {
         const blueprintGrid = document.querySelector('.blueprint-grid');
 
         const composerCard = document.querySelector('.chat-input-wrapper');
-        const btnChatBack = document.getElementById('btn-chat-back');
         const titleEl = document.getElementById('center-pane-title');
 
         document.querySelectorAll('.rail-btn').forEach(b => b.classList.remove('active'));
@@ -7909,7 +8298,7 @@ export function renderHtmlShell(): string {
           if (blueprintGrid) blueprintGrid.classList.add('view-full', 'hide-palco');
           if (documentsModal) documentsModal.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'none';
-          if (btnChatBack) btnChatBack.style.display = 'inline-flex';
+          updateHeaderBackButton('documents');
           if (titleEl) titleEl.textContent = 'Central de Documentos & Artefatos';
           
           const docCardsContainer = document.getElementById('doc-cards-container');
@@ -7935,7 +8324,7 @@ export function renderHtmlShell(): string {
           if (blueprintGrid) blueprintGrid.classList.add('view-full', 'hide-palco');
           if (supercerebroModal) supercerebroModal.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'none';
-          if (btnChatBack) btnChatBack.style.display = 'inline-flex';
+          updateHeaderBackButton('supercerebro');
           if (titleEl) titleEl.textContent = 'Supercérebro — Grafo de Conhecimento';
 
           // Renderização instantânea sem glitch nem atraso
@@ -7951,18 +8340,18 @@ export function renderHtmlShell(): string {
           if (blueprintGrid) blueprintGrid.classList.add('view-full', 'hide-palco');
           if (timelineModal) timelineModal.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'none';
-          if (btnChatBack) btnChatBack.style.display = 'inline-flex';
+          updateHeaderBackButton('timeline');
           if (titleEl) titleEl.textContent = 'Histórico & Linha do Tempo';
           renderTimelineEvents();
         } else if (viewName === 'controls') {
           btnMobControls?.classList.add('active');
           if (composerCard) composerCard.style.display = 'none';
-          if (btnChatBack) btnChatBack.style.display = 'inline-flex';
+          updateHeaderBackButton('controls');
           if (titleEl) titleEl.textContent = 'Mesa de Controles & BYOK';
         } else if (viewName === 'palco') {
           btnMobPalco?.classList.add('active');
           if (composerCard) composerCard.style.display = 'none';
-          if (btnChatBack) btnChatBack.style.display = 'inline-flex';
+          updateHeaderBackButton('palco');
           if (titleEl) titleEl.textContent = 'Palco Operacional da Conta';
         } else {
           btnRailChat?.classList.add('active');
@@ -7970,7 +8359,7 @@ export function renderHtmlShell(): string {
           if (blueprintGrid) blueprintGrid.classList.add('view-chat');
           if (chatWrapper) chatWrapper.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'block';
-          if (btnChatBack) btnChatBack.style.display = 'none';
+          updateHeaderBackButton('chat');
           if (titleEl) titleEl.textContent = 'Agente AdzHub';
         }
       }
@@ -7979,8 +8368,6 @@ export function renderHtmlShell(): string {
 
       function openDocumentsModal() { switchView('documents'); }
       function closeDocumentsModal() { switchView('chat'); }
-      function openSupercerebroModal() { switchView('supercerebro'); }
-      function closeSupercerebroModal() { switchView('chat'); }
       function openTimelineModal() { switchView('timeline'); }
       function closeTimelineModal() { switchView('chat'); }
 
@@ -7992,7 +8379,13 @@ export function renderHtmlShell(): string {
       btnRailChat?.addEventListener('click', () => switchView('chat'));
       btnRailTasks?.addEventListener('click', () => switchView('documents'));
       btnRailInspector?.addEventListener('click', () => switchView('timeline'));
-      document.getElementById('btn-chat-back')?.addEventListener('click', () => switchView('chat'));
+      document.getElementById('btn-chat-back')?.addEventListener('click', () => {
+        if (currentActiveView === 'chat') {
+          resetChatToMainScreen();
+        } else {
+          switchView('chat');
+        }
+      });
 
       btnCloseDocuments?.addEventListener('click', closeDocumentsModal);
 
@@ -8480,6 +8873,171 @@ export function renderHtmlShell(): string {
         chatObserver.observe(chatContainerEl, { childList: true, subtree: true });
       }
 
+      // ==========================================
+      // Tutorial de Primeiro Acesso (Etapa 1: Operador, Etapa 2: API Key)
+      // ==========================================
+      const tutorialBackdrop = document.getElementById('tutorial-backdrop');
+      const tutorialCard = document.getElementById('tutorial-card');
+      const tutorialTitleEl = document.getElementById('tutorial-title');
+      const tutorialArrow = document.getElementById('tutorial-card-arrow');
+      const btnTutorialOk = document.getElementById('btn-tutorial-ok');
+      const topBarEl = document.getElementById('top-bar');
+
+      let tutorialCurrentStep = 1;
+
+      function positionTutorialCard() {
+        if (!tutorialCard || !tutorialCard.classList.contains('active')) return;
+        const targetEl = (tutorialCurrentStep === 2)
+          ? document.getElementById('key-bar')
+          : document.getElementById('operator-selector-wrapper');
+
+        if (!targetEl) return;
+
+        const rect = targetEl.getBoundingClientRect();
+        const cardWidth = tutorialCard.offsetWidth || Math.min(380, window.innerWidth - 32);
+        const cardHeight = tutorialCard.offsetHeight || 110;
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const margin = 16;
+
+        let targetLeft = rect.left + (rect.width / 2) - (cardWidth / 2);
+        if (targetLeft < margin) targetLeft = margin;
+        if (targetLeft + cardWidth > viewportWidth - margin) {
+          targetLeft = viewportWidth - cardWidth - margin;
+        }
+
+        let targetTop = rect.bottom + 14;
+        let isBelow = true;
+
+        if (targetTop + cardHeight > viewportHeight - margin && rect.top > cardHeight + 20) {
+          targetTop = rect.top - cardHeight - 14;
+          isBelow = false;
+        }
+
+        tutorialCard.style.left = targetLeft + 'px';
+        tutorialCard.style.top = Math.max(margin, targetTop) + 'px';
+
+        if (tutorialArrow) {
+          const arrowLeft = (rect.left + rect.width / 2) - targetLeft;
+          const clampedLeft = Math.max(20, Math.min(cardWidth - 20, arrowLeft));
+          tutorialArrow.style.left = clampedLeft + 'px';
+          if (isBelow) {
+            tutorialArrow.classList.remove('arrow-bottom');
+          } else {
+            tutorialArrow.classList.add('arrow-bottom');
+          }
+        }
+      }
+
+      function openOperatorTutorial(step) {
+        tutorialCurrentStep = (typeof step === 'number') ? step : 1;
+        const opWrapper = document.getElementById('operator-selector-wrapper');
+        const kBar = document.getElementById('key-bar');
+        const pControls = document.getElementById('pane-controls');
+
+        if (tutorialCurrentStep === 1) {
+          if (tutorialTitleEl) tutorialTitleEl.textContent = 'Selecione aqui com quem você quer operar';
+          if (topBarEl) topBarEl.classList.add('has-tutorial-spotlight');
+          if (opWrapper) opWrapper.classList.add('tutorial-spotlight');
+          if (kBar) kBar.classList.remove('tutorial-spotlight');
+          if (pControls) pControls.classList.remove('has-tutorial-spotlight');
+        } else if (tutorialCurrentStep === 2) {
+          if (tutorialTitleEl) tutorialTitleEl.textContent = 'Insira aqui a sua chave de API';
+          if (topBarEl) topBarEl.classList.remove('has-tutorial-spotlight');
+          if (opWrapper) opWrapper.classList.remove('tutorial-spotlight');
+          if (window.innerWidth <= 900 && window.switchView) {
+            window.switchView('controls');
+          }
+          if (pControls) pControls.classList.add('has-tutorial-spotlight');
+          if (kBar) kBar.classList.add('tutorial-spotlight');
+        }
+
+        if (tutorialBackdrop) tutorialBackdrop.classList.add('active');
+        if (tutorialCard) {
+          tutorialCard.classList.add('active');
+          positionTutorialCard();
+          setTimeout(() => {
+            positionTutorialCard();
+            if (btnTutorialOk) btnTutorialOk.focus();
+          }, 80);
+        }
+      }
+
+      function handleTutorialNext() {
+        if (tutorialCurrentStep === 1) {
+          openOperatorTutorial(2);
+        } else {
+          closeOperatorTutorial();
+        }
+      }
+
+      function closeOperatorTutorial() {
+        const opWrapper = document.getElementById('operator-selector-wrapper');
+        const kBar = document.getElementById('key-bar');
+        const pControls = document.getElementById('pane-controls');
+
+        if (topBarEl) topBarEl.classList.remove('has-tutorial-spotlight');
+        if (opWrapper) opWrapper.classList.remove('tutorial-spotlight');
+        if (kBar) kBar.classList.remove('tutorial-spotlight');
+        if (pControls) pControls.classList.remove('has-tutorial-spotlight');
+        if (tutorialBackdrop) tutorialBackdrop.classList.remove('active');
+        if (tutorialCard) tutorialCard.classList.remove('active');
+
+        if (window.innerWidth <= 900 && window.switchView && tutorialCurrentStep === 2) {
+          window.switchView('chat');
+        }
+
+        tutorialCurrentStep = 1;
+
+        try {
+          localStorage.setItem('adzhub_operator_tutorial_seen', 'true');
+          localStorage.setItem('adzhub_tutorial_seen', 'true');
+        } catch (err) {}
+      }
+
+      btnTutorialOk?.addEventListener('click', () => {
+        handleTutorialNext();
+      });
+
+      window.addEventListener('resize', positionTutorialCard);
+      window.addEventListener('scroll', positionTutorialCard);
+
+      window.addEventListener('keydown', (e) => {
+        if (tutorialCard && tutorialCard.classList.contains('active')) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleTutorialNext();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            closeOperatorTutorial();
+          }
+        }
+      });
+
+      // Expõe para retestar ou acionar manualmente se necessário
+      window.startOperatorTutorial = function(force) {
+        if (force) {
+          try {
+            localStorage.removeItem('adzhub_operator_tutorial_seen');
+            localStorage.removeItem('adzhub_tutorial_seen');
+          } catch(e) {}
+        }
+        openOperatorTutorial(1);
+      };
+
+      function initOperatorTutorial() {
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const forceTutorial = urlParams.get('tutorial') === '1' || urlParams.get('tour') === '1';
+          const seen = localStorage.getItem('adzhub_operator_tutorial_seen') || localStorage.getItem('adzhub_tutorial_seen');
+          if (forceTutorial || !seen) {
+            setTimeout(() => openOperatorTutorial(1), 350);
+          }
+        } catch (err) {
+          setTimeout(() => openOperatorTutorial(1), 350);
+        }
+      }
+
       // Inicialização
       updateKeyUI();
       validateExecution();
@@ -8495,6 +9053,7 @@ export function renderHtmlShell(): string {
       }
       renderDocumentsList();
       resetDocumentReader();
+      initOperatorTutorial();
     })();
   </script>
 </body>
