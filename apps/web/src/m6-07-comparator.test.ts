@@ -113,11 +113,17 @@ describe('M6-07: Comparador Basic (ReAct) × Governed (PEV-C)', () => {
     expect(body.observedWinner).toBe('GOVERNED_PEVC');
   });
 
-  it('o HTML Shell deve conter controles e tabela para exibição do comparador', () => {
+  it('o HTML Shell deve conter controles, formulário de prompt interativo e tabela para exibição do comparador', () => {
     const html = renderHtmlShell();
 
     expect(html).toContain('id="btn-compare"');
     expect(html).toContain('id="comparison-modal"');
+    expect(html).toContain('id="comparison-prompt-step"');
+    expect(html).toContain('id="comparison-prompt-input"');
+    expect(html).toContain('id="btn-start-comparison-prompt"');
+    expect(html).toContain('id="btn-cancel-comparison-prompt"');
+    expect(html).toContain('id="btn-recompare"');
+    expect(html).toContain('comparison-suggestion-chip');
     expect(html).toContain('id="comparison-table-element"');
     expect(html).toContain('id="comparison-tbody"');
     expect(html).toContain('id="comparison-summary-card"');

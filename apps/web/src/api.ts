@@ -2,7 +2,7 @@ import { CONTRACTS_VERSION, DatasetManifest } from '@adzhub/contracts';
 import { getCurrentDatasetManifest, getSupercerebroOperatorProfiles, SupercerebroTraversalEngine } from '@adzhub/data';
 import { getNoStoreHeaders, redactSecretsRecursively } from '@adzhub/runtime';
 import { defaultRunsService, RunEvent, RunsService } from './runs-service.js';
-import { renderHtmlShell } from './ui-shell.js';
+import { renderHtmlShell, ADZHUB_LOGO_SVG } from './ui-shell.js';
 import {
   listCanonicalScenarios,
   getCanonicalScenario,
@@ -96,6 +96,27 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
         ...getNoStoreHeaders()
       },
       body: renderHtmlShell() as any
+    };
+  }
+
+  // Logotipo Vetorial Oficial AdzHub (/adzhub-logo.svg)
+  if (path === '/adzhub-logo.svg') {
+    if (method !== 'GET') {
+      return {
+        status: 405,
+        headers: defaultHeaders,
+        body: { error: 'Method Not Allowed', allowed: ['GET'] }
+      };
+    }
+
+    return {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/svg+xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=86400',
+        'X-Contracts-Version': CONTRACTS_VERSION
+      },
+      body: ADZHUB_LOGO_SVG as any
     };
   }
 
@@ -832,10 +853,14 @@ export async function handleFetchRequest(
   });
 
   const isNullBodyStatus = result.status === 204 || result.status === 205 || result.status === 304;
-  const responseBody = isNullBodyStatus
+  const isRawString =
+    typeof result.body === 'string' &&
+    (result.headers['Content-Type']?.includes('text/') ||
+     result.headers['Content-Type']?.includes('image/svg+xml'));
+  const responseBody: string | null = isNullBodyStatus
     ? null
-    : typeof result.body === 'string' && result.headers['Content-Type']?.includes('text/html')
-      ? result.body
+    : isRawString
+      ? (result.body as string)
       : JSON.stringify(result.body);
 
   return new Response(responseBody, {

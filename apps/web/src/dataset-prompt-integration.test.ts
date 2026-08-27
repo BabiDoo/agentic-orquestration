@@ -147,4 +147,28 @@ describe('Dataset & Prompt Integration Tests', () => {
     expect(response).toContain('Marcos Silva');
     expect(response).toContain('Enviar a Proposta de Pausa para Aline');
   });
+
+  it('deve gerar a proposta executiva SPOT para validação do Head de Marketing Marcos Silva', () => {
+    const prompt = 'Gerar proposta executiva de realocação de verba para validação do Head de Marketing';
+    const response = generateAuditedDatasetResponse(prompt);
+
+    expect(response).toContain('PROPOSTA EXECUTIVA DE REALOCAÇÃO DE VERBA E PAUSA OPERACIONAL');
+    expect(response).toContain('PARA: Marcos Silva, Head de Marketing Housewhey');
+    expect(response).toContain('DE: Carolina Mendes, Gerente de Contas SPOT');
+    expect(response).toContain('ad_namorados_casal_03');
+    expect(response).toContain('ad_whey_sabores_04');
+    expect(response).toContain('card de governança abaixo');
+  });
+
+  it('deve confirmar despacho com commit no SQLite ao receber o comando direto pode enviar', () => {
+    const prompt = 'pode enviar';
+    const response = generateAuditedDatasetResponse(prompt);
+
+    expect(response).toContain('Diagnóstico & Execução de Governança no Supercérebro');
+    expect(response).toContain('Proposta executiva formalmente despachada e commitada');
+    expect(response).toContain('Marcos Silva (Head de Marketing Housewhey)');
+    expect(response).toContain('Carolina Mendes (Gerente de Contas SPOT)');
+    expect(response).toContain('Status de Governança: COMMITTED');
+    expect(response).toContain('O card de pendências da SPOT foi marcado como Concluído');
+  });
 });

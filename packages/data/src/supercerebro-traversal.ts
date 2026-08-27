@@ -386,8 +386,8 @@ export function getSupercerebroOperatorProfiles(options: {
         meta: isDone
           ? 'Pausa executada e auditada no SQLite'
           : (isWaitingApproval
-              ? 'Proposta despachada; aguardando aprovação de Marcos Silva (S5)'
-              : 'Exige proposta formal de Carolina Mendes e aprovação de Marcos Silva (S5)'),
+              ? 'Proposta despachada; aguardando aprovação de Marcos Silva'
+              : 'Exige proposta formal de Carolina Mendes e aprovação de Marcos Silva'),
         prompt: 'Pausar criativos com baixo desempenho e sugerir 3 variações de copy e chamada',
         btnText: isDone ? 'Ver Auditoria →' : (isWaitingApproval ? 'Aguardando Aprovação' : 'Aguardando Proposta'),
         sourceEventId: 'evt_tl_06'

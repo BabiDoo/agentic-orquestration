@@ -106,24 +106,22 @@ describe('M6-02: Controles de Execução', () => {
     it('HTML Shell deve conter todos os seletores e controles de execução', () => {
       const html = renderHtmlShell();
 
-      // Seletores principais
-      expect(html).toContain('id="model-select"');
+      // Controles principais e auto-seleção inteligente
+      expect(html).toContain('autoDetectModelFromKey');
       expect(html).toContain('google/gemini-2.5-flash');
-      expect(html).toContain('openai/gpt-4o-mini');
+      expect(html).toContain('anthropic/claude-3-5-sonnet');
 
       // Botão comparar e botão de envio
       expect(html).toContain('id="btn-compare"');
       expect(html).toContain('id="btn-chat-send"');
 
-      // Botão reset e botão voltar no chat
-      expect(html).toContain('id="btn-reset"');
+      // Botão voltar no chat
       expect(html).toContain('id="btn-chat-back"');
 
       // Barra de chave BYOK
       expect(html).toContain('id="key-bar"');
       expect(html).toContain('id="api-key-input"');
       expect(html).toContain('type="password"');
-      expect(html).toContain('id="btn-save-key"');
       expect(html).toContain('id="btn-forget-key"');
       expect(html).toContain('id="key-status-text"');
     });
@@ -137,7 +135,6 @@ describe('M6-02: Controles de Execução', () => {
       expect(html).toContain('sessionStorage.getItem');
       expect(html).toContain('sessionStorage.removeItem');
       expect(html).toContain('btnForgetKey');
-      expect(html).toContain('btnReset');
       expect(html).toContain('btnChatBack');
       expect(html).toContain('resetChatToMainScreen');
     });

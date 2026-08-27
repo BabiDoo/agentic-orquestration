@@ -6,7 +6,6 @@
 
 import { CONTRACTS_VERSION } from '@adzhub/contracts';
 import { getSupercerebroOperatorProfiles } from '@adzhub/data';
-import { ALLOWED_MODELS } from './canonical-scenarios.js';
 
 export type HarnessStatusState =
   'PROVISIONAL' | 'VERIFYING' | 'QUARANTINED' | 'COMMITTED' | 'BLOCKED' | 'FAILED';
@@ -22,11 +21,11 @@ export interface StatusBadgeInfo {
 
 export function getStatusBadgeInfo(
   status: string,
-  verified?: boolean,
+  _verified?: boolean,
   missingCondition?: string
 ): StatusBadgeInfo {
   const normalized = status.toUpperCase();
-  if (normalized === 'COMMITTED' || (normalized === 'COMPLETED' && verified)) {
+  if (normalized === 'COMMITTED') {
     return {
       status: 'COMMITTED',
       label: 'SALVO NO SUPERCÉREBRO',
@@ -81,6 +80,170 @@ export function getStatusBadgeInfo(
     cssClass: 'badge-provisional',
     description: 'Conclusão preliminar pendente de confirmação final.'
   };
+}
+
+// ==========================================
+// AdzHub Official Logo SVG
+// ==========================================
+
+export const ADZHUB_LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17626.6 4479.68" fill-rule="evenodd" clip-rule="evenodd" style="height: 32px; width: auto; display: block;" aria-label="AdzHub Logo">
+ <defs>
+  <linearGradient id="adzhub-logo-grad" gradientUnits="userSpaceOnUse" x1="151.81" y1="4327.69" x2="2885.33" y2="97.24">
+   <stop offset="0" style="stop-opacity:1; stop-color:#F68934"/>
+   <stop offset="1" style="stop-opacity:1; stop-color:#FFB32B"/>
+  </linearGradient>
+ </defs>
+ <g id="Camada_x0020_1">
+  <g id="_2943086959024">
+   <path fill="#294A91" fill-rule="nonzero" d="M6935.15 4420.12l-143.56 -347.84c-7.89,-19.11 -25.54,-30.93 -46.22,-30.93l-1054.87 0c-20.68,0 -38.33,11.81 -46.22,30.92l-143.57 347.86c-7.89,19.11 -25.54,30.92 -46.22,30.92l-458.33 0c-17.46,0 -32.48,-8.16 -41.97,-22.82 -9.49,-14.66 -10.8,-31.7 -3.65,-47.64l976.13 -2176.1c8.24,-18.38 25.47,-29.54 45.62,-29.54l504.2 0c20.19,0 37.45,11.2 45.67,29.64l969.92 2176.1c7.1,15.93 5.77,32.95 -3.73,47.58 -9.5,14.64 -24.49,22.78 -41.94,22.78l-465.04 0c-20.68,0 -38.33,-11.81 -46.22,-30.93zm-758.9 -1622.93l-298.52 716.46c-6.63,15.9 -5.01,32.63 4.55,46.97 9.56,14.33 24.37,22.26 41.6,22.26l591.86 0c17.17,0 31.94,-7.87 41.51,-22.13 9.58,-14.26 11.27,-30.91 4.76,-46.81l-293.33 -716.46c-7.83,-19.13 -25.44,-30.99 -46.12,-31.06 -20.67,-0.06 -38.36,11.69 -46.31,30.77zm3155.06 -572.24l0 2176.1c0,27.54 -22.46,50 -50,50l-349.98 0c-24.59,0 -45.19,-17.39 -49.3,-41.64l-9.63 -56.82c-3.08,-18.21 -14.82,-32.3 -32.16,-38.62 -17.35,-6.33 -35.4,-3.1 -49.48,8.85 -126.3,107.16 -282.12,160.75 -467.44,160.75 -149.57,0 -282.35,-35.23 -398.32,-105.68 -115.97,-70.45 -206.47,-169.08 -271.5,-295.89 -65.04,-126.81 -97.55,-271.51 -97.55,-434.09 0,-162.58 32.51,-307.27 97.55,-434.08 65.03,-126.81 155.53,-225.44 271.5,-295.9 115.97,-70.45 248.75,-105.67 398.32,-105.67 160.53,0 300.25,40.91 419.14,122.74 15.69,10.8 34.75,11.94 51.62,3.08 16.86,-8.87 26.73,-25.21 26.73,-44.26l0 -668.87c0,-27.54 22.46,-50 50,-50l410.5 0c27.54,0 50,22.46 50,50zm-887.68 1829.41c112.72,0 204.85,-37.39 276.38,-112.18 71.54,-74.79 107.3,-172.88 107.3,-294.27 0,-121.39 -35.76,-219.48 -107.3,-294.26 -71.53,-74.79 -163.66,-112.18 -276.38,-112.18 -112.72,0 -204.31,37.93 -274.76,113.8 -70.45,75.87 -105.68,173.42 -105.68,292.64 0,119.23 35.23,216.77 105.68,292.64 70.45,75.87 162.04,113.81 274.76,113.81zm1987.45 -48.78l563.8 0c27.54,0 50,22.46 50,50l0 345.47c0,27.54 -22.46,50 -50,50l-1337.19 0c-27.54,0 -50,-22.46 -50,-50l0 -103.58c0,-10.54 2.81,-19.59 8.77,-28.28l626.85 -913.67c10.77,-15.7 11.88,-34.74 3.01,-51.59 -8.87,-16.84 -25.2,-26.7 -44.24,-26.7l-482.61 0c-27.54,0 -50,-22.46 -50,-50l0 -332.46c0,-27.54 22.46,-50 50,-50l1252.65 0c27.54,0 50,22.46 50,50l0 97.05c0,10.56 -2.81,19.63 -8.79,28.33l-623.46 907.11c-10.79,15.7 -11.91,34.75 -3.04,51.6 8.87,16.86 25.2,26.72 44.25,26.72zm2513.94 -1830.63l430.01 0c27.54,0 50,22.46 50,50l0 2176.1c0,27.54 -22.46,50 -50,50l-430.01 0c-27.54,0 -50,-22.46 -50,-50l0 -813.69c0,-27.54 -22.46,-50 -50,-50l-865.71 0c-27.54,0 -50,22.46 -50,50l0 813.69c0,27.54 -22.46,50 -50,50l-433.26 0c-27.54,0 -50,-22.46 -50,-50l0 -2176.1c0,-27.54 22.46,-50 50,-50l433.26 0c27.54,0 50,22.46 50,50l0 781.18c0,27.54 22.46,50 50,50l865.71 0c27.54,0 50,-22.46 50,-50l0 -781.18c0,-27.54 22.46,-50 50,-50zm2518.74 719.82l0 1506.28c0,27.54 -22.46,50 -50,50l-350.22 0c-24.49,0 -45.02,-17.23 -49.25,-41.36l-8.56 -48.82c-3.2,-18.22 -15.05,-32.26 -32.48,-38.47 -17.43,-6.2 -35.49,-2.81 -49.48,9.29 -46.47,40.2 -98.98,72.94 -157.47,98.22 -87.79,37.93 -183.71,56.91 -287.76,56.91 -197.27,0 -354.43,-65.03 -471.48,-195.1 -117.06,-130.06 -175.59,-309.98 -175.59,-539.76l0 -857.19c0,-27.54 22.46,-50 50,-50l410.5 0c27.54,0 50,22.46 50,50l0 827.93c0,104.05 25.47,185.34 76.41,243.87 50.94,58.52 120.85,87.79 209.73,87.79 97.54,0 176.12,-34.14 235.74,-102.43 59.61,-68.28 89.41,-156.61 89.41,-265l0 -792.16c0,-27.54 22.46,-50 50,-50l410.5 0c27.54,0 50,22.46 50,50zm1391.67 -82.51c149.57,0 282.89,35.22 399.94,105.67 117.06,70.46 208.1,169.09 273.13,295.9 65.04,126.81 97.55,271.5 97.55,434.08 0,162.58 -32.51,307.28 -97.55,434.09 -65.03,126.81 -156.07,225.44 -273.13,295.89 -117.05,70.45 -250.37,105.68 -399.94,105.68 -185.32,0 -341.14,-53.59 -467.44,-160.75 -14.08,-11.95 -32.13,-15.18 -49.48,-8.85 -17.35,6.32 -29.08,20.41 -32.16,38.62l-9.63 56.81c-4.11,24.25 -24.7,41.65 -49.3,41.65l-349.98 0c-27.54,0 -50,-22.46 -50,-50l0 -2176.1c0,-27.54 22.46,-50 50,-50l410.5 0c27.54,0 50,22.46 50,50l0 668.87c0,19.05 9.87,35.39 26.73,44.26 16.87,8.86 35.92,7.73 51.62,-3.08 118.89,-81.83 258.61,-122.74 419.14,-122.74zm-120.31 1242.1c112.72,0 204.85,-37.39 276.38,-112.18 71.54,-74.79 107.31,-172.88 107.31,-294.27 0,-121.39 -35.77,-219.48 -107.31,-294.26 -71.53,-74.79 -163.66,-112.18 -276.38,-112.18 -112.72,0 -204.31,37.93 -274.76,113.8 -70.45,75.87 -105.67,173.42 -105.67,292.64 0,119.23 35.22,216.77 105.67,292.64 70.45,75.87 162.04,113.81 274.76,113.81z"/>
+   <path fill="url(#adzhub-logo-grad)" d="M1484.65 1989.21l-285.24 385.08c-26.96,35.82 -47.2,57.84 -71.56,93.86l-939.35 1271.54c-28.01,33.54 -44.82,60.23 -70.45,95.37 -82.32,112.9 -160.54,224.81 -92.83,375.83 6.18,13.79 25.28,43.13 32.27,50.54 9.43,10 9.71,8.66 19.34,17.03 49.64,43.16 84.15,63.56 163.9,60.25 120.35,-5 759.2,-340.57 943.86,-423.52l452.01 -219.96c280.41,-125.85 653.33,-324.39 923.26,-439.84 78.82,-33.71 294.53,-129.62 364.64,-178.4 49.43,-34.39 39.13,-15.57 70.9,-67.07 48.93,-79.31 87.81,-145.43 57.95,-262.81 -21.95,-86.27 -89,-160.32 -148.98,-190.56 -106.22,-53.55 -176.46,-21.31 -272.63,16.76 -68.3,27.04 -169.62,73.04 -233.12,107.22 -159.9,86.07 -511.05,226.96 -701.97,320.79 -38.71,19.02 -198.38,104.28 -231.02,94.33 -17.15,-31.23 -4.19,-44.24 11.47,-65.33l594.51 -796.35c15.74,-20.62 27.53,-36.8 36.57,-59.3 8.67,-7.83 6.4,-5.81 15.76,-16.31l751.93 -1017.54c25.88,-38.76 60.11,-73.97 87.85,-15.65l75.46 246.74c30.92,95.1 62.83,191.02 91.64,286.41 170.77,565.49 363.78,1148.85 534.92,1712.96 56.08,184.85 113.86,389.79 177.59,568.33 40.06,112.22 91.16,343.6 146.76,405.44 13.6,15.12 32.34,28.85 47.59,43.52 83.64,80.44 245.24,89.92 358.52,39.53 84.62,-37.65 131.03,-110.57 173.09,-202.53 79.69,-174.26 151.58,-351.98 234.84,-520.72 81.24,-164.65 147.3,-353.12 229.29,-517 147.29,-294.4 315.53,-733.47 460.38,-1031.83l234.72 -520.82c40.93,-97.32 89.22,-174.5 24.27,-279.11 -46.01,-74.13 -155.48,-113.07 -268.34,-66.19 -174,72.28 -356.27,147.4 -528.82,226.91 -85.38,39.34 -173.68,75.52 -257.49,110.79 -87.33,36.75 -173.33,80.31 -261.84,115.54 -89.02,35.42 -178.82,73.68 -266.89,111.27 -329.15,140.45 -280.13,193.48 -385.96,-178.36l-275.65 -912.41c-29.11,-100.82 -59.98,-202.94 -92.99,-303.27 -60.74,-184.59 -78.53,-456.83 -337.34,-453.2 -147.79,2.07 -235.39,131.57 -326.73,261.01 -8.01,11.36 -8.93,16.11 -17.23,29.48l-149.21 200.26c-28.78,41.61 -58.99,75.77 -87.05,115.63l-80.85 112.85c-26.51,39.18 -57.89,75.54 -87.18,115.34l-801.32 1087.01c-15.16,20.71 -28.81,41.76 -43.25,60.46zm2836.55 1342.66c48.26,-18.58 235.57,-457.15 263.44,-529.59 37.2,-96.69 237.4,-492.16 226.48,-558.84 -56.36,-11.27 -305.14,116.41 -372.18,146.09 -453.47,200.72 -396.91,123.2 -327.84,359.06l120.84 404.22c17.23,57.19 25.59,168.59 89.26,179.06z"/>
+  </g>
+ </g>
+</svg>`;
+
+// ==========================================
+// Material Design 3 (M3) Symbols Helper
+// ==========================================
+
+export function getMaterialIcon(
+  name: string,
+  options: {
+    size?: number;
+    fill?: number;
+    weight?: number;
+    grade?: number;
+    opticalSize?: number;
+    className?: string;
+    style?: string;
+  } = {}
+): string {
+  const size = options.size || 18;
+  const fill = options.fill ?? 0;
+  const weight = options.weight ?? 400;
+  const grad = options.grade ?? 0;
+  const opsz = options.opticalSize ?? 24;
+  const cls = options.className
+    ? `material-symbols-rounded md3-icon md3-icon-${name} ${options.className}`
+    : `material-symbols-rounded md3-icon md3-icon-${name}`;
+  const customStyle = options.style ? `${options.style}; ` : '';
+  const fontVar = `font-variation-settings: 'FILL' ${fill}, 'wght' ${weight}, 'GRAD' ${grad}, 'opsz' ${opsz}; font-size: ${size}px; width: ${size}px; height: ${size}px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; user-select: none; vertical-align: middle;`;
+  return `<span class="${cls}" style="${customStyle}${fontVar}" aria-hidden="true">${name}</span>`;
+}
+
+// ==========================================
+// Lucide Icons Vector Helper
+// ==========================================
+
+export function getLucideSvg(
+  name: string,
+  options: { size?: number; className?: string; strokeWidth?: number; style?: string } = {}
+): string {
+  const size = options.size || 16;
+  const strokeWidth = options.strokeWidth || 2;
+  const cls = options.className ? ` class="lucide-icon lucide-${name} ${options.className}"` : ` class="lucide-icon lucide-${name}"`;
+  const style = options.style ? ` style="${options.style}"` : '';
+  const baseAttr = `xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"${cls}${style}`;
+
+  switch (name) {
+    case 'message-square':
+      return `<svg ${baseAttr}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+    case 'folder':
+      return `<svg ${baseAttr}><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>`;
+    case 'folder-open':
+      return `<svg ${baseAttr}><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>`;
+    case 'folder-kanban':
+      return `<svg ${baseAttr}><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg>`;
+    case 'file-text':
+    case 'description':
+      return `<svg ${baseAttr}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>`;
+    case 'brain':
+      return `<svg ${baseAttr}><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/><path d="M12 10a2.5 2.5 0 0 0 2.5 2.5"/><path d="M12 14.5a2.5 2.5 0 0 1-2.5-2.5"/></svg>`;
+    case 'history':
+      return `<svg ${baseAttr}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>`;
+    case 'clock':
+      return `<svg ${baseAttr}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+    case 'crosshair':
+    case 'target':
+      return `<svg ${baseAttr}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`;
+    case 'zap':
+      return `<svg ${baseAttr}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
+    case 'user':
+    case 'person':
+      return `<svg ${baseAttr}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+    case 'users':
+      return `<svg ${baseAttr}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
+    case 'search':
+      return `<svg ${baseAttr}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`;
+    case 'calendar':
+      return `<svg ${baseAttr}><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
+    case 'bar-chart-3':
+      return `<svg ${baseAttr}><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>`;
+    case 'lightbulb':
+      return `<svg ${baseAttr}><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`;
+    case 'rocket':
+      return `<svg ${baseAttr}><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>`;
+    case 'scale':
+      return `<svg ${baseAttr}><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>`;
+    case 'rotate-ccw':
+      return `<svg ${baseAttr}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
+    case 'copy':
+      return `<svg ${baseAttr}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+    case 'download':
+      return `<svg ${baseAttr}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>`;
+    case 'shield':
+    case 'security':
+      return `<svg ${baseAttr}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+    case 'shield-check':
+      return `<svg ${baseAttr}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
+    case 'check':
+      return `<svg ${baseAttr}><polyline points="20 6 9 17 4 12"/></svg>`;
+    case 'check-circle-2':
+    case 'verified':
+      return `<svg ${baseAttr}><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
+    case 'x':
+      return `<svg ${baseAttr}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`;
+    case 'alert-triangle':
+      return `<svg ${baseAttr}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>`;
+    case 'lock':
+      return `<svg ${baseAttr}><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+    case 'wrench':
+      return `<svg ${baseAttr}><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`;
+    case 'sparkles':
+      return `<svg ${baseAttr}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>`;
+    case 'eye':
+      return `<svg ${baseAttr}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    case 'arrow-right':
+      return `<svg ${baseAttr}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
+    case 'arrow-up':
+      return `<svg ${baseAttr}><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>`;
+    case 'menu':
+      return `<svg ${baseAttr}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>`;
+    case 'network':
+    case 'hub':
+    case 'share-2':
+      return `<svg ${baseAttr}><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>`;
+    case 'building-2':
+    case 'building':
+    case 'corporate_fare':
+      return `<svg ${baseAttr}><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>`;
+    case 'megaphone':
+    case 'campaign':
+      return `<svg ${baseAttr}><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`;
+    case 'tag':
+    case 'tags':
+    case 'sell':
+      return `<svg ${baseAttr}><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>`;
+    case 'clipboard-list':
+    case 'pending_actions':
+      return `<svg ${baseAttr}><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>`;
+    case 'info':
+      return `<svg ${baseAttr}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
+    case 'timeline':
+    case 'activity':
+      return `<svg ${baseAttr}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`;
+    default:
+      return `<svg ${baseAttr}><circle cx="12" cy="12" r="10"/></svg>`;
+  }
 }
 
 // ==========================================
@@ -158,11 +321,6 @@ export function renderGovernanceCard(data: GovernanceCardData): string {
 }
 
 export function renderHtmlShell(): string {
-  const modelsOptions = ALLOWED_MODELS.map(
-    (m) =>
-      `<option value="${m.id}" ${'default' in m && m.default ? 'selected' : ''}>${m.name}</option>`
-  ).join('');
-
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -172,8 +330,108 @@ export function renderHtmlShell(): string {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&family=Plus+Jakarta+Sans:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
+      /* ========================================================= */
+      /* Material Design 3 (M3) — Tokens Oficiais de Cor & Tema   */
+      /* ========================================================= */
+      --md-sys-color-primary: #294A91;
+      --md-sys-color-on-primary: #FFFFFF;
+      --md-sys-color-primary-container: #E2E8F8;
+      --md-sys-color-on-primary-container: #102657;
+
+      --md-sys-color-secondary: #F68934;
+      --md-sys-color-on-secondary: #FFFFFF;
+      --md-sys-color-secondary-container: #FFEAD8;
+      --md-sys-color-on-secondary-container: #542500;
+
+      --md-sys-color-tertiary: #0284C7;
+      --md-sys-color-on-tertiary: #FFFFFF;
+      --md-sys-color-tertiary-container: #E0F2FE;
+      --md-sys-color-on-tertiary-container: #002244;
+
+      --md-sys-color-error: #BA1A1A;
+      --md-sys-color-on-error: #FFFFFF;
+      --md-sys-color-error-container: #FFDAD6;
+      --md-sys-color-on-error-container: #410002;
+
+      --md-sys-color-success: #15803D;
+      --md-sys-color-on-success: #FFFFFF;
+      --md-sys-color-success-container: #DCFCE7;
+      --md-sys-color-on-success-container: #052E16;
+
+      --md-sys-color-warning: #B45309;
+      --md-sys-color-on-warning: #FFFFFF;
+      --md-sys-color-warning-container: #FEF3C7;
+      --md-sys-color-on-warning-container: #451A03;
+
+      --md-sys-color-surface: #FFFFFF;
+      --md-sys-color-surface-dim: #D9DFE8;
+      --md-sys-color-surface-bright: #F8FAFD;
+      --md-sys-color-surface-container-lowest: #FFFFFF;
+      --md-sys-color-surface-container-low: #F6F8FB;
+      --md-sys-color-surface-container: #EEF2F8;
+      --md-sys-color-surface-container-high: #E6ECF4;
+      --md-sys-color-surface-container-highest: #DEE5EF;
+      --md-sys-color-on-surface: #1E293B;
+      --md-sys-color-on-surface-variant: #475569;
+      --md-sys-color-outline: #CBD5E1;
+      --md-sys-color-outline-variant: #E2E8F0;
+      --md-sys-color-inverse-surface: #1E293B;
+      --md-sys-color-inverse-on-surface: #F8FAFC;
+      --md-sys-color-inverse-primary: #ADC6FF;
+
+      /* ========================================================= */
+      /* Material Design 3 — Shape Scale (Formas e Raios)          */
+      /* ========================================================= */
+      --md-sys-shape-corner-none: 0px;
+      --md-sys-shape-corner-extra-small: 4px;
+      --md-sys-shape-corner-small: 8px;
+      --md-sys-shape-corner-medium: 12px;
+      --md-sys-shape-corner-large: 16px;
+      --md-sys-shape-corner-extra-large: 28px;
+      --md-sys-shape-corner-full: 9999px;
+
+      /* ========================================================= */
+      /* Material Design 3 — Elevation Scale (Sombreamento Duplo)  */
+      /* ========================================================= */
+      --md-sys-elevation-0: none;
+      --md-sys-elevation-1: 0px 1px 2px rgba(15, 23, 42, 0.08), 0px 1px 3px 1px rgba(15, 23, 42, 0.05);
+      --md-sys-elevation-2: 0px 1px 2px rgba(15, 23, 42, 0.08), 0px 2px 6px 2px rgba(15, 23, 42, 0.06);
+      --md-sys-elevation-3: 0px 1px 3px rgba(15, 23, 42, 0.10), 0px 4px 12px 3px rgba(15, 23, 42, 0.08);
+      --md-sys-elevation-4: 0px 2px 3px rgba(15, 23, 42, 0.10), 0px 6px 16px 4px rgba(15, 23, 42, 0.10);
+      --md-sys-elevation-5: 0px 4px 4px rgba(15, 23, 42, 0.12), 0px 8px 24px 6px rgba(15, 23, 42, 0.12);
+
+      /* ========================================================= */
+      /* Material Design 3 — Motion System (Curvas e Durações)     */
+      /* ========================================================= */
+      --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.0);
+      --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1.0);
+      --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+      --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+      --md-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0.2, 1);
+      --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.4, 0, 1, 1);
+
+      --md-sys-motion-duration-short1: 50ms;
+      --md-sys-motion-duration-short2: 100ms;
+      --md-sys-motion-duration-short3: 150ms;
+      --md-sys-motion-duration-short4: 200ms;
+      --md-sys-motion-duration-medium1: 250ms;
+      --md-sys-motion-duration-medium2: 300ms;
+      --md-sys-motion-duration-medium3: 350ms;
+      --md-sys-motion-duration-medium4: 400ms;
+      --md-sys-motion-duration-long1: 450ms;
+      --md-sys-motion-duration-long2: 500ms;
+      --md-sys-motion-duration-long3: 550ms;
+      --md-sys-motion-duration-long4: 600ms;
+      --md-sys-motion-duration-extra-long1: 700ms;
+      --md-sys-motion-duration-extra-long2: 800ms;
+      --md-sys-motion-duration-extra-long3: 900ms;
+      --md-sys-motion-duration-extra-long4: 1000ms;
+
       /* ========================================================= */
       /* adzhub-command-center v1.0.0 — Tokens Oficiais de Cor     */
       /* ========================================================= */
@@ -209,6 +467,7 @@ export function renderHtmlShell(): string {
       --blue-soft: #EDF2FC;
 
       --cyan: #8AD7E4;
+      --cyan-strong: #0284C7;
       --green: #53B58A;
       --green-soft: #E5F5EE;
       --yellow: #E6B94D;
@@ -249,6 +508,27 @@ export function renderHtmlShell(): string {
       --color-blocked: var(--danger);
       --color-failed: var(--danger);
 
+      /* Sistema de Tags Tone-on-Tone Refinado */
+      --tag-neutral-bg: #F1F5F9;
+      --tag-neutral-border: #E2E8F0;
+      --tag-neutral-ink: #334155;
+
+      --tag-success-bg: #F0FDF4;
+      --tag-success-border: #DCFCE7;
+      --tag-success-ink: #15803D;
+
+      --tag-warning-bg: #FFFBEB;
+      --tag-warning-border: #FEF3C7;
+      --tag-warning-ink: #B45309;
+
+      --tag-danger-bg: #FEF2F2;
+      --tag-danger-border: #FEE2E2;
+      --tag-danger-ink: #B91C1C;
+
+      --tag-info-bg: #EFF6FF;
+      --tag-info-border: #DBEAFE;
+      --tag-info-ink: #1D4ED8;
+
       /* ========================================================= */
       /* Tipografia Inter, Plus Jakarta Sans & IBM Plex Mono       */
       /* ========================================================= */
@@ -275,15 +555,23 @@ export function renderHtmlShell(): string {
       --radius-app-window: 22px;
       --radius-pill: 999px;
 
-      /* Sombras Frias, Difusas e Curtas */
-      --shadow-app-window: 0 18px 50px rgba(31, 43, 63, 0.12);
-      --shadow-card: 0 2px 10px rgba(37, 48, 66, 0.045);
-      --shadow-floating: 0 8px 22px rgba(37, 48, 66, 0.10);
+      /* Sombras Frias, Difusas e Flutuantes (Profundidade Multi-camadas) */
+      --shadow-app-window: 
+        0 0 0 1px rgba(203, 213, 225, 0.75),
+        0 4px 6px -2px rgba(15, 23, 42, 0.05),
+        0 12px 24px -4px rgba(15, 23, 42, 0.12),
+        0 25px 50px -12px rgba(15, 23, 42, 0.18),
+        0 45px 80px -20px rgba(15, 23, 42, 0.14);
+      --shadow-card: 0 2px 8px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-floating: 
+        0 10px 25px -4px rgba(15, 23, 42, 0.12),
+        0 4px 10px -2px rgba(15, 23, 42, 0.06),
+        0 0 0 1px rgba(203, 213, 225, 0.8);
       --glow-navy-pulse: 0 0 0 3px rgba(41, 74, 145, 0.25);
 
       /* Animação & Movimento */
       --duration-default: 200ms;
-      --ease-default: cubic-bezier(.22, 1, .36, 1);
+      --ease-default: var(--md-sys-motion-easing-standard, cubic-bezier(.22, 1, .36, 1));
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -291,7 +579,9 @@ export function renderHtmlShell(): string {
     html {
       font-size: 14px;
       height: 100vh;
+      height: 100dvh;
       max-height: 100vh;
+      max-height: 100dvh;
       overflow: hidden;
     }
 
@@ -301,12 +591,17 @@ export function renderHtmlShell(): string {
 
     body {
       height: 100vh;
+      height: 100dvh;
       max-height: 100vh;
+      max-height: 100dvh;
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: var(--page-backdrop);
-      background-image: radial-gradient(circle at 50% -10%, rgba(41, 74, 145, 0.04) 0%, rgba(241, 243, 245, 0.98) 60%, #E9ECEF 100%);
+      background-color: #EDF2F7;
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(41, 74, 145, 0.06) 0%, transparent 65%),
+        radial-gradient(ellipse at 85% 100%, rgba(245, 154, 25, 0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #F8FAFC 0%, #EDF2F7 100%);
       color: var(--ink);
       font-family: var(--font-primary);
       font-size: var(--body);
@@ -361,6 +656,11 @@ export function renderHtmlShell(): string {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+    }
+    .brand-logo-wrap svg {
+      height: 32px;
+      width: auto;
+      display: block;
     }
 
     .brand .logo-badge {
@@ -458,8 +758,8 @@ export function renderHtmlShell(): string {
     .operator-dropdown-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 4px 10px;
+      gap: 6px;
+      padding: 5px 12px;
       background: var(--surface-soft);
       border: 1px solid var(--line-strong);
       border-radius: var(--radius-pill);
@@ -654,7 +954,56 @@ export function renderHtmlShell(): string {
     }
 
     /* ========================================================= */
-    /* Componentes Globais de Form e Botões                      */
+    /* Material Symbols M3 & Icon Typography                     */
+    /* ========================================================= */
+    .material-symbols-rounded, .material-symbols-outlined {
+      font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+      vertical-align: middle;
+      flex-shrink: 0;
+      transition: transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+    }
+
+    /* ========================================================= */
+    /* Material Design 3 — Ripple Effect & Interactive States    */
+    /* ========================================================= */
+    .md3-ripple, button, .rail-btn, .doc-tab-btn, .timeline-tab-btn, .graph-tab-btn, .task-card-item, .operator-menu-item, .turn-suggestion-chip {
+      position: relative;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .md3-ripple-wave {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(41, 74, 145, 0.28) 0%, rgba(41, 74, 145, 0.10) 60%, transparent 80%);
+      transform: scale(0);
+      animation: md3-ripple-animation 0.55s var(--md-sys-motion-easing-standard-decelerate) forwards;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes md3-ripple-animation {
+      0% { transform: scale(0); opacity: 1; }
+      100% { transform: scale(2.8); opacity: 0; }
+    }
+
+    /* ========================================================= */
+    /* Componentes Globais de Form e Botões Material Design 3    */
     /* ========================================================= */
     select, button, input {
       background-color: var(--surface);
@@ -665,13 +1014,13 @@ export function renderHtmlShell(): string {
       font-size: var(--body);
       font-family: var(--font-primary);
       outline: none;
-      transition: all var(--duration-default) var(--ease-default);
+      transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
     }
 
     select:focus, button:focus, input:focus {
-      border-color: var(--navy);
+      border-color: var(--md-sys-color-primary);
       background-color: var(--surface);
-      box-shadow: 0 0 0 2px rgba(41, 74, 145, 0.25);
+      box-shadow: 0 0 0 3px rgba(41, 74, 145, 0.18);
     }
 
     button {
@@ -680,6 +1029,8 @@ export function renderHtmlShell(): string {
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      user-select: none;
+      transition: all var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
     }
 
     button:hover:not(:disabled) {
@@ -687,46 +1038,155 @@ export function renderHtmlShell(): string {
       border-color: var(--line-strong);
     }
 
+    button:active:not(:disabled) {
+      transform: scale(0.985);
+    }
+
     button:disabled {
       opacity: 0.45;
       cursor: not-allowed;
     }
 
-    button.btn-primary {
-      background-color: var(--navy);
-      border-color: var(--navy);
-      color: #FFFFFF;
+    /* M3 Filled Button (btn-primary) */
+    button.btn-primary, .md3-btn-filled {
+      background-color: var(--md-sys-color-primary);
+      border: 1px solid var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
       font-weight: 600;
-      padding: 7px 14px;
-      box-shadow: 0 1px 3px rgba(41, 74, 145, 0.2);
+      padding: 7px 15px;
+      border-radius: var(--md-sys-shape-corner-full);
+      box-shadow: var(--md-sys-elevation-1);
+      letter-spacing: 0.01em;
     }
-    button.btn-primary:hover:not(:disabled) {
+    button.btn-primary:hover:not(:disabled), .md3-btn-filled:hover:not(:disabled) {
       background-color: var(--navy-deep);
       border-color: var(--navy-deep);
-      box-shadow: 0 2px 8px rgba(41, 74, 145, 0.3);
+      box-shadow: var(--md-sys-elevation-2);
+      transform: translateY(-1px);
+    }
+    button.btn-primary:active:not(:disabled), .md3-btn-filled:active:not(:disabled) {
+      box-shadow: var(--md-sys-elevation-1);
+      transform: translateY(0) scale(0.985);
+    }
+
+    /* M3 Tonal / Outlined Button (btn-secondary) */
+    button.btn-secondary, .md3-btn-tonal {
+      background-color: var(--md-sys-color-surface-container-high);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      color: var(--md-sys-color-primary);
+      padding: 6px 14px;
+      border-radius: var(--md-sys-shape-corner-full);
+      font-weight: 600;
+    }
+    button.btn-secondary:hover:not(:disabled), .md3-btn-tonal:hover:not(:disabled) {
+      background-color: var(--md-sys-color-primary-container);
+      border-color: var(--adzhub-navy-border);
+      color: var(--md-sys-color-on-primary-container);
+      box-shadow: var(--md-sys-elevation-1);
+      transform: translateY(-1px);
+    }
+    button.btn-secondary:active:not(:disabled), .md3-btn-tonal:active:not(:disabled) {
+      transform: translateY(0) scale(0.985);
+    }
+
+    /* M3 Danger Button */
+    button.btn-danger {
+      background-color: var(--md-sys-color-error-container);
+      border: 1px solid rgba(186, 26, 26, 0.2);
+      color: var(--md-sys-color-error);
+      border-radius: var(--md-sys-shape-corner-full);
+      font-weight: 600;
+    }
+    button.btn-danger:hover:not(:disabled) {
+      background-color: var(--md-sys-color-error);
+      color: #FFFFFF;
+      box-shadow: var(--md-sys-elevation-1);
       transform: translateY(-1px);
     }
 
-    button.btn-secondary {
-      background-color: var(--surface);
-      border-color: var(--line);
-      color: var(--ink);
-      padding: 6px 12px;
+    /* M3 Icon Button */
+    .md3-icon-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: all var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
     }
-    button.btn-secondary:hover:not(:disabled) {
-      background-color: var(--navy-soft);
-      border-color: var(--adzhub-navy-border);
-      color: var(--navy-ink);
+    .md3-icon-button:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-primary);
+    }
+    .md3-icon-button:active {
+      transform: scale(0.94);
     }
 
-    button.btn-danger {
-      background-color: var(--danger-soft);
-      border-color: var(--danger);
-      color: #991B1B;
+    /* M3 Filter Chips */
+    .md3-chip, .md3-filter-chip, .doc-tab-btn, .timeline-tab-btn, .graph-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: var(--md-sys-shape-corner-full);
+      font-size: var(--label);
+      font-weight: 600;
+      font-family: var(--font-primary);
+      cursor: pointer;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background-color: var(--md-sys-color-surface-container-lowest);
+      color: var(--ink);
+      transition: all var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+      white-space: nowrap;
+      user-select: none;
     }
-    button.btn-danger:hover:not(:disabled) {
-      background-color: var(--danger);
-      color: #FFFFFF;
+    .md3-chip:hover, .md3-filter-chip:hover, .doc-tab-btn:hover, .timeline-tab-btn:hover, .graph-tab-btn:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+      border-color: var(--adzhub-navy-border);
+      color: var(--md-sys-color-primary);
+      box-shadow: var(--md-sys-elevation-1);
+      transform: translateY(-1px);
+    }
+    .md3-chip.active, .md3-filter-chip.active, .doc-tab-btn.active, .timeline-tab-btn.active, .graph-tab-btn.active {
+      background-color: var(--md-sys-color-primary);
+      border-color: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary) !important;
+      box-shadow: var(--md-sys-elevation-1);
+    }
+    .md3-chip.active .material-symbols-rounded, .md3-chip.active svg {
+      color: var(--md-sys-color-on-primary) !important;
+      stroke: var(--md-sys-color-on-primary) !important;
+    }
+
+    /* M3 Suggestion Chips */
+    .turn-suggestion-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--surface);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-large);
+      color: var(--ink-strong);
+      font-size: var(--label);
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: var(--md-sys-elevation-1);
+      transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+      text-align: left;
+    }
+    .turn-suggestion-chip:hover {
+      background: var(--md-sys-color-surface-container-low);
+      border-color: var(--adzhub-navy-border);
+      color: var(--md-sys-color-primary);
+      box-shadow: var(--md-sys-elevation-2);
+      transform: translateY(-2px);
     }
 
     /* ========================================================= */
@@ -736,13 +1196,16 @@ export function renderHtmlShell(): string {
       flex: 1;
       min-height: 0;
       overflow: hidden;
-      padding: 14px 20px 16px;
+      padding: 12px 20px 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100%;
+      height: calc(100vh - 50px);
+      height: calc(100dvh - 50px);
       box-sizing: border-box;
+      gap: 12px;
     }
 
     .blueprint-card {
@@ -750,15 +1213,18 @@ export function renderHtmlShell(): string {
       width: 100%;
       max-width: 1200px;
       min-height: 0;
-      max-height: calc(100vh - 84px);
+      max-height: calc(100vh - 78px);
+      max-height: calc(100dvh - 78px);
+      height: 100%;
       background-color: var(--app-canvas);
-      border: 1px solid var(--line);
+      border: 1px solid rgba(226, 232, 240, 0.9);
       border-radius: var(--radius-app-window);
       box-shadow: var(--shadow-app-window);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       margin: 0 auto;
+      position: relative;
     }
 
     .blueprint-card-header {
@@ -778,23 +1244,46 @@ export function renderHtmlShell(): string {
     }
 
     /* ========================================================= */
-    /* Grid de 4 Regiões Anatômicas:                             */
-    /* iconRail (56px) + taskQueue (210px) + assistant (1fr) + context (260px) */
+    /* Grid de 4 Regiões Anatômicas (Desktop):                   */
+    /* iconRail (56px) + Mesa de Controles (220px) + Chat (1fr) + Palco (270px) */
     /* ========================================================= */
     .blueprint-grid {
       flex: 1;
       min-height: 0;
       display: grid;
-      grid-template-columns: 56px minmax(190px, 220px) minmax(420px, 1fr) minmax(230px, 280px);
+      grid-template-columns: 56px minmax(210px, 240px) minmax(400px, 1fr) minmax(240px, 280px);
       overflow: hidden;
+      width: 100%;
     }
-    .blueprint-grid.hide-controls-and-palco,
-    .blueprint-grid.hide-palco {
-      grid-template-columns: 56px 1fr;
+    .blueprint-grid.view-chat,
+    .blueprint-grid:not(.view-documents):not(.view-supercerebro):not(.view-timeline):not(.view-controls):not(.view-palco) {
+      grid-template-columns: 56px minmax(210px, 240px) minmax(400px, 1fr) minmax(240px, 280px);
+    }
+    .blueprint-grid.view-documents,
+    .blueprint-grid.view-supercerebro,
+    .blueprint-grid.view-timeline,
+    .blueprint-grid.view-full,
+    .blueprint-grid.hide-palco,
+    .blueprint-grid.hide-controls-and-palco {
+      grid-template-columns: 56px 1fr !important;
+    }
+
+    /* Ocultar Controles e Palco no Desktop quando em views de tela cheia */
+    .blueprint-grid.view-documents #pane-controls,
+    .blueprint-grid.view-documents #pane-palco,
+    .blueprint-grid.view-supercerebro #pane-controls,
+    .blueprint-grid.view-supercerebro #pane-palco,
+    .blueprint-grid.view-timeline #pane-controls,
+    .blueprint-grid.view-timeline #pane-palco,
+    .blueprint-grid.hide-palco #pane-controls,
+    .blueprint-grid.hide-palco #pane-palco,
+    .blueprint-grid.hide-controls-and-palco #pane-controls,
+    .blueprint-grid.hide-controls-and-palco #pane-palco {
+      display: none !important;
     }
 
     /* --------------------------------------------------------- */
-    /* REGIÃO 1: ICON RAIL (Left Navigation Shortcuts)           */
+    /* REGIÃO 1: ICON RAIL (Left Navigation Shortcuts M3)        */
     /* --------------------------------------------------------- */
     .icon-rail-column {
       flex-shrink: 0;
@@ -814,11 +1303,11 @@ export function renderHtmlShell(): string {
     }
 
     .rail-btn {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       margin: 0 auto;
       padding: 0;
-      border-radius: var(--radius-control);
+      border-radius: var(--md-sys-shape-corner-full);
       background: transparent;
       border: 1px solid transparent;
       color: var(--ink-muted);
@@ -829,17 +1318,22 @@ export function renderHtmlShell(): string {
       font-size: 1.05rem;
       cursor: pointer;
       position: relative;
-      transition: all var(--duration-default) var(--ease-default);
+      transition: all var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
       box-sizing: border-box;
     }
     .rail-btn:hover {
-      background-color: var(--navy-soft);
-      color: var(--navy-ink);
+      background-color: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-primary);
+      transform: scale(1.06);
     }
     .rail-btn.active {
-      background-color: var(--navy);
-      color: #FFFFFF;
-      box-shadow: 0 1px 4px rgba(41, 74, 145, 0.25);
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-primary);
+      box-shadow: var(--md-sys-elevation-1);
+    }
+    .rail-btn.active .material-symbols-rounded, .rail-btn.active svg {
+      color: var(--md-sys-color-primary);
+      stroke: var(--md-sys-color-primary);
     }
     .rail-divider {
       width: 24px;
@@ -1124,6 +1618,7 @@ export function renderHtmlShell(): string {
       gap: 14px;
       scrollbar-width: thin;
       scrollbar-color: var(--line) transparent;
+      scroll-behavior: smooth;
     }
     #chat-messages-wrapper::-webkit-scrollbar { width: 5px; }
     #chat-messages-wrapper::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
@@ -1173,16 +1668,90 @@ export function renderHtmlShell(): string {
     .user-bubble {
       background-color: var(--navy);
       color: #FFFFFF;
-      padding: 10px 14px;
+      padding: 10px 16px;
       border-radius: var(--radius-card);
-      font-size: var(--body);
+      font-size: 0.9375rem;
       font-weight: 400;
       max-width: 82%;
       box-shadow: var(--shadow-card);
-      line-height: 1.5;
+      line-height: 1.55;
+      letter-spacing: 0.01em;
     }
 
-    /* Agent Reasoning & Tool Steps */
+    /* ========================================================= */
+    /* Card Accordion de Raciocínio Colapsável                   */
+    /* ========================================================= */
+    .reasoning-accordion-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      background-color: var(--surface-soft);
+      overflow: hidden;
+      transition: all var(--duration-default) var(--ease-default);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    .reasoning-accordion-card:hover {
+      border-color: var(--adzhub-navy-border);
+    }
+    .reasoning-accordion-header {
+      width: 100%;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: transparent;
+      border: none;
+      color: var(--ink-strong);
+      font-size: var(--body);
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      user-select: none;
+      font-family: var(--font-primary);
+      transition: background-color var(--duration-default) var(--ease-default);
+    }
+    .reasoning-accordion-header:hover {
+      background-color: var(--surface-selected);
+    }
+    .reasoning-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .reasoning-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      background: var(--navy-soft);
+      color: var(--navy);
+    }
+    .reasoning-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink-strong);
+      letter-spacing: -0.01em;
+    }
+    .reasoning-chevron {
+      color: var(--ink-muted);
+      font-size: 0.85rem;
+      transition: transform var(--duration-default) var(--ease-default);
+      display: inline-flex;
+      align-items: center;
+    }
+    .reasoning-accordion-card.open .reasoning-chevron {
+      transform: rotate(180deg);
+    }
+    .reasoning-accordion-content {
+      padding: 8px 12px 12px;
+      border-top: 1px dashed var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Agent Reasoning & Tool Steps (Cards de raciocínio mantidos intactos) */
     .agent-steps-stream {
       display: flex;
       flex-direction: column;
@@ -1194,7 +1763,7 @@ export function renderHtmlShell(): string {
       gap: 8px;
       font-size: var(--body);
       color: var(--ink);
-      background: var(--surface-soft);
+      background: var(--surface);
       padding: 8px 10px;
       border-radius: var(--radius-control);
       border: 1px solid var(--line);
@@ -1212,7 +1781,7 @@ export function renderHtmlShell(): string {
       font-family: var(--font-mono);
       font-size: var(--micro);
       font-weight: 600;
-      background-color: var(--surface);
+      background-color: var(--surface-soft);
       border: 1px solid var(--line);
       padding: 2px 6px;
       border-radius: var(--radius-micro);
@@ -1227,16 +1796,40 @@ export function renderHtmlShell(): string {
       margin-top: 2px;
     }
 
-    /* Agent Response Box */
+    /* Agent Response Box (Mensagens Recebidas com fonte aumentada) */
     .agent-response-box {
       background-color: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius-card);
-      padding: 14px;
+      padding: 16px 18px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       box-shadow: var(--shadow-card);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+    .agent-response-content {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+    .agent-response-content p {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--ink);
+      margin: 6px 0;
+    }
+    .agent-response-content ul, .agent-response-content ol {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+    .agent-response-content li {
+      font-size: 0.9375rem;
+      line-height: 1.55;
+      color: var(--ink);
     }
     .response-header-line {
       display: flex;
@@ -1331,10 +1924,22 @@ export function renderHtmlShell(): string {
       box-shadow: none !important;
       outline: none !important;
       color: var(--ink-strong);
-      font-size: var(--body);
+      font-size: 0.9375rem;
       padding: 6px 0;
-      resize: none;
+      resize: none !important;
+      overflow: hidden !important;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
       font-family: var(--font-primary);
+      line-height: 1.4;
+      min-height: 24px;
+      max-height: 120px;
+    }
+    .chat-input-row textarea::-webkit-scrollbar,
+    #chat-interactive-input::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
 
     .chat-input-row input:focus, .chat-input-row textarea:focus {
@@ -1468,10 +2073,8 @@ export function renderHtmlShell(): string {
     }
 
     .stage-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      display: block;
+      margin-bottom: 5px;
     }
     .stage-card-name {
       font-family: var(--font-display);
@@ -1479,41 +2082,44 @@ export function renderHtmlShell(): string {
       color: var(--ink-strong);
       font-size: 0.8125rem;
       letter-spacing: -0.01em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      line-height: 1.35;
+      white-space: normal;
+      word-break: break-word;
+      display: block;
     }
 
     .stage-card-tags {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       flex-wrap: wrap;
-      margin-top: 1px;
+      margin-top: 4px;
     }
 
-    /* Dynamic Tags & Badges */
+    /* Dynamic Tags & Badges - Refinados, Sem Poluição Visual */
     .tag-pill {
       font-family: var(--font-mono);
       font-size: var(--micro);
       font-weight: 500;
       letter-spacing: 0.02em;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: var(--radius-pill);
-      border: 1px solid var(--line);
-      background-color: var(--surface-soft);
-      color: var(--ink);
+      border: 1px solid var(--tag-neutral-border);
+      background-color: var(--tag-neutral-bg);
+      color: var(--tag-neutral-ink);
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
+      gap: 4px;
       line-height: 1.25;
+      transition: all var(--duration-default) var(--ease-default);
     }
-    .tag-hook-strong { background: var(--green-soft); color: #1E6B56; border-color: var(--green); }
-    .tag-hook-weak { background: var(--danger-soft); color: #8F2D36; border-color: var(--danger); }
-    .tag-cta-good { background: var(--navy-soft); color: var(--navy-ink); border-color: var(--adzhub-navy-border); }
-    .tag-cta-bad { background: var(--orange-soft); color: var(--orange-ink); border-color: var(--orange); }
-    .tag-status-paused { background: var(--orange-soft); color: var(--orange-ink); font-weight: 600; border-color: var(--orange); }
-    .tag-status-active { background: var(--navy-soft); color: var(--navy-ink); font-weight: 600; border-color: var(--adzhub-navy-border); }
+    .tag-hook-strong { background: var(--tag-success-bg); color: var(--tag-success-ink); border-color: var(--tag-success-border); }
+    .tag-hook-weak { background: var(--tag-danger-bg); color: var(--tag-danger-ink); border-color: var(--tag-danger-border); }
+    .tag-cta-good { background: var(--tag-neutral-bg); color: var(--tag-neutral-ink); border-color: var(--tag-neutral-border); }
+    .tag-cta-bad { background: var(--tag-warning-bg); color: var(--tag-warning-ink); border-color: var(--tag-warning-border); }
+    .tag-status-paused { background: var(--tag-warning-bg); color: var(--tag-warning-ink); font-weight: 600; border-color: var(--tag-warning-border); }
+    .tag-status-active { background: var(--tag-success-bg); color: var(--tag-success-ink); font-weight: 600; border-color: var(--tag-success-border); }
 
     .stage-card-metrics {
       font-family: var(--font-mono);
@@ -1545,49 +2151,87 @@ export function renderHtmlShell(): string {
       50% { box-shadow: 0 0 0 3px rgba(41, 74, 145, 0.25); border-color: var(--navy) !important; }
     }
 
-    /* Flow Sequence Bar (Rodapé) */
+    /* Flow Sequence Bar (Rodapé Flutuante) */
     .flow-sequence-bar {
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 4px 12px;
+      gap: 8px;
+      padding: 6px 18px;
       flex-wrap: wrap;
       font-size: var(--label);
       font-family: var(--font-mono);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(203, 213, 225, 0.85);
+      border-radius: var(--radius-pill);
+      box-shadow: 
+        0 4px 6px -1px rgba(15, 23, 42, 0.06),
+        0 10px 24px -3px rgba(15, 23, 42, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+      z-index: 10;
+      transition: all var(--duration-default) var(--ease-default);
+    }
+    .flow-sequence-bar:hover {
+      box-shadow: 
+        0 6px 12px -2px rgba(15, 23, 42, 0.08),
+        0 14px 28px -4px rgba(15, 23, 42, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+      transform: translateY(-1px);
     }
 
     .flow-pill {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 2px 8px;
+      gap: 6px;
+      padding: 3px 10px;
       border-radius: var(--radius-pill);
-      background: var(--surface);
-      border: 1px solid var(--line);
+      background: #FFFFFF;
+      border: 1px solid rgba(226, 232, 240, 0.95);
       color: var(--ink-muted);
       font-weight: 500;
       font-size: var(--label);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
       transition: all var(--duration-default) var(--ease-default);
+    }
+    .flow-pill:hover {
+      border-color: var(--adzhub-navy-border);
+      color: var(--navy-ink);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+      transform: translateY(-1px);
     }
     .flow-pill.active {
       background: var(--navy) !important;
       border-color: var(--navy) !important;
       color: #FFFFFF !important;
       font-weight: 600 !important;
-      box-shadow: 0 1px 4px rgba(41, 74, 145, 0.25) !important;
+      box-shadow: 0 3px 10px rgba(41, 74, 145, 0.35), 0 0 0 1px rgba(41, 74, 145, 0.4) !important;
+      transform: translateY(-1px);
     }
     .flow-pill.active-success {
       background: var(--green) !important;
       border-color: var(--green) !important;
       color: #FFFFFF !important;
       font-weight: 600 !important;
-      box-shadow: 0 1px 4px rgba(83, 181, 138, 0.3) !important;
+      box-shadow: 0 3px 10px rgba(83, 181, 138, 0.35), 0 0 0 1px rgba(83, 181, 138, 0.4) !important;
+      transform: translateY(-1px);
     }
     .flow-pill-arrow {
-      color: var(--ink-faint);
-      font-size: var(--micro);
+      color: #94A3B8;
+      font-size: 0.72rem;
+      font-weight: 600;
+      opacity: 0.85;
+      user-select: none;
+    }
+    .flow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+      opacity: 0.85;
     }
 
     /* Modal Comparador */
@@ -1636,31 +2280,31 @@ export function renderHtmlShell(): string {
     .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 2px 8px;
+      gap: 6px;
+      padding: 3px 10px;
       border-radius: var(--radius-pill);
       font-family: var(--font-mono);
       font-size: var(--label);
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
       border: 1px solid var(--line);
       background-color: var(--surface-soft);
       color: var(--ink);
     }
-    .badge-committed { border-color: var(--green); color: #1E6B56; background-color: var(--green-soft); }
+    .badge-committed { border-color: var(--tag-success-border); color: var(--tag-success-ink); background-color: var(--tag-success-bg); }
     .badge-provisional { border-color: var(--line-strong); color: var(--ink-muted); background-color: var(--surface-soft); }
-    .badge-verifying { border-color: var(--navy); color: var(--navy-ink); background-color: var(--navy-soft); }
-    .badge-quarantined { border-color: var(--orange); color: var(--orange-ink); background-color: var(--orange-soft); }
-    .badge-blocked { border-color: var(--danger); color: #8F2D36; background-color: var(--danger-soft); }
-    .badge-failed { border-color: var(--danger); color: #8F2D36; background-color: var(--danger-soft); }
+    .badge-verifying { border-color: var(--tag-info-border); color: var(--tag-info-ink); background-color: var(--tag-info-bg); }
+    .badge-quarantined { border-color: var(--tag-warning-border); color: var(--tag-warning-ink); background-color: var(--tag-warning-bg); }
+    .badge-blocked { border-color: var(--tag-danger-border); color: var(--tag-danger-ink); background-color: var(--tag-danger-bg); }
+    .badge-failed { border-color: var(--tag-danger-border); color: var(--tag-danger-ink); background-color: var(--tag-danger-bg); }
 
-    .badge-phase-plan { border-color: var(--navy); color: var(--navy-ink); background-color: var(--navy-soft); }
-    .badge-phase-fork { border-color: #8C75B5; color: #432E6A; background-color: #EFEBF7; }
-    .badge-phase-attribute { border-color: var(--orange); color: var(--orange-ink); background-color: var(--orange-soft); }
-    .badge-phase-replan { border-color: #DF7148; color: #732C10; background-color: #FCECE6; }
-    .badge-phase-verify { border-color: var(--navy); color: var(--navy-ink); background-color: var(--navy-soft); }
-    .badge-phase-commit { border-color: var(--green); color: #1E6B56; background-color: var(--green-soft); }
+    .badge-phase-plan { border-color: var(--tag-info-border); color: var(--tag-info-ink); background-color: var(--tag-info-bg); }
+    .badge-phase-fork { border-color: #E2E8F0; color: #475569; background-color: #F8FAFC; }
+    .badge-phase-attribute { border-color: var(--tag-warning-border); color: var(--tag-warning-ink); background-color: var(--tag-warning-bg); }
+    .badge-phase-replan { border-color: var(--tag-danger-border); color: var(--tag-danger-ink); background-color: var(--tag-danger-bg); }
+    .badge-phase-verify { border-color: var(--tag-info-border); color: var(--tag-info-ink); background-color: var(--tag-info-bg); }
+    .badge-phase-commit { border-color: var(--tag-success-border); color: var(--tag-success-ink); background-color: var(--tag-success-bg); }
 
     .spinner {
       width: 22px;
@@ -1849,32 +2493,426 @@ export function renderHtmlShell(): string {
     .hidden-storage-panel { display: none; }
 
     /* Responsividade */
+    /* ========================================================= */
+    /* Mobile Hamburger & Drawer Styles                          */
+    /* ========================================================= */
+    .btn-mobile-menu {
+      display: none;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-control);
+      background: var(--surface-soft);
+      border: 1px solid var(--line-strong);
+      color: var(--navy);
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: all var(--duration-default) var(--ease-default);
+    }
+    .btn-mobile-menu:hover, .btn-mobile-menu:focus-visible {
+      background: var(--surface-selected);
+      border-color: var(--navy);
+    }
+
+    .mobile-drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9998;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .mobile-drawer-backdrop.open {
+      display: block;
+      opacity: 1;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 310px;
+      max-width: 86vw;
+      background: var(--surface);
+      border-right: 1px solid var(--line);
+      z-index: 9999;
+      box-shadow: var(--shadow-app-window);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.28s var(--md-sys-motion-easing-emphasized);
+      overflow-y: auto;
+    }
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+
+    .mobile-drawer-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-soft);
+    }
+    .btn-close-drawer {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+    }
+    .btn-close-drawer:hover {
+      background: var(--surface-muted);
+      color: var(--ink-strong);
+    }
+
+    .mobile-drawer-body {
+      flex: 1;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .mobile-drawer-section-title {
+      font-family: var(--font-mono);
+      font-size: var(--micro);
+      font-weight: 700;
+      color: var(--ink-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .mobile-drawer-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mobile-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-card);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink-strong);
+      cursor: pointer;
+      text-align: left;
+      transition: all var(--duration-default) var(--ease-default);
+      width: 100%;
+    }
+    .mobile-nav-item:hover, .mobile-nav-item:focus-visible {
+      background: var(--surface-soft);
+      border-color: var(--adzhub-navy-border);
+      transform: translateX(2px);
+    }
+    .mobile-nav-item.active {
+      background: var(--surface-selected);
+      border-color: var(--navy);
+      box-shadow: 0 1px 3px rgba(41, 74, 145, 0.1);
+    }
+    .mobile-nav-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-control);
+      background: var(--navy-soft);
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mobile-nav-item.active .mobile-nav-icon {
+      background: var(--navy);
+      color: #FFFFFF;
+    }
+    .mobile-nav-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .mobile-nav-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: var(--label);
+      color: var(--ink-strong);
+    }
+    .mobile-nav-desc {
+      font-size: var(--micro);
+      color: var(--ink-muted);
+      line-height: 1.25;
+    }
+
+    .mobile-drawer-operators {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mobile-drawer-footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--line);
+      background: var(--surface-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #doc-search-input:focus {
+      border-color: var(--navy) !important;
+      background: var(--surface) !important;
+      box-shadow: 0 0 0 2px rgba(41, 74, 145, 0.15) !important;
+    }
+
+    /* Responsividade Detalhada (Tablet e Celular) */
     @media (max-width: 1120px) {
-      .blueprint-grid {
+      .blueprint-grid.view-chat,
+      .blueprint-grid:not(.view-documents):not(.view-supercerebro):not(.view-timeline):not(.view-controls):not(.view-palco) {
         grid-template-columns: 56px 200px 1fr 240px;
       }
     }
     @media (max-width: 900px) {
-      .blueprint-outer-wrapper {
-        padding: 6px 8px;
+      html, body {
+        height: 100dvh;
+        max-height: 100dvh;
+        overflow: hidden;
       }
-      .blueprint-card {
-        max-width: 100%;
-        max-height: none;
+      .btn-mobile-menu {
+        display: inline-flex !important;
+      }
+      .icon-rail-column {
+        display: none !important;
       }
       nav#mobile-nav {
         display: flex;
       }
-      .blueprint-grid {
-        grid-template-columns: 1fr;
+      .blueprint-outer-wrapper {
+        padding: 4px 6px;
+        height: calc(100dvh - 50px);
+        min-height: 0;
       }
-      .icon-rail-column {
+      .blueprint-card {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 14px;
+        height: 100%;
+      }
+      .blueprint-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        flex: 1 !important;
+      }
+
+      /* View-specific rules for mobile */
+      /* Chat View: Only show #pane-chat */
+      .blueprint-grid.view-chat #pane-controls,
+      .blueprint-grid.view-chat #pane-palco,
+      .blueprint-grid:not(.view-documents):not(.view-supercerebro):not(.view-timeline):not(.view-controls):not(.view-palco) #pane-controls,
+      .blueprint-grid:not(.view-documents):not(.view-supercerebro):not(.view-timeline):not(.view-controls):not(.view-palco) #pane-palco {
+        display: none !important;
+      }
+      .blueprint-grid.view-chat #pane-chat,
+      .blueprint-grid:not(.view-documents):not(.view-supercerebro):not(.view-timeline):not(.view-controls):not(.view-palco) #pane-chat {
+        display: flex !important;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+
+      /* Controls View on mobile (opened via drawer) */
+      .blueprint-grid.view-controls #pane-controls {
+        display: flex !important;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        border-right: none;
+      }
+      .blueprint-grid.view-controls #pane-chat,
+      .blueprint-grid.view-controls #pane-palco {
+        display: none !important;
+      }
+
+      /* Palco View on mobile (opened via drawer) */
+      .blueprint-grid.view-palco #pane-palco {
+        display: flex !important;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        border-left: none;
+      }
+      .blueprint-grid.view-palco #pane-chat,
+      .blueprint-grid.view-palco #pane-controls {
+        display: none !important;
+      }
+
+      .chat-column {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+      #top-bar {
+        padding: 0 12px;
+        gap: 8px;
+      }
+      .brand-logo-wrap svg {
+        height: 26px;
+      }
+      #operator-active-role {
         display: none;
       }
-      .controls-column, .stage-column {
-        border-right: none;
-        border-left: none;
-        border-bottom: 1px solid var(--line);
+      #operator-dropdown-btn {
+        padding: 4px 8px;
+      }
+      #chat-welcome-title {
+        font-size: 1.75rem !important;
+        line-height: 1.2 !important;
+      }
+      #chat-empty-state {
+        padding: 18px 10px !important;
+      }
+      .chat-composer-card {
+        padding: 6px 8px !important;
+      }
+      .chat-composer-hint {
+        display: none;
+      }
+      .flow-sequence-bar {
+        display: none;
+      }
+
+      /* Central de Documentos Responsiva */
+      #documents-modal {
+        height: 100% !important;
+        width: 100% !important;
+      }
+      #documents-modal > div:last-child {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        position: relative !important;
+      }
+      #doc-cards-container {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        border-right: none !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+        padding: 10px !important;
+        display: flex !important;
+      }
+      #doc-cards-container.doc-cards-mobile-hidden {
+        display: none !important;
+      }
+      #doc-reader-panel {
+        display: none !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+      }
+      #doc-reader-panel.doc-reader-mobile-active {
+        display: flex !important;
+      }
+      #doc-filter-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap !important;
+        padding-bottom: 4px;
+        max-width: 100%;
+        scrollbar-width: thin;
+      }
+
+      /* Supercérebro Grafo Responsivo */
+      #supercerebro-modal {
+        height: 100% !important;
+        width: 100% !important;
+      }
+      #graph-filter-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap !important;
+        padding-bottom: 4px;
+        max-width: 100%;
+        scrollbar-width: thin;
+      }
+      #supercerebro-modal > div:last-child {
+        flex-direction: column !important;
+      }
+      #graph-node-details-panel {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-height: 180px !important;
+        border-left: none !important;
+        border-top: 1px solid var(--line) !important;
+        flex-shrink: 0;
+      }
+
+      /* Linha do Tempo Responsiva */
+      #timeline-modal {
+        height: 100% !important;
+        width: 100% !important;
+      }
+      #timeline-filter-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap !important;
+        padding-bottom: 4px;
+        max-width: 100%;
+        scrollbar-width: thin;
+      }
+      #timeline-feed-container {
+        padding: 10px 8px !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #system-status-badge {
+        display: none;
+      }
+      #top-bar {
+        padding: 0 8px;
+      }
+      .operator-dropdown-menu {
+        min-width: 260px;
+        right: 0;
+        left: auto;
+      }
+      .comparison-modal-content {
+        max-height: 94vh;
+      }
+      .comparison-table th, .comparison-table td {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+      }
+      #doc-view-body {
+        padding: 14px 16px !important;
       }
     }
   </style>
@@ -1883,28 +2921,28 @@ export function renderHtmlShell(): string {
 
   <!-- Região 1: Top Bar — Header Global do Workspace AdzHub -->
   <header id="top-bar" role="banner">
-    <div class="brand">
-      <span class="brand-logo-wrap">
-        <img src="/adzhub-logo.svg" alt="AdzHub Logo" height="26" style="height: 26px; width: auto; display: block;">
-      </span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <!-- Botão Menu Sanduíche (Mobile) -->
+      <button id="btn-mobile-menu" type="button" class="btn-mobile-menu" aria-label="Abrir Menu de Navegação" title="Abrir menu de navegação">
+        ${getLucideSvg('menu', { size: 20 })}
+      </button>
+      <div class="brand">
+        <span class="brand-logo-wrap" title="AdzHub · Central de Operações de Mídia &amp; IA">
+          ${ADZHUB_LOGO_SVG}
+        </span>
+      </div>
     </div>
 
     <!-- Dropdown de Seleção de Perfil Operacional (Quem está operando) -->
     <div class="operator-selector-container" id="operator-selector-wrapper">
       <button id="operator-dropdown-btn" type="button" class="operator-dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-label="Selecionar perfil do operador" title="Clique para alternar o perfil de quem está operando">
-        <div class="operator-info-wrap">
-          <div class="operator-name-row">
-            <span class="operator-active-name" id="operator-active-name">Aline Rocha</span>
-          </div>
-          <span class="operator-active-role" id="operator-active-role">Gestora de Tráfego</span>
-        </div>
+        <span class="operator-active-name" id="operator-active-name">Aline Rocha</span>
         <span class="operator-dropdown-arrow" aria-hidden="true">▾</span>
       </button>
 
       <div id="operator-dropdown-menu" class="operator-dropdown-menu" role="menu" aria-label="Perfis de Operação da Conta">
         <div class="operator-menu-header">
           <span>OPERAR COMO:</span>
-          <span class="operator-menu-sub">Supercérebro Housewhey &amp; SPOT</span>
         </div>
         <div class="operator-menu-list" role="none">
           <button type="button" class="operator-menu-item active" data-operator-id="p_aline" role="menuitem" aria-selected="true">
@@ -1959,6 +2997,107 @@ export function renderHtmlShell(): string {
     </div>
   </header>
 
+  <!-- Backdrop do Menu Sanduíche Mobile -->
+  <div id="mobile-drawer-backdrop" class="mobile-drawer-backdrop" aria-hidden="true"></div>
+
+  <!-- Gaveta Lateral Mobile (Drawer Sanduíche) -->
+  <aside id="mobile-drawer-menu" class="mobile-drawer" role="dialog" aria-modal="true" aria-label="Menu de Navegação Principal">
+    <div class="mobile-drawer-header">
+      <div class="brand">
+        <span class="brand-logo-wrap">
+          ${ADZHUB_LOGO_SVG}
+        </span>
+      </div>
+      <button id="btn-close-mobile-drawer" type="button" class="btn-close-drawer" aria-label="Fechar menu">
+        ${getLucideSvg('x', { size: 18 })}
+      </button>
+    </div>
+
+    <div class="mobile-drawer-body">
+      <!-- Seção 1: Navegação Principal -->
+      <div class="mobile-drawer-section">
+        <div class="mobile-drawer-section-title">NAVEGAÇÃO</div>
+        <div class="mobile-drawer-nav-list">
+          <button type="button" class="mobile-nav-item active" id="btn-mobile-nav-chat">
+            <span class="mobile-nav-icon">${getLucideSvg('message-square', { size: 18 })}</span>
+            <div class="mobile-nav-info">
+              <span class="mobile-nav-title">Chat Operacional &amp; IA</span>
+              <span class="mobile-nav-desc">Central de conversação e execução</span>
+            </div>
+          </button>
+
+          <button type="button" class="mobile-nav-item" id="btn-mobile-nav-tasks">
+            <span class="mobile-nav-icon">${getLucideSvg('folder-kanban', { size: 18 })}</span>
+            <div class="mobile-nav-info">
+              <span class="mobile-nav-title">Central de Documentos</span>
+              <span class="mobile-nav-desc">Briefings, Pautas, Relatórios e Propostas</span>
+            </div>
+          </button>
+
+          <button type="button" class="mobile-nav-item" id="btn-mobile-nav-supercerebro">
+            <span class="mobile-nav-icon">${getLucideSvg('brain', { size: 18 })}</span>
+            <div class="mobile-nav-info">
+              <span class="mobile-nav-title">Supercérebro (Grafo)</span>
+              <span class="mobile-nav-desc">Grafo de conhecimento e relacionamentos</span>
+            </div>
+          </button>
+
+          <button type="button" class="mobile-nav-item" id="btn-mobile-nav-timeline">
+            <span class="mobile-nav-icon">${getLucideSvg('history', { size: 18 })}</span>
+            <div class="mobile-nav-info">
+              <span class="mobile-nav-title">Histórico &amp; Linha do Tempo</span>
+              <span class="mobile-nav-desc">Auditoria e ações em tempo real</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Seção 2: Painéis Operacionais -->
+      <div class="mobile-drawer-section">
+        <div class="mobile-drawer-section-title">PAINÉIS OPERACIONAIS</div>
+        <div class="mobile-drawer-nav-list">
+          <button type="button" class="mobile-nav-item" id="btn-mobile-nav-controls">
+            <span class="mobile-nav-icon">${getLucideSvg('sliders', { size: 18 })}</span>
+            <div class="mobile-nav-info">
+              <span class="mobile-nav-title">Mesa de Controles &amp; BYOK</span>
+              <span class="mobile-nav-desc">Chave de API e fila de pendências</span>
+            </div>
+          </button>
+
+          <button type="button" class="mobile-nav-item" id="btn-mobile-nav-palco">
+            <span class="mobile-nav-icon">${getLucideSvg('eye', { size: 18 })}</span>
+            <div class="mobile-nav-info">
+              <span class="mobile-nav-title">Palco Operacional da Conta</span>
+              <span class="mobile-nav-desc">Criativos, métricas e observações</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Seção 3: Ferramentas & Ações -->
+      <div class="mobile-drawer-section">
+        <div class="mobile-drawer-section-title">AÇÕES RÁPIDAS</div>
+        <div class="mobile-drawer-actions">
+          <button type="button" class="btn-primary" id="btn-mobile-compare" style="width: 100%; justify-content: center; padding: 9px 14px; font-size: var(--label); font-weight: 600;">
+            ${getLucideSvg('scale', { size: 15 })} Comparar Basic × Governed
+          </button>
+        </div>
+      </div>
+
+      <!-- Seção 4: Operar Como (Seleção de Operador no Mobile) -->
+      <div class="mobile-drawer-section">
+        <div class="mobile-drawer-section-title">OPERAR COMO</div>
+        <div class="mobile-drawer-operators" id="mobile-drawer-operators-list"></div>
+      </div>
+    </div>
+
+    <div class="mobile-drawer-footer">
+      <span class="status-badge badge-provisional" style="font-size: var(--micro); padding: 2px 8px;">
+        ● v${CONTRACTS_VERSION}
+      </span>
+    </div>
+  </aside>
+
   <!-- Janela Principal Elevada — Central de Operações -->
   <div class="blueprint-outer-wrapper">
     <div class="blueprint-card">
@@ -1974,17 +3113,17 @@ export function renderHtmlShell(): string {
         <!-- REGIÃO 1: ICON RAIL (Left Navigation Rail) -->
         <nav class="icon-rail-column" aria-label="Navegação por Atalhos">
           <button class="rail-btn active" id="btn-rail-chat" type="button" title="Chat Operacional &amp; IA" aria-label="Chat Operacional">
-            💬
+            ${getLucideSvg('message-square', { size: 18 })}
           </button>
           <button class="rail-btn" id="btn-rail-tasks" type="button" title="Central de Documentos &amp; Artefatos Gerados (Briefings, Pautas, Relatórios, Propostas)" aria-label="Central de Documentos">
-            📋
+            ${getLucideSvg('folder-kanban', { size: 18 })}
           </button>
           <div class="rail-divider"></div>
           <button class="rail-btn" id="btn-rail-supercerebro" type="button" title="Supercérebro &amp; Grafo de Conhecimento — Visualização de Nós, Relacionamentos e Linha do Tempo da Conta." aria-label="Supercérebro Grafo">
-            🧠
+            ${getLucideSvg('brain', { size: 18 })}
           </button>
           <button class="rail-btn" id="btn-rail-inspector" type="button" title="Histórico &amp; Linha do Tempo do Supercérebro — Acompanhe ações de mídia, trocas de documentos e aprovações dos operadores em tempo real." aria-label="Histórico da Timeline do Supercérebro">
-            🔍
+            ${getLucideSvg('history', { size: 18 })}
           </button>
         </nav>
 
@@ -1995,30 +3134,10 @@ export function renderHtmlShell(): string {
           </div>
 
           <div class="controls-content">
-            <!-- Model Selection -->
-            <div class="control-group">
-              <label for="model-select" class="control-label">Modelo LLM</label>
-              <select id="model-select" aria-label="Modelo LLM">
-                ${modelsOptions}
-              </select>
-            </div>
-
-            <!-- Action Buttons: Comparar & Reset -->
-            <div class="controls-action-box">
-              <div style="display: flex; gap: 6px; width: 100%;">
-                <button id="btn-compare" class="btn-primary" type="button" aria-label="Comparar Basic vs Governed" style="flex: 1; justify-content: center; padding: 7px 10px; font-size: var(--label); font-weight: 600;">
-                  <span>⚖</span> Comparar
-                </button>
-                <button id="btn-reset" class="btn-secondary" type="button" aria-label="Resetar Sessão" style="width: auto; min-width: 65px; justify-content: center; padding: 7px 10px; font-size: var(--label);">
-                  <span>↺</span> Reset
-                </button>
-              </div>
-            </div>
-
             <!-- Key Management Card (BYOK) -->
             <div id="key-bar" role="region" aria-label="Gerenciamento de chave de API em memória" class="controls-key-box">
               <div class="key-inputs" style="display: flex; flex-direction: column; gap: 5px; width: 100%;">
-                <label for="api-key-input" class="control-label">Chave de API (BYOK)</label>
+                <label for="api-key-input" class="control-label">Chave de API</label>
                 <input
                   type="password"
                   id="api-key-input"
@@ -2027,17 +3146,23 @@ export function renderHtmlShell(): string {
                   spellcheck="false"
                   style="width: 100%;"
                 />
-                <div style="display: flex; gap: 5px; width: 100%;">
-                  <button id="btn-save-key" type="button" class="btn-secondary" style="flex: 1; justify-content: center; font-size: var(--micro); padding: 5px 8px;">
-                    Definir
-                  </button>
-                  <button id="btn-forget-key" type="button" class="btn-danger" style="flex: 1; justify-content: center; font-size: var(--micro); padding: 5px 8px;">
-                    Esquecer
+                <div style="display: flex; width: 100%;">
+                  <button id="btn-forget-key" type="button" class="btn-danger" style="width: 100%; justify-content: center; font-size: var(--micro); padding: 5px 8px;">
+                    Esquecer Chave
                   </button>
                 </div>
               </div>
               <div id="key-status" style="margin-top: 2px;">
                 <span id="key-status-text">Sem chave salva (Insira sua API Key)</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons: Comparar -->
+            <div class="controls-action-box">
+              <div style="display: flex; width: 100%;">
+                <button id="btn-compare" class="btn-primary" type="button" aria-label="Comparar Basic vs Governed" style="width: 100%; justify-content: center; padding: 7px 10px; font-size: var(--label); font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                  ${getLucideSvg('scale', { size: 14 })} Comparar
+                </button>
               </div>
             </div>
 
@@ -2089,7 +3214,7 @@ export function renderHtmlShell(): string {
                   <span id="chat-greeting-prefix">Bom dia</span>, <span id="chat-operator-name" style="color: #2563eb;">Aline</span>.
                 </h2>
                 <p style="font-size: 1.05rem; color: var(--ink-muted); line-height: 1.5; margin: 0; max-width: 440px;">
-                  Estou aqui e pronto para cuidar da operação com você.<br/>Diga o que precisa acontecer.
+                  Estou aqui e pronto para cuidar da operação com você.<br/>Diga o que precisa.
                 </p>
               </div>
 
@@ -2122,14 +3247,14 @@ export function renderHtmlShell(): string {
                   </div>
                 </div>
                 <div class="agent-steps-stream" id="agent-steps-stream-box">
-                  <div class="step-item" id="step-reasoning-1"><span class="step-icon">💡</span><div class="step-text" id="step-reasoning-1-text"></div></div>
-                  <div class="step-item" id="step-tools-1"><span class="step-icon">🔧</span><div class="step-text"><span class="step-tool-tag" id="step-tool-1-name"></span><span class="step-tool-tag" id="step-tool-2-name"></span><div class="step-obs" id="step-tools-1-obs"></div></div></div>
-                  <div class="step-item" id="step-reasoning-2"><span class="step-icon">💡</span><div class="step-text" id="step-reasoning-2-text"></div></div>
-                  <div class="step-item" id="step-tools-2"><span class="step-icon">🔧</span><div class="step-text"><span class="step-tool-tag" id="step-tool-3-name"></span><span class="step-tool-tag" id="step-tool-4-name"></span><div class="step-obs" id="step-tools-2-obs"></div></div></div>
+                  <div class="step-item" id="step-reasoning-1"><span class="step-icon">${getLucideSvg('brain', { size: 14, style: 'color: var(--navy);' })}</span><div class="step-text" id="step-reasoning-1-text"></div></div>
+                  <div class="step-item" id="step-tools-1"><span class="step-icon">${getLucideSvg('wrench', { size: 14, style: 'color: var(--navy);' })}</span><div class="step-text"><span class="step-tool-tag" id="step-tool-1-name"></span><span class="step-tool-tag" id="step-tool-2-name"></span><div class="step-obs" id="step-tools-1-obs"></div></div></div>
+                  <div class="step-item" id="step-reasoning-2"><span class="step-icon">${getLucideSvg('brain', { size: 14, style: 'color: var(--navy);' })}</span><div class="step-text" id="step-reasoning-2-text"></div></div>
+                  <div class="step-item" id="step-tools-2"><span class="step-icon">${getLucideSvg('wrench', { size: 14, style: 'color: var(--navy);' })}</span><div class="step-text"><span class="step-tool-tag" id="step-tool-3-name"></span><span class="step-tool-tag" id="step-tool-4-name"></span><div class="step-obs" id="step-tools-2-obs"></div></div></div>
                 </div>
                 <div id="chat-result-container" class="agent-response-box">
                   <div id="chat-conclusion-text"></div>
-                  <div id="chat-ctas-action-card"><div class="cta-badge-ready" id="badge-ctas-ready">✨ 3 CTAs prontos</div><span id="chat-ctas-target"></span><div class="cta-suggestions-container" id="chat-ctas-list"><div class="cta-suggestion-item"><span class="cta-num">1</span><span id="cta-item-1"></span></div><div class="cta-suggestion-item"><span class="cta-num">2</span><span id="cta-item-2"></span></div><div class="cta-suggestion-item"><span class="cta-num">3</span><span id="cta-item-3"></span></div></div></div>
+                  <div id="chat-ctas-action-card"><div class="cta-badge-ready" id="badge-ctas-ready">${getLucideSvg('lightbulb', { size: 13, style: 'color: var(--navy);' })} 3 CTAs prontos</div><span id="chat-ctas-target"></span><div class="cta-suggestions-container" id="chat-ctas-list"><div class="cta-suggestion-item"><span class="cta-num">1</span><span id="cta-item-1"></span></div><div class="cta-suggestion-item"><span class="cta-num">2</span><span id="cta-item-2"></span></div><div class="cta-suggestion-item"><span class="cta-num">3</span><span id="cta-item-3"></span></div></div></div>
                   <div id="chat-approval-card"><button id="btn-approve-action"></button><button id="btn-reject-action"></button></div>
                   <div id="chat-limitations-container"><ul id="chat-limitations-list"></ul></div>
                   <div id="chat-question-container"><div id="chat-question-text"></div><div id="chat-evidencerefs-list"></div></div>
@@ -2142,19 +3267,19 @@ export function renderHtmlShell(): string {
             <!-- View 2: Grafo do Supercérebro (Inline Workspace View) -->
             <div id="supercerebro-modal" style="display: none; width: 100%; height: 100%; flex-direction: column; overflow: hidden; background: var(--surface);">
               <!-- Toolbar: Filter Tabs & Stats -->
-              <div style="padding: 8px 14px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--surface); gap: 10px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;" id="graph-filter-tabs">
-                  <button type="button" class="btn-primary graph-tab-btn active" data-graph-filter="all" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Todos os Nós</button>
-                  <button type="button" class="btn-secondary graph-tab-btn" data-graph-filter="organizations" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Organizações</button>
-                  <button type="button" class="btn-secondary graph-tab-btn" data-graph-filter="meta_ads" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Meta Ads</button>
-                  <button type="button" class="btn-secondary graph-tab-btn" data-graph-filter="creatives" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Ofertas &amp; Criativos</button>
-                  <button type="button" class="btn-secondary graph-tab-btn" data-graph-filter="operators" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Operadores</button>
-                  <button type="button" class="btn-secondary graph-tab-btn" data-graph-filter="pendencies" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Pendências</button>
+              <div id="graph-header-controls" style="padding: 6px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--surface); gap: 6px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;" id="graph-filter-tabs">
+                  <button type="button" class="btn-primary graph-tab-btn active md3-chip md3-filter-chip" data-graph-filter="all" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('share-2', { size: 12 })} Todos os Nós</button>
+                  <button type="button" class="btn-secondary graph-tab-btn md3-chip md3-filter-chip" data-graph-filter="organizations" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('building-2', { size: 12 })} Organizações</button>
+                  <button type="button" class="btn-secondary graph-tab-btn md3-chip md3-filter-chip" data-graph-filter="meta_ads" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('megaphone', { size: 12 })} Meta Ads</button>
+                  <button type="button" class="btn-secondary graph-tab-btn md3-chip md3-filter-chip" data-graph-filter="creatives" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('tag', { size: 12 })} Ofertas &amp; Criativos</button>
+                  <button type="button" class="btn-secondary graph-tab-btn md3-chip md3-filter-chip" data-graph-filter="operators" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('user', { size: 12 })} Operadores</button>
+                  <button type="button" class="btn-secondary graph-tab-btn md3-chip md3-filter-chip" data-graph-filter="pendencies" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('clipboard-list', { size: 12 })} Pendências</button>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 0.8125rem; color: var(--ink-muted);">
+                <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">
                   <span id="graph-node-count">Nós: 0</span>
                   <span id="graph-edge-count">Conexões: 0</span>
-                  <button id="btn-refresh-graph" class="btn-secondary" type="button" style="padding: 4px 10px; font-size: 0.8125rem;" title="Atualizar Grafo">↺ Recarregar</button>
+                  <button id="btn-refresh-graph" class="btn-secondary" type="button" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" title="Atualizar Grafo">${getLucideSvg('rotate-ccw', { size: 12 })} Recarregar</button>
                   <button id="btn-close-supercerebro" class="btn-secondary" type="button" style="display: none;">✕ Fechar</button>
                 </div>
               </div>
@@ -2184,10 +3309,10 @@ export function renderHtmlShell(): string {
                 </div>
 
                 <!-- Node Detail Panel -->
-                <div id="graph-node-details-panel" style="width: 240px; border-left: 1px solid var(--line); background: var(--surface); color: var(--ink-strong); padding: 12px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto;">
+                <div id="graph-node-details-panel" style="width: 320px; min-width: 300px; max-width: 360px; border-left: 1px solid var(--line); background: var(--surface); color: var(--ink-strong); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto;">
                   <div style="font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; border-bottom: 1px solid var(--line); padding-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
                     <span>Detalhes do Nó</span>
-                    <span id="detail-node-type-badge" style="font-family: var(--font-mono); font-size: 0.65rem; background: var(--surface-soft); color: var(--navy-ink); border: 1px solid var(--line); padding: 2px 5px; border-radius: var(--radius-pill); text-transform: uppercase;">Clique em um Nó</span>
+                    <span id="detail-node-type-badge" style="font-family: var(--font-mono); font-size: 0.65rem; background: var(--surface-soft); color: var(--navy-ink); border: 1px solid var(--line); padding: 2px 6px; border-radius: var(--radius-pill); text-transform: uppercase;">Clique em um Nó</span>
                   </div>
                   <div id="detail-node-content" style="font-size: 0.78rem; line-height: 1.4; color: var(--ink);">
                     Selecione um nó no grafo à esquerda para examinar suas conexões e detalhes.
@@ -2198,29 +3323,30 @@ export function renderHtmlShell(): string {
 
             <!-- View 3: Central de Documentos (Inline Workspace View) -->
             <div id="documents-modal" style="display: none; width: 100%; height: 100%; flex-direction: column; overflow: hidden; background: var(--surface);">
-              <!-- Controls: Tabs + Search -->
-              <div style="padding: 8px 14px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--surface); gap: 8px; flex-wrap: nowrap; overflow-x: auto; white-space: nowrap;">
-                <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;" id="doc-filter-tabs">
-                  <button type="button" class="btn-primary doc-tab-btn active" data-doc-filter="all" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap;">Todos</button>
-                  <button type="button" class="btn-secondary doc-tab-btn" data-doc-filter="briefing" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap;">📝 Briefings</button>
-                  <button type="button" class="btn-secondary doc-tab-btn" data-doc-filter="pauta" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap;">📅 Pautas</button>
-                  <button type="button" class="btn-secondary doc-tab-btn" data-doc-filter="relatorio" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap;">📊 Relatórios</button>
-                  <button type="button" class="btn-secondary doc-tab-btn" data-doc-filter="proposta" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap;">💡 Propostas</button>
-                  <button type="button" class="btn-secondary doc-tab-btn" data-doc-filter="plano" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap;">🚀 Planos</button>
+              <!-- Controls: Tabs + Search (Sem scroll, cabe 100% no header) -->
+              <div id="documents-header-controls" style="padding: 6px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--surface); gap: 6px; flex-wrap: wrap; overflow: hidden;">
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;" id="doc-filter-tabs">
+                  <button type="button" class="btn-primary doc-tab-btn active md3-chip md3-filter-chip" data-doc-filter="all" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('folder', { size: 12 })} Todos</button>
+                  <button type="button" class="btn-secondary doc-tab-btn md3-chip md3-filter-chip" data-doc-filter="briefing" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('file-text', { size: 12 })} Briefings</button>
+                  <button type="button" class="btn-secondary doc-tab-btn md3-chip md3-filter-chip" data-doc-filter="pauta" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('calendar', { size: 12 })} Pautas</button>
+                  <button type="button" class="btn-secondary doc-tab-btn md3-chip md3-filter-chip" data-doc-filter="relatorio" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('bar-chart-3', { size: 12 })} Relatórios</button>
+                  <button type="button" class="btn-secondary doc-tab-btn md3-chip md3-filter-chip" data-doc-filter="proposta" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('lightbulb', { size: 12 })} Propostas</button>
+                  <button type="button" class="btn-secondary doc-tab-btn md3-chip md3-filter-chip" data-doc-filter="plano" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('rocket', { size: 12 })} Planos</button>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; white-space: nowrap;">
-                  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 4px 10px; font-size: 0.8125rem;">
-                    <span style="color: var(--ink-muted); font-size: 0.8125rem; font-weight: 500;">📅 Data:</span>
-                    <input type="date" id="doc-date-input" style="border: none; background: transparent; font-size: 0.8125rem; color: var(--ink-strong); outline: none; font-family: var(--font-mono); cursor: pointer; max-width: 125px;" title="Filtrar por data específica">
-                    <select id="doc-date-preset" style="border: none; background: transparent; font-size: 0.8125rem; color: var(--ink-strong); outline: none; font-family: var(--font-sans); cursor: pointer;">
-                      <option value="all">Todas as datas</option>
-                      <option value="today">Hoje (27/08)</option>
-                      <option value="7days">Últimos 7 dias</option>
-                      <option value="30days">Este mês</option>
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  <div style="display: inline-flex; align-items: center; gap: 4px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 3px 8px; font-size: 0.75rem; height: 30px; box-sizing: border-box;">
+                    <span style="color: var(--ink-muted); font-size: 0.75rem; font-weight: 500; display: inline-flex; align-items: center; gap: 3px;">${getLucideSvg('calendar', { size: 12, style: 'color: var(--ink-muted);' })} Data:</span>
+                    <input type="date" id="doc-date-input" style="border: none; background: transparent; font-size: 0.75rem; color: var(--ink-strong); outline: none; font-family: var(--font-mono); cursor: pointer; max-width: 105px;" title="Filtrar por data específica">
+                    <select id="doc-date-preset" style="border: none; background: transparent; font-size: 0.75rem; color: var(--ink-strong); outline: none; font-family: var(--font-sans); cursor: pointer;">
+                      <option value="all">Todas</option>
+                      <option value="today">Hoje</option>
+                      <option value="7days">7 dias</option>
+                      <option value="30days">Mês</option>
                     </select>
                   </div>
-                  <div style="position: relative; width: 140px; flex-shrink: 0;">
-                    <input type="text" id="doc-search-input" placeholder="🔍 Buscar..." style="width: 100%; padding: 5px 10px; border-radius: var(--radius-pill); border: 1px solid var(--line); font-size: 0.8125rem; background: var(--surface-soft); color: var(--ink-strong); outline: none;">
+                  <div style="position: relative; width: 180px; min-width: 130px; display: flex; align-items: center;">
+                    <span style="position: absolute; left: 8px; pointer-events: none; display: flex; align-items: center; color: var(--ink-muted);">${getLucideSvg('search', { size: 13 })}</span>
+                    <input type="text" id="doc-search-input" placeholder="Buscar docs..." style="width: 100%; height: 30px; padding: 3px 8px 3px 26px; border-radius: var(--radius-pill); border: 1px solid var(--line); font-size: 0.75rem; background: var(--surface-soft); color: var(--ink-strong); outline: none; box-sizing: border-box; transition: all var(--duration-default) var(--ease-default);">
                     <button id="btn-close-documents" class="btn-secondary" type="button" style="display: none;">✕ Fechar</button>
                   </div>
                 </div>
@@ -2235,13 +3361,17 @@ export function renderHtmlShell(): string {
                 <!-- Right Column: Expansive Document Reader Panel (Takes 100% remaining width: flex: 1) -->
                 <div id="doc-reader-panel" style="flex: 1; min-width: 0; background: var(--surface); color: var(--ink-strong); display: flex; flex-direction: column; overflow: hidden;">
                   <div id="doc-reader-empty" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; text-align: center; color: var(--ink-muted);">
-                    <span style="font-size: 2.8rem; margin-bottom: 12px; opacity: 0.6;">📄</span>
-                    <p style="margin: 0; font-size: 0.9rem; font-weight: 500;">Selecione um documento da lista ao lado para visualizar os detalhes completos.</p>
+                    <div style="margin-bottom: 12px; opacity: 0.45; color: var(--navy);">${getLucideSvg('file-text', { size: 42 })}</div>
+                    <p style="margin: 0; font-size: 0.9rem; font-weight: 600; color: var(--ink-strong);">Nenhum documento selecionado</p>
+                    <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--ink-muted);">Selecione um documento da lista ao lado para visualizar os detalhes completos.</p>
                   </div>
                   
                   <div id="doc-reader-content" style="display: none; flex: 1; flex-direction: column; height: 100%; overflow: hidden;">
                     <div style="padding: 14px 24px; border-bottom: 1px solid var(--line); background: var(--surface-soft); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
                       <div>
+                        <button id="btn-doc-back-list" type="button" class="btn-secondary" style="display: none; padding: 4px 10px; font-size: var(--micro); margin-bottom: 6px; align-items: center; gap: 4px;">
+                          ← Voltar para lista
+                        </button>
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                           <span id="doc-view-date" style="font-size: 0.75rem; color: var(--ink-muted); font-family: var(--font-mono);"></span>
                         </div>
@@ -2254,8 +3384,8 @@ export function renderHtmlShell(): string {
                     </div>
                     
                     <div style="padding: 12px 24px; border-top: 1px solid var(--line); background: var(--surface-soft); display: flex; justify-content: flex-end; gap: 8px;">
-                      <button id="btn-copy-doc" class="btn-secondary" type="button" style="padding: 6px 14px; font-size: 0.8125rem;">📋 Copiar Texto</button>
-                      <button id="btn-download-doc" class="btn-primary" type="button" style="padding: 6px 14px; font-size: 0.8125rem;">⬇️ Baixar MD</button>
+                      <button id="btn-copy-doc" class="btn-secondary" type="button" style="padding: 6px 14px; font-size: 0.8125rem; display: inline-flex; align-items: center; gap: 6px;">${getLucideSvg('copy', { size: 14 })} Copiar Texto</button>
+                      <button id="btn-download-doc" class="btn-primary" type="button" style="padding: 6px 14px; font-size: 0.8125rem; display: inline-flex; align-items: center; gap: 6px;">${getLucideSvg('download', { size: 14 })} Baixar MD</button>
                     </div>
                   </div>
                 </div>
@@ -2265,16 +3395,17 @@ export function renderHtmlShell(): string {
             <!-- View 4: Histórico & Linha do Tempo (Inline Workspace View) -->
             <div id="timeline-modal" style="display: none; width: 100%; height: 100%; flex-direction: column; overflow: hidden; background: var(--surface);">
               <!-- Controls: Filter Tabs + Search -->
-              <div style="padding: 8px 14px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--surface); gap: 8px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;" id="timeline-filter-tabs">
-                  <button type="button" class="btn-primary timeline-tab-btn active" data-timeline-filter="all" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Todas</button>
-                  <button type="button" class="btn-secondary timeline-tab-btn" data-timeline-filter="media" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Mídia</button>
-                  <button type="button" class="btn-secondary timeline-tab-btn" data-timeline-filter="documents" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Documentos</button>
-                  <button type="button" class="btn-secondary timeline-tab-btn" data-timeline-filter="governance" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Governança</button>
-                  <button type="button" class="btn-secondary timeline-tab-btn" data-timeline-filter="audit" style="padding: 5px 12px; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-pill);">Auditoria</button>
+              <div id="timeline-header-controls" style="padding: 6px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--surface); gap: 6px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;" id="timeline-filter-tabs">
+                  <button type="button" class="btn-primary timeline-tab-btn active md3-chip md3-filter-chip" data-timeline-filter="all" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('history', { size: 12 })} Todas</button>
+                  <button type="button" class="btn-secondary timeline-tab-btn md3-chip md3-filter-chip" data-timeline-filter="media" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('megaphone', { size: 12 })} Mídia</button>
+                  <button type="button" class="btn-secondary timeline-tab-btn md3-chip md3-filter-chip" data-timeline-filter="documents" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('file-text', { size: 12 })} Documentos</button>
+                  <button type="button" class="btn-secondary timeline-tab-btn md3-chip md3-filter-chip" data-timeline-filter="governance" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('shield-check', { size: 12 })} Governança</button>
+                  <button type="button" class="btn-secondary timeline-tab-btn md3-chip md3-filter-chip" data-timeline-filter="audit" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 600; border-radius: var(--radius-pill); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${getLucideSvg('check-circle-2', { size: 12 })} Auditoria</button>
                 </div>
-                <div style="width: 160px;">
-                  <input type="text" id="timeline-search-input" placeholder="🔍 Buscar..." style="width: 100%; padding: 5px 12px; border-radius: var(--radius-pill); border: 1px solid var(--line); font-size: 0.8125rem; background: var(--surface-soft); color: var(--ink-strong); outline: none;">
+                <div style="position: relative; width: 180px; min-width: 130px; display: flex; align-items: center;">
+                  <span style="position: absolute; left: 8px; pointer-events: none; display: flex; align-items: center; color: var(--ink-muted);">${getLucideSvg('search', { size: 13 })}</span>
+                  <input type="text" id="timeline-search-input" placeholder="Buscar eventos..." style="width: 100%; height: 30px; padding: 3px 8px 3px 26px; border-radius: var(--radius-pill); border: 1px solid var(--line); font-size: 0.75rem; background: var(--surface-soft); color: var(--ink-strong); outline: none; box-sizing: border-box; transition: all var(--duration-default) var(--ease-default);">
                   <button id="btn-close-timeline" class="btn-secondary" type="button" style="display: none;">✕ Fechar</button>
                 </div>
               </div>
@@ -2320,8 +3451,8 @@ export function renderHtmlShell(): string {
 
           <div class="stage-content" id="stage-cards-container">
             <!-- Estado Inicial / Aguardando Observações -->
-            <div id="stage-empty-state" style="margin: auto; text-align: center; color: var(--ink-muted); padding: 28px 14px;">
-              <div style="font-size: 1.6rem; margin-bottom: 6px; opacity: 0.6;">👁️</div>
+            <div id="stage-empty-state" style="margin: auto; text-align: center; color: var(--ink-muted); padding: 28px 14px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <div style="margin-bottom: 8px; opacity: 0.45; color: var(--navy);">${getLucideSvg('eye', { size: 28 })}</div>
               <div style="font-weight: 600; color: var(--ink-strong); font-size: 0.875rem; margin-bottom: 3px;">Nenhuma observação ativa</div>
               <div style="font-size: var(--label); color: var(--ink-muted); max-width: 220px; margin: 0 auto; line-height: 1.4;">Execute uma ação no chat para projetar dados da conta em tempo real.</div>
             </div>
@@ -2331,9 +3462,9 @@ export function renderHtmlShell(): string {
             <div class="stage-card" id="card-ugc-oferta" style="display: none;">
               <div class="stage-card-top">
                 <span class="stage-card-name">UGC - Oferta A</span>
-                <span class="tag-pill tag-status-paused" id="badge-ugc-status">Pausado</span>
               </div>
               <div class="stage-card-tags" id="tags-ugc-oferta">
+                <span class="tag-pill tag-status-paused" id="badge-ugc-status">Pausado</span>
                 <span class="tag-pill tag-hook-strong">Hook Forte 8.5</span>
                 <span class="tag-pill tag-cta-bad">CTA Ruim 4.0</span>
                 <span class="tag-pill tag-cta-good">Meta Ads</span>
@@ -2349,9 +3480,9 @@ export function renderHtmlShell(): string {
             <div class="stage-card" id="card-hook-social" style="display: none;">
               <div class="stage-card-top">
                 <span class="stage-card-name">Hook - Prova Social</span>
-                <span class="tag-pill tag-status-active" id="badge-hook-status">Ativo</span>
               </div>
               <div class="stage-card-tags" id="tags-hook-social">
+                <span class="tag-pill tag-status-active" id="badge-hook-status">Ativo</span>
                 <span class="tag-pill tag-hook-strong">Hook Forte 8.8</span>
                 <span class="tag-pill tag-cta-good">CTA Bom 8.5</span>
                 <span class="tag-pill tag-hook-strong">Alta Conversão</span>
@@ -2367,9 +3498,9 @@ export function renderHtmlShell(): string {
             <div class="stage-card" id="card-carousel-faq" style="display: none;">
               <div class="stage-card-top">
                 <span class="stage-card-name">Carrossel - FAQ</span>
-                <span class="tag-pill tag-status-paused" id="badge-faq-status">Pausado</span>
               </div>
               <div class="stage-card-tags" id="tags-carousel-faq">
+                <span class="tag-pill tag-status-paused" id="badge-faq-status">Pausado</span>
                 <span class="tag-pill tag-hook-weak">Hook Fraco 4.2</span>
                 <span class="tag-pill tag-cta-bad">CTA Ruim 3.8</span>
                 <span class="tag-pill tag-cta-bad">Fadiga 2.65x</span>
@@ -2385,9 +3516,9 @@ export function renderHtmlShell(): string {
             <div class="stage-card" id="card-meta-metrics" style="display: none;">
               <div class="stage-card-top">
                 <span class="stage-card-name">Meta Ads — Tráfego Pago (Agosto/2026)</span>
-                <span class="tag-pill tag-status-active" id="badge-meta-status">Ativo</span>
               </div>
               <div class="stage-card-tags" id="tags-meta-metrics">
+                <span class="tag-pill tag-status-active" id="badge-meta-status">Ativo</span>
                 <span class="tag-pill tag-hook-strong">Investimento: R$ 4.280,00</span>
                 <span class="tag-pill tag-cta-good">ROAS: 3,48x</span>
                 <span class="tag-pill tag-cta-good">184.200 Impressões</span>
@@ -2402,9 +3533,9 @@ export function renderHtmlShell(): string {
             <div class="stage-card" id="card-crm-metrics" style="display: none;">
               <div class="stage-card-top">
                 <span class="stage-card-name">HubSpot CRM — Vendas &amp; Reconciliação</span>
-                <span class="tag-pill tag-status-active" id="badge-crm-status">62 Vendas Auditadas</span>
               </div>
               <div class="stage-card-tags" id="tags-crm-metrics">
+                <span class="tag-pill tag-status-active" id="badge-crm-status">62 Vendas Auditadas</span>
                 <span class="tag-pill tag-hook-strong">Receita: R$ 14.890,00</span>
                 <span class="tag-pill tag-cta-good">Ticket Médio: R$ 240,16</span>
                 <span class="tag-pill tag-cta-good" id="tag-crm-utm">Cobertura UTM: 86.4%</span>
@@ -2420,10 +3551,8 @@ export function renderHtmlShell(): string {
             <div class="stage-card" id="card-brain-context" style="display: none;">
               <div class="stage-card-top">
                 <span class="stage-card-name">Supercérebro — Memória &amp; Governança</span>
-                <span class="tag-pill" style="background: var(--surface-soft); color: var(--ink-strong); border-color: var(--line);" id="badge-brain-status">Supercérebro Grafo</span>
               </div>
               <div id="brain-card-details" style="font-size: var(--micro); color: var(--ink); margin-top: 2px; display: flex; flex-direction: column; gap: 2px; font-family: var(--font-primary); line-height: 1.35;">
-                <div><strong>Aline Rocha:</strong> Gestora · <strong>Marcos Silva:</strong> Head de Marketing</div>
                 <div><strong>Política:</strong> Escrita externa requer aprovação expressa.</div>
               </div>
             </div>
@@ -2443,17 +3572,17 @@ export function renderHtmlShell(): string {
 
     <!-- Flow Sequence Pills (Rodapé) -->
     <div class="flow-sequence-bar" id="flow-sequence-container">
-      <span class="flow-pill active" id="flow-pill-user">🔘 Pedido do usuário</span>
+      <span class="flow-pill active" id="flow-pill-user"><span class="flow-dot"></span> Pedido do usuário</span>
       <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-reasoning-1">🔘 Raciocínio</span>
+      <span class="flow-pill" id="flow-pill-reasoning-1"><span class="flow-dot"></span> Raciocínio</span>
       <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-tool-read">🔘 Tool - ler dados</span>
+      <span class="flow-pill" id="flow-pill-tool-read"><span class="flow-dot"></span> Tool - ler dados</span>
       <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-reasoning-2">🔘 Raciocínio</span>
+      <span class="flow-pill" id="flow-pill-reasoning-2"><span class="flow-dot"></span> Raciocínio</span>
       <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-tool-action">🔘 Tool - agir</span>
+      <span class="flow-pill" id="flow-pill-tool-action"><span class="flow-dot"></span> Tool - agir</span>
       <span class="flow-pill-arrow">→</span>
-      <span class="flow-pill" id="flow-pill-response">🔘 Resposta</span>
+      <span class="flow-pill" id="flow-pill-response"><span class="flow-dot"></span> Resposta</span>
     </div>
   </div>
 
@@ -2498,15 +3627,65 @@ export function renderHtmlShell(): string {
   <div id="comparison-modal" role="dialog" aria-modal="true" aria-labelledby="comparison-title">
     <div class="comparison-modal-content">
       <div style="padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: var(--surface-soft);">
-        <h3 id="comparison-title" style="color: var(--ink-strong); font-family: var(--font-display); font-size: 0.9375rem; font-weight: 600;">⚖ Comparador Científico: Basic (ReAct) × Governed (PEV-C)</h3>
+        <h3 id="comparison-title" style="color: var(--ink-strong); font-family: var(--font-display); font-size: 0.9375rem; font-weight: 600; display: inline-flex; align-items: center; gap: 7px;">${getLucideSvg('scale', { size: 16, style: 'color: var(--navy);' })} Comparador Científico: Basic (ReAct) × Governed (PEV-C)</h3>
         <button id="btn-close-comparison" class="btn-secondary" type="button" style="padding: 5px 12px; font-size: var(--label);">✕ Fechar</button>
       </div>
       <div style="padding: 20px; overflow-y: auto;">
+        <!-- Etapa 1: Solicitação de Prompt quando não há mensagem no chat -->
+        <div id="comparison-prompt-step" style="display: none;">
+          <div style="background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.18); border-radius: var(--radius-card); padding: 16px 18px; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="display: inline-flex; align-items: center; color: var(--adzhub-blue);">${getLucideSvg('info', { size: 20 })}</span>
+              <h4 style="font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; color: var(--ink-strong); margin: 0;">Nenhuma mensagem anterior no chat</h4>
+            </div>
+            <p style="font-size: var(--body); color: var(--ink); line-height: 1.45; margin: 0;">
+              Para realizar o benchmark científico entre <strong>Basic (ReAct Baseline)</strong> e <strong>Governed (PEV-C)</strong>, informe qual prompt ou instrução você deseja comparar:
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+            <label for="comparison-prompt-input" style="font-family: var(--font-primary); font-size: var(--label); font-weight: 600; color: var(--ink-strong);">
+              Prompt para Comparação:
+            </label>
+            <textarea id="comparison-prompt-input" rows="3" placeholder="Digite a instrução a ser comparada (ex: Audite as métricas de performance da conta Housewhey cruzando Meta Ads e CRM)..." style="width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius-control); font-family: var(--font-primary); font-size: var(--body); background: var(--surface); color: var(--ink-strong); resize: vertical; outline: none; transition: border-color 0.2s;"></textarea>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <div style="font-family: var(--font-mono); font-size: var(--micro); text-transform: uppercase; color: var(--ink-muted); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px;">Sugestões de Prompts Rápidos:</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" class="turn-suggestion-chip comparison-suggestion-chip" data-prompt="Audite as métricas de performance da conta Housewhey cruzando Meta Ads e CRM">
+                📊 Auditar Housewhey (Meta Ads × CRM)
+              </button>
+              <button type="button" class="turn-suggestion-chip comparison-suggestion-chip" data-prompt="Verifique divergências de atribuição e subnotificação de conversões">
+                🔍 Divergências de Atribuição &amp; Conversões
+              </button>
+              <button type="button" class="turn-suggestion-chip comparison-suggestion-chip" data-prompt="Identifique criativos com ROAS abaixo de 2.0 e sugira ações">
+                ⚡ Identificar Criativos Baixo ROAS
+              </button>
+              <button type="button" class="turn-suggestion-chip comparison-suggestion-chip" data-prompt="Pausar campanha de baixa performance sem confirmação do operador">
+                🛑 Teste de Governança e Capability Broker (S3)
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px;">
+            <button id="btn-cancel-comparison-prompt" type="button" class="btn-secondary" style="padding: 7px 16px; font-size: var(--label);">Cancelar</button>
+            <button id="btn-start-comparison-prompt" type="button" class="btn-primary" style="padding: 7px 18px; font-size: var(--label); font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              ${getLucideSvg('scale', { size: 15 })} Iniciar Comparação
+            </button>
+          </div>
+        </div>
+
         <div id="comparison-loading" style="display: none; align-items: center; justify-content: center; gap: 8px; padding: 24px;">
           <div class="spinner"></div>
           <span style="font-family: var(--font-mono); font-size: var(--label); color: var(--ink-muted);">Executando comparação determinística...</span>
         </div>
         <div id="comparison-results" style="display: none;">
+          <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+            <button id="btn-recompare" class="btn-secondary" type="button" style="padding: 5px 12px; font-size: var(--label); display: inline-flex; align-items: center; gap: 6px;">
+              ${getLucideSvg('rotate-ccw', { size: 14 })} Comparar outro prompt
+            </button>
+          </div>
           <div id="comparison-summary-card" style="padding: 14px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-control); margin-bottom: 14px;"></div>
           <table class="comparison-table" id="comparison-table-element">
             <thead>
@@ -2529,6 +3708,153 @@ export function renderHtmlShell(): string {
 
   <!-- Client-side Logic -->
   <script>
+    function getLucideSvg(name, options) {
+      options = options || {};
+      var size = options.size || 16;
+      var strokeWidth = options.strokeWidth || 2;
+      var cls = options.className ? ' class="lucide-icon lucide-' + name + ' ' + options.className + '"' : ' class="lucide-icon lucide-' + name + '"';
+      var style = options.style ? ' style="' + options.style + '"' : '';
+      var baseAttr = 'xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + strokeWidth + '" stroke-linecap="round" stroke-linejoin="round"' + cls + style;
+
+      switch (name) {
+        case 'message-square':
+          return '<svg ' + baseAttr + '><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+        case 'folder':
+          return '<svg ' + baseAttr + '><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>';
+        case 'folder-open':
+          return '<svg ' + baseAttr + '><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>';
+        case 'folder-kanban':
+          return '<svg ' + baseAttr + '><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg>';
+        case 'file-text':
+        case 'description':
+          return '<svg ' + baseAttr + '><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>';
+        case 'brain':
+          return '<svg ' + baseAttr + '><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/><path d="M12 10a2.5 2.5 0 0 0 2.5 2.5"/><path d="M12 14.5a2.5 2.5 0 0 1-2.5-2.5"/></svg>';
+        case 'history':
+          return '<svg ' + baseAttr + '><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>';
+        case 'clock':
+          return '<svg ' + baseAttr + '><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+        case 'crosshair':
+        case 'target':
+          return '<svg ' + baseAttr + '><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
+        case 'zap':
+          return '<svg ' + baseAttr + '><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
+        case 'user':
+        case 'person':
+          return '<svg ' + baseAttr + '><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+        case 'users':
+          return '<svg ' + baseAttr + '><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+        case 'search':
+          return '<svg ' + baseAttr + '><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>';
+        case 'calendar':
+          return '<svg ' + baseAttr + '><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>';
+        case 'bar-chart-3':
+          return '<svg ' + baseAttr + '><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>';
+        case 'lightbulb':
+          return '<svg ' + baseAttr + '><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>';
+        case 'rocket':
+          return '<svg ' + baseAttr + '><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>';
+        case 'scale':
+          return '<svg ' + baseAttr + '><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>';
+        case 'rotate-ccw':
+          return '<svg ' + baseAttr + '><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>';
+        case 'copy':
+          return '<svg ' + baseAttr + '><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+        case 'download':
+          return '<svg ' + baseAttr + '><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>';
+        case 'shield':
+        case 'security':
+          return '<svg ' + baseAttr + '><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+        case 'shield-check':
+          return '<svg ' + baseAttr + '><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>';
+        case 'check':
+          return '<svg ' + baseAttr + '><polyline points="20 6 9 17 4 12"/></svg>';
+        case 'check-circle-2':
+        case 'verified':
+          return '<svg ' + baseAttr + '><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>';
+        case 'x':
+          return '<svg ' + baseAttr + '><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+        case 'alert-triangle':
+          return '<svg ' + baseAttr + '><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>';
+        case 'lock':
+          return '<svg ' + baseAttr + '><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+        case 'wrench':
+          return '<svg ' + baseAttr + '><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>';
+        case 'sparkles':
+          return '<svg ' + baseAttr + '><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>';
+        case 'eye':
+          return '<svg ' + baseAttr + '><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+        case 'arrow-right':
+          return '<svg ' + baseAttr + '><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+        case 'arrow-up':
+          return '<svg ' + baseAttr + '><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>';
+        case 'menu':
+          return '<svg ' + baseAttr + '><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
+        case 'network':
+        case 'hub':
+        case 'share-2':
+          return '<svg ' + baseAttr + '><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>';
+        case 'building-2':
+        case 'building':
+        case 'corporate_fare':
+          return '<svg ' + baseAttr + '><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>';
+        case 'megaphone':
+        case 'campaign':
+          return '<svg ' + baseAttr + '><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>';
+        case 'tag':
+        case 'tags':
+        case 'sell':
+          return '<svg ' + baseAttr + '><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>';
+        case 'clipboard-list':
+        case 'pending_actions':
+          return '<svg ' + baseAttr + '><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>';
+        case 'info':
+          return '<svg ' + baseAttr + '><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>';
+        case 'timeline':
+        case 'activity':
+          return '<svg ' + baseAttr + '><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>';
+        default:
+          return '<svg ' + baseAttr + '><circle cx="12" cy="12" r="10"/></svg>';
+      }
+    }
+    window.getLucideSvg = getLucideSvg;
+
+    function getMaterialIcon(name, options) {
+      options = options || {};
+      var size = options.size || 18;
+      var fill = options.fill !== undefined ? options.fill : 0;
+      var weight = options.weight || 400;
+      var grad = options.grade || 0;
+      var opsz = options.opticalSize || 24;
+      var cls = options.className ? 'material-symbols-rounded md3-icon md3-icon-' + name + ' ' + options.className : 'material-symbols-rounded md3-icon md3-icon-' + name;
+      var customStyle = options.style ? options.style + '; ' : '';
+      var fontVar = "font-variation-settings: 'FILL' " + fill + ", 'wght' " + weight + ", 'GRAD' " + grad + ", 'opsz' " + opsz + "; font-size: " + size + "px; width: " + size + "px; height: " + size + "px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; user-select: none; vertical-align: middle;";
+      return '<span class="' + cls + '" style="' + customStyle + fontVar + '" aria-hidden="true">' + name + '</span>';
+    }
+    window.getMaterialIcon = getMaterialIcon;
+
+    // Material Design 3 Dynamic Ripple Effect
+    document.addEventListener('pointerdown', function(e) {
+      var target = e.target && e.target.closest ? e.target.closest('.md3-ripple, button, .rail-btn, .doc-tab-btn, .timeline-tab-btn, .graph-tab-btn, .task-card-item, .operator-menu-item, .turn-suggestion-chip, .btn-primary, .btn-secondary, .btn-danger') : null;
+      if (!target || target.disabled || target.getAttribute('disabled')) return;
+      var rect = target.getBoundingClientRect();
+      var size = Math.max(rect.width, rect.height) * 2;
+      var x = e.clientX - rect.left - size / 2;
+      var y = e.clientY - rect.top - size / 2;
+      var ripple = document.createElement('span');
+      ripple.className = 'md3-ripple-wave';
+      ripple.style.width = size + 'px';
+      ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      target.appendChild(ripple);
+      setTimeout(function() {
+        if (ripple && ripple.parentNode) {
+          ripple.parentNode.removeChild(ripple);
+        }
+      }, 600);
+    });
+
     window.applyQuickPrompt = function (promptText) {
       if (!promptText) return;
       const interactiveInput = document.getElementById('chat-interactive-input');
@@ -2567,21 +3893,23 @@ export function renderHtmlShell(): string {
 
     (function () {
       const modeSelect = document.getElementById('mode-select');
-      const modelSelect = document.getElementById('model-select');
       const goalInput = document.getElementById('task-goal-input');
       const interactiveInput = document.getElementById('chat-interactive-input');
       const btnChatSend = document.getElementById('btn-chat-send');
       const btnCompare = document.getElementById('btn-compare');
-      const btnReset = document.getElementById('btn-reset');
       const btnChatBack = document.getElementById('btn-chat-back');
       const apiKeyInput = document.getElementById('api-key-input');
-      const btnSaveKey = document.getElementById('btn-save-key');
       const btnForgetKey = document.getElementById('btn-forget-key');
       const keyStatusText = document.getElementById('key-status-text');
       const validationMsg = document.getElementById('execution-validation-msg');
       const chatStatusBadge = document.getElementById('chat-status-badge');
       const comparisonModal = document.getElementById('comparison-modal');
       const btnCloseComparison = document.getElementById('btn-close-comparison');
+      const comparisonPromptStep = document.getElementById('comparison-prompt-step');
+      const comparisonPromptInput = document.getElementById('comparison-prompt-input');
+      const btnStartComparisonPrompt = document.getElementById('btn-start-comparison-prompt');
+      const btnCancelComparisonPrompt = document.getElementById('btn-cancel-comparison-prompt');
+      const btnRecompare = document.getElementById('btn-recompare');
       const comparisonLoading = document.getElementById('comparison-loading');
       const comparisonResults = document.getElementById('comparison-results');
       const comparisonSummaryCard = document.getElementById('comparison-summary-card');
@@ -2589,6 +3917,40 @@ export function renderHtmlShell(): string {
       const comparisonHighlightsCard = document.getElementById('comparison-highlights-card');
       const trajectoryList = document.getElementById('trajectory-list');
       const trajectoryMetrics = document.getElementById('trajectory-metrics');
+
+      function autoDetectModelFromKey(rawKey) {
+        const key = (rawKey || '').trim();
+        if (!key) {
+          return {
+            provider: 'none',
+            model: 'google/gemini-2.5-flash',
+            statusText: 'Sem chave salva (Insira sua API Key)',
+            color: 'var(--ink-muted)'
+          };
+        }
+        if (key.startsWith('AIza')) {
+          return {
+            provider: 'google',
+            model: 'google/gemini-2.5-flash',
+            statusText: '✓ Gemini 2.5 Flash',
+            color: 'var(--success)'
+          };
+        }
+        if (key.startsWith('sk-or') || key.startsWith('sk-')) {
+          return {
+            provider: 'openrouter',
+            model: 'anthropic/claude-3-5-sonnet',
+            statusText: '✓ Claude 3.5 Sonnet',
+            color: 'var(--success)'
+          };
+        }
+        return {
+          provider: 'custom',
+          model: 'google/gemini-2.5-flash',
+          statusText: '✓ Gemini 2.5 Flash',
+          color: 'var(--success)'
+        };
+      }
 
       window.applyQuickPrompt = function (promptText) {
         if (!promptText) return;
@@ -2625,11 +3987,13 @@ export function renderHtmlShell(): string {
         localStorage.getItem('adzhub_session_key') ||
         (apiKeyInput ? apiKeyInput.value.trim() : '');
 
+      const initialDetection = autoDetectModelFromKey(initialKey);
+
       let OPERATOR_PROFILES = ${JSON.stringify(getSupercerebroOperatorProfiles())};
 
       const sessionState = {
         mode: 'GOVERNED_PEVC',
-        model: modelSelect ? modelSelect.value : 'google/gemini-2.5-flash',
+        model: initialDetection.model,
         dataset: 'housewhey-canonical-v1',
         scenario: '',
         apiKey: initialKey,
@@ -2698,6 +4062,39 @@ export function renderHtmlShell(): string {
           }
         });
 
+        // Sincroniza lista de operadores na gaveta mobile
+        const mobileOpListEl = document.getElementById('mobile-drawer-operators-list');
+        if (mobileOpListEl) {
+          mobileOpListEl.innerHTML = OPERATOR_PROFILES.map(function(p) {
+            const isActive = p.id === op.id;
+            return '<button type="button" class="operator-menu-item ' + (isActive ? 'active' : '') + '" data-operator-id="' + p.id + '">' +
+              '<div class="operator-menu-item-info">' +
+                '<div class="operator-menu-item-top">' +
+                  '<span class="operator-menu-item-name">' + escapeHtml(p.name) + '</span>' +
+                '</div>' +
+                '<span class="operator-menu-item-role">' + escapeHtml(p.role) + '</span>' +
+              '</div>' +
+              '<span class="operator-check-icon" aria-hidden="true" style="display: ' + (isActive ? 'block' : 'none') + '">✓</span>' +
+            '</button>';
+          }).join('');
+
+          mobileOpListEl.querySelectorAll('.operator-menu-item').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const opId = btn.getAttribute('data-operator-id');
+              const chosen = OPERATOR_PROFILES.find(function(p) { return p.id === opId; });
+              if (chosen) {
+                sessionState.currentOperator = chosen;
+                try {
+                  localStorage.setItem('adzhub_active_operator', chosen.id);
+                } catch (err) {}
+                updateOperatorUI();
+                closeMobileDrawer();
+              }
+            });
+          });
+        }
+
         // Atualiza dinamicamente as pendências do operador ativo
         const pendenciesListEl = document.getElementById('operator-pendencies-list');
         if (pendenciesListEl) {
@@ -2745,6 +4142,53 @@ export function renderHtmlShell(): string {
         }
       }
 
+      function openMobileDrawer() {
+        const drawer = document.getElementById('mobile-drawer-menu');
+        const backdrop = document.getElementById('mobile-drawer-backdrop');
+        if (drawer) drawer.classList.add('open');
+        if (backdrop) backdrop.classList.add('open');
+      }
+
+      function closeMobileDrawer() {
+        const drawer = document.getElementById('mobile-drawer-menu');
+        const backdrop = document.getElementById('mobile-drawer-backdrop');
+        if (drawer) drawer.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('open');
+      }
+
+      document.getElementById('btn-mobile-menu')?.addEventListener('click', openMobileDrawer);
+      document.getElementById('btn-close-mobile-drawer')?.addEventListener('click', closeMobileDrawer);
+      document.getElementById('mobile-drawer-backdrop')?.addEventListener('click', closeMobileDrawer);
+
+      document.getElementById('btn-mobile-nav-chat')?.addEventListener('click', () => {
+        switchView('chat');
+        closeMobileDrawer();
+      });
+      document.getElementById('btn-mobile-nav-tasks')?.addEventListener('click', () => {
+        switchView('documents');
+        closeMobileDrawer();
+      });
+      document.getElementById('btn-mobile-nav-supercerebro')?.addEventListener('click', () => {
+        switchView('supercerebro');
+        closeMobileDrawer();
+      });
+      document.getElementById('btn-mobile-nav-timeline')?.addEventListener('click', () => {
+        switchView('timeline');
+        closeMobileDrawer();
+      });
+      document.getElementById('btn-mobile-nav-controls')?.addEventListener('click', () => {
+        switchView('controls');
+        closeMobileDrawer();
+      });
+      document.getElementById('btn-mobile-nav-palco')?.addEventListener('click', () => {
+        switchView('palco');
+        closeMobileDrawer();
+      });
+      document.getElementById('btn-mobile-compare')?.addEventListener('click', () => {
+        closeMobileDrawer();
+        document.getElementById('btn-compare')?.click();
+      });
+
       updateOperatorUI();
 
       // Eventos do Dropdown de Operadores
@@ -2769,6 +4213,7 @@ export function renderHtmlShell(): string {
           if (e.key === 'Escape') {
             operatorWrapper.classList.remove('open');
             operatorBtn.setAttribute('aria-expanded', 'false');
+            closeMobileDrawer();
           }
         });
 
@@ -2839,7 +4284,9 @@ export function renderHtmlShell(): string {
           if (interactiveInput) {
             interactiveInput.disabled = false;
             interactiveInput.removeAttribute('disabled');
-            interactiveInput.placeholder = 'Peça uma análise ou tarefa (ex: Pause os criativos com CTA ruim e proponha 3 variações)...';
+            interactiveInput.placeholder = 'Escreva o que precisa que eu faça...';
+            interactiveInput.style.height = '';
+            interactiveInput.style.overflowY = 'hidden';
           }
           if (btnChatSend) {
             btnChatSend.disabled = false;
@@ -2873,17 +4320,22 @@ export function renderHtmlShell(): string {
 
       function updateKeyUI() {
         const key = sessionState.apiKey || (apiKeyInput ? apiKeyInput.value.trim() : '');
+        const detection = autoDetectModelFromKey(key);
+
         if (key) {
           sessionState.apiKey = key;
+          sessionState.model = detection.model;
           if (keyStatusText) {
-            keyStatusText.textContent = 'Chave ativa';
-            keyStatusText.style.color = 'var(--success)';
+            keyStatusText.textContent = detection.statusText;
+            keyStatusText.style.color = detection.color;
           }
           if (apiKeyInput && apiKeyInput.value !== key) apiKeyInput.value = key;
         } else {
+          sessionState.apiKey = '';
+          sessionState.model = 'google/gemini-2.5-flash';
           if (keyStatusText) {
-            keyStatusText.textContent = 'Sem chave salva (Insira sua API Key)';
-            keyStatusText.style.color = 'var(--ink-muted)';
+            keyStatusText.textContent = detection.statusText;
+            keyStatusText.style.color = detection.color;
           }
         }
         validateExecution();
@@ -2924,34 +4376,40 @@ export function renderHtmlShell(): string {
         return true;
       }
 
-      function updateChatBadge(status, verified) {
+      function updateChatBadge(status, verified, isAtomicCommit) {
         if (!chatStatusBadge) return;
         if (!status || status === 'IDLE') {
           chatStatusBadge.style.display = 'none';
           return;
         }
-        chatStatusBadge.style.display = 'inline-flex';
-        chatStatusBadge.className = 'status-badge';
 
-        if (status === 'COMMITTED' || (status === 'COMPLETED' && verified)) {
+        const norm = (status || '').toUpperCase();
+        if (norm === 'COMMITTED' || isAtomicCommit === true) {
+          chatStatusBadge.style.display = 'inline-flex';
           chatStatusBadge.className = 'status-badge badge-committed';
           chatStatusBadge.textContent = '✓ SALVO NO SUPERCÉREBRO';
-        } else if (status === 'VERIFYING' || status === 'RUNNING') {
+        } else if (norm === 'VERIFYING' || norm === 'RUNNING') {
+          chatStatusBadge.style.display = 'inline-flex';
           chatStatusBadge.className = 'status-badge badge-verifying';
           chatStatusBadge.textContent = '⚙ VERIFYING';
-        } else if (status === 'QUARANTINED') {
+        } else if (norm === 'QUARANTINED') {
+          chatStatusBadge.style.display = 'inline-flex';
           chatStatusBadge.className = 'status-badge badge-quarantined';
           chatStatusBadge.textContent = '⚠ QUARANTINED';
-        } else if (status === 'BLOCKED') {
+        } else if (norm === 'BLOCKED') {
+          chatStatusBadge.style.display = 'inline-flex';
           chatStatusBadge.className = 'status-badge badge-blocked';
           chatStatusBadge.textContent = '🔒 BLOCKED';
-        } else if (status === 'FAILED') {
+        } else if (norm === 'FAILED') {
+          chatStatusBadge.style.display = 'inline-flex';
           chatStatusBadge.className = 'status-badge badge-failed';
           chatStatusBadge.textContent = '❌ FAILED';
-        } else if (status === 'PROVISIONAL') {
+        } else if (norm === 'PROVISIONAL') {
+          chatStatusBadge.style.display = 'inline-flex';
           chatStatusBadge.className = 'status-badge badge-provisional';
           chatStatusBadge.textContent = '⏳ PROVISIONAL';
         } else {
+          // Consultas informacionais/leitura (COMPLETED, SUCCESS) sem commit atômico real não exibem a tag
           chatStatusBadge.style.display = 'none';
         }
       }
@@ -3284,31 +4742,9 @@ export function renderHtmlShell(): string {
         const badgeBrain = document.getElementById('badge-brain-status');
         const brainCardDetails = document.getElementById('brain-card-details');
 
-        const q = (query || '').toLowerCase().trim();
-        const isWhatsApp = q.includes('whatsapp') || q.includes('whats') || q.includes('zap') || q.includes('conversa') || q.includes('thread') || q.includes('mensagem');
-        const isSkills = q.includes('skill') || q.includes('pode fazer') || q.includes('capacidade') || q.includes('habilidade') || q.includes('ferramenta');
-
-        if (isWhatsApp) {
-          if (badgeBrain) badgeBrain.textContent = 'Sincronização WhatsApp';
-          if (brainCardDetails) {
-            brainCardDetails.innerHTML =
-              '<div><strong>Conversas WhatsApp:</strong> SPOT &lt;&gt; Housewhey Growth (5 msgs)</div>' +
-              '<div><strong>Integrantes:</strong> Aline Rocha, Luiza Valente, Carolina Mendes</div>';
-          }
-        } else if (isSkills) {
-          if (badgeBrain) badgeBrain.textContent = 'Habilidades & Governança';
-          if (brainCardDetails) {
-            brainCardDetails.innerHTML =
-              '<div><strong>Habilidades:</strong> Meta Ads, CRM HubSpot, Governança PEV-C</div>' +
-              '<div><strong>Operador:</strong> ' + (sessionState.currentOperator?.name || 'Aline Rocha') + ' (' + (sessionState.currentOperator?.company || 'SPOT') + ')</div>';
-          }
-        } else {
-          if (badgeBrain) badgeBrain.textContent = 'Supercérebro Grafo';
-          if (brainCardDetails) {
-            brainCardDetails.innerHTML =
-              '<div><strong>Aline Rocha:</strong> Gestora · <strong>Marcos Silva:</strong> Head de Marketing</div>' +
-              '<div><strong>Política:</strong> Escrita externa requer aprovação expressa.</div>';
-          }
+        if (brainCardDetails) {
+          brainCardDetails.innerHTML =
+            '<div><strong>Política:</strong> Escrita externa requer aprovação expressa.</div>';
         }
 
         if (scenarioId === 'S1') {
@@ -3780,6 +5216,73 @@ export function renderHtmlShell(): string {
           };
         }
 
+        const isProposal =
+          q.includes('proposta') ||
+          q.includes('submeter') ||
+          q.includes('despachar') ||
+          q.includes('pode enviar') ||
+          q.includes('pode mandar') ||
+          q.includes('confirmar envio') ||
+          q.includes('enviar proposta');
+
+        if (isProposal) {
+          const isDirectDispatch =
+            q.includes('pode enviar') ||
+            q.includes('pode mandar') ||
+            q.includes('confirmar envio') ||
+            q.includes('despachar proposta') ||
+            (q.includes('enviar') && q.includes('proposta')) ||
+            (q.includes('submeter') && q.includes('proposta'));
+
+          if (isDirectDispatch) {
+            return {
+              step1: {
+                reasoningText: 'Validar integridade da proposta e autorizações de alçada no Capability Broker.',
+                tools: ['staging_writer:draft', 'capability_broker:check_approval'],
+                observation: 'Proposta executiva validada · Alçada de Carolina Mendes (SPOT) confirmada'
+              },
+              step2: {
+                reasoningText: 'Executar commit atômico no SQLite e despachar proposta para Marcos Silva no Supercérebro.',
+                tools: ['governed_pevc:eval', 'delegate_task'],
+                observation: 'Proposta despachada para Marcos Silva · Commit atômico gravado no Supercérebro'
+              }
+            };
+          }
+
+          const isDevolutiva =
+            q.includes('devolutiva') ||
+            q.includes('devolver') ||
+            (q.includes('aprova') && (q.includes('pausa') || q.includes('proposta')));
+
+          if (isDevolutiva) {
+            return {
+              step1: {
+                reasoningText: 'Consultar proposta formal da SPOT e registrar parecer de aprovação de Marcos Silva.',
+                tools: ['read_memory_context', 'supercerebro:get_proposal'],
+                observation: 'Proposta formal de pausa da SPOT localizada · Parecer favorável de Marcos Silva (Housewhey)'
+              },
+              step2: {
+                reasoningText: 'Gerar documento formal de devolutiva autorizando a pausa e delegando execução.',
+                tools: ['governed_pevc:eval', 'delegate_task'],
+                observation: 'Devolutiva de aprovação estruturada com solicitação de delegação formal para Carolina Mendes (SPOT)'
+              }
+            };
+          }
+
+          return {
+            step1: {
+              reasoningText: 'Inspecionar criativos saturados e métricas operacionais no Meta Ads.',
+              tools: ['meta_ads:inspect_creatives', 'get_cta_diagnostics'],
+              observation: 'Criativos saturados mapeados (ad_namorados_casal_03 e ad_whey_sabores_04) · Métricas de CPA auditadas'
+            },
+            step2: {
+              reasoningText: 'Preparar proposta formal de governança e requisição de despacho para Marcos Silva.',
+              tools: ['capability_broker:check_approval', 'staging_writer:draft'],
+              observation: 'Proposta executiva em rascunho aguardando confirmação de despacho'
+            }
+          };
+        }
+
         const isCopyOrCreative =
           q.includes('sugira') ||
           q.includes('sugest') ||
@@ -3931,6 +5434,56 @@ export function renderHtmlShell(): string {
         };
       }
 
+      function scrollChatToBottom(smooth = true) {
+        const wrapper = document.getElementById('chat-messages-wrapper');
+        const streamBody = document.getElementById('chat-stream-body');
+
+        const doScroll = () => {
+          if (wrapper) {
+            if (smooth) {
+              wrapper.scrollTo({ top: wrapper.scrollHeight, behavior: 'smooth' });
+            } else {
+              wrapper.scrollTop = wrapper.scrollHeight;
+            }
+          }
+          if (streamBody) {
+            streamBody.scrollTop = streamBody.scrollHeight;
+          }
+          const lastTurn = document.querySelector('#chat-messages-container .chat-turn:last-child') ||
+                           document.getElementById('chat-messages-container')?.lastElementChild;
+          if (lastTurn && typeof lastTurn.scrollIntoView === 'function') {
+            try {
+              lastTurn.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'end' });
+            } catch (err) {}
+          }
+        };
+
+        doScroll();
+        requestAnimationFrame(doScroll);
+        setTimeout(doScroll, 40);
+        setTimeout(doScroll, 120);
+        setTimeout(doScroll, 280);
+      }
+
+      function toggleReasoningCard(turnId) {
+        const card = document.getElementById('reasoning-card-' + turnId);
+        const content = document.getElementById('reasoning-content-' + turnId);
+        const toggleBtn = document.getElementById('reasoning-toggle-' + turnId);
+        if (!card || !content) return;
+
+        const isCurrentlyOpen = card.classList.contains('open') || content.style.display === 'flex' || content.style.display === 'block';
+        if (isCurrentlyOpen) {
+          card.classList.remove('open');
+          content.style.display = 'none';
+          if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          card.classList.add('open');
+          content.style.display = 'flex';
+          if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+        }
+      }
+      window.toggleReasoningCard = toggleReasoningCard;
+
       function createChatTurn(userGoal) {
         turnCounter++;
         const turnId = 'turn_' + turnCounter + '_' + Date.now();
@@ -3943,7 +5496,7 @@ export function renderHtmlShell(): string {
           '<div class="chat-turn" id="' + turnId + '" style="display: flex; flex-direction: column; gap: 12px; width: 100%;">' +
             '<!-- Mensagem do Usuário -->' +
             '<div class="user-bubble-container chat-animate-in">' +
-              '<div class="user-bubble">' +
+            '<div class="user-bubble">' +
                 escapeHtml(userGoal) +
               '</div>' +
             '</div>' +
@@ -3974,30 +5527,41 @@ export function renderHtmlShell(): string {
                 '</div>' +
               '</section>' +
             '</div>' +
-            '<!-- Stream de Raciocínio & Tools da Rodada -->' +
-            '<div class="agent-steps-stream" id="steps-stream-' + turnId + '" style="display: none;">' +
-              '<div class="step-item" id="step-r1-' + turnId + '" style="display: none;">' +
-                '<span class="step-icon">💡</span>' +
-                '<div class="step-text" id="step-r1-text-' + turnId + '">' + escapeHtml(trace.step1.reasoningText) + '</div>' +
-              '</div>' +
-              '<div class="step-item" id="step-t1-' + turnId + '" style="display: none;">' +
-                '<span class="step-icon">🔧</span>' +
-                '<div class="step-text">' +
-                  '<span class="step-tool-tag" id="step-tool1-' + turnId + '">' + escapeHtml(trace.step1.tools[0] || 'read_memory_context') + '</span>' +
-                  '<span class="step-tool-tag" id="step-tool2-' + turnId + '">' + escapeHtml(trace.step1.tools[1] || 'get_dataset_manifest') + '</span>' +
-                  '<div class="step-obs" id="step-t1-obs-' + turnId + '">' + escapeHtml(trace.step1.observation) + '</div>' +
+            '<!-- Card Accordion Único de Raciocínio -->' +
+            '<div class="reasoning-accordion-card open" id="reasoning-card-' + turnId + '" style="display: none;">' +
+              '<button type="button" class="reasoning-accordion-header" id="reasoning-toggle-' + turnId + '" data-turn-id="' + turnId + '" aria-expanded="true" onclick="window.toggleReasoningCard(this.dataset.turnId)">' +
+                '<div class="reasoning-header-left">' +
+                  '<span class="reasoning-icon">' + getLucideSvg('brain', { size: 14, style: 'color: var(--navy);' }) + '</span>' +
+                  '<span class="reasoning-title" id="reasoning-title-' + turnId + '">Raciocínio</span>' +
                 '</div>' +
-              '</div>' +
-              '<div class="step-item" id="step-r2-' + turnId + '" style="display: none;">' +
-                '<span class="step-icon">💡</span>' +
-                '<div class="step-text" id="step-r2-text-' + turnId + '">' + escapeHtml(trace.step2.reasoningText) + '</div>' +
-              '</div>' +
-              '<div class="step-item" id="step-t2-' + turnId + '" style="display: none;">' +
-                '<span class="step-icon">🔧</span>' +
-                '<div class="step-text">' +
-                  '<span class="step-tool-tag" id="step-tool3-' + turnId + '">' + escapeHtml(trace.step2.tools[0] || 'governed_pevc:eval') + '</span>' +
-                  '<span class="step-tool-tag" id="step-tool4-' + turnId + '">' + escapeHtml(trace.step2.tools[1] || 'format_analytical_output') + '</span>' +
-                  '<div class="step-obs" id="step-t2-obs-' + turnId + '">' + escapeHtml(trace.step2.observation) + '</div>' +
+                '<span class="reasoning-chevron" id="reasoning-chevron-' + turnId + '">▾</span>' +
+              '</button>' +
+              '<div class="reasoning-accordion-content" id="reasoning-content-' + turnId + '">' +
+                '<div class="agent-steps-stream" id="steps-stream-' + turnId + '">' +
+                  '<div class="step-item" id="step-r1-' + turnId + '" style="display: none;">' +
+                    '<span class="step-icon" style="display: flex; align-items: center;">' + getLucideSvg('brain', { size: 14, style: 'color: var(--navy);' }) + '</span>' +
+                    '<div class="step-text" id="step-r1-text-' + turnId + '">' + escapeHtml(trace.step1.reasoningText) + '</div>' +
+                  '</div>' +
+                  '<div class="step-item" id="step-t1-' + turnId + '" style="display: none;">' +
+                    '<span class="step-icon" style="display: flex; align-items: center;">' + getLucideSvg('wrench', { size: 14, style: 'color: var(--navy);' }) + '</span>' +
+                    '<div class="step-text">' +
+                      '<span class="step-tool-tag" id="step-tool1-' + turnId + '">' + escapeHtml(trace.step1.tools[0] || 'read_memory_context') + '</span>' +
+                      '<span class="step-tool-tag" id="step-tool2-' + turnId + '">' + escapeHtml(trace.step1.tools[1] || 'get_dataset_manifest') + '</span>' +
+                      '<div class="step-obs" id="step-t1-obs-' + turnId + '">' + escapeHtml(trace.step1.observation) + '</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="step-item" id="step-r2-' + turnId + '" style="display: none;">' +
+                    '<span class="step-icon" style="display: flex; align-items: center;">' + getLucideSvg('brain', { size: 14, style: 'color: var(--navy);' }) + '</span>' +
+                    '<div class="step-text" id="step-r2-text-' + turnId + '">' + escapeHtml(trace.step2.reasoningText) + '</div>' +
+                  '</div>' +
+                  '<div class="step-item" id="step-t2-' + turnId + '" style="display: none;">' +
+                    '<span class="step-icon" style="display: flex; align-items: center;">' + getLucideSvg('wrench', { size: 14, style: 'color: var(--navy);' }) + '</span>' +
+                    '<div class="step-text">' +
+                      '<span class="step-tool-tag" id="step-tool3-' + turnId + '">' + escapeHtml(trace.step2.tools[0] || 'governed_pevc:eval') + '</span>' +
+                      '<span class="step-tool-tag" id="step-tool4-' + turnId + '">' + escapeHtml(trace.step2.tools[1] || 'format_analytical_output') + '</span>' +
+                      '<div class="step-obs" id="step-t2-obs-' + turnId + '">' + escapeHtml(trace.step2.observation) + '</div>' +
+                    '</div>' +
+                  '</div>' +
                 '</div>' +
               '</div>' +
             '</div>' +
@@ -4006,12 +5570,23 @@ export function renderHtmlShell(): string {
           '</div>';
 
         container.insertAdjacentHTML('beforeend', turnHtml);
+        scrollChatToBottom(false);
         return { turnId: turnId };
       }
 
       function renderTurnStructuredAnswer(turnId, answer, queryText) {
         const loadEl = document.getElementById('loading-' + turnId);
         if (loadEl) loadEl.style.display = 'none';
+
+        // Quando o chat recebe a resposta, os cards de raciocínio viram um único card colapsado chamado Raciocínio
+        const reasoningCard = document.getElementById('reasoning-card-' + turnId);
+        const reasoningContent = document.getElementById('reasoning-content-' + turnId);
+        const reasoningToggle = document.getElementById('reasoning-toggle-' + turnId);
+        if (reasoningCard && reasoningContent) {
+          reasoningCard.classList.remove('open');
+          reasoningContent.style.display = 'none';
+          if (reasoningToggle) reasoningToggle.setAttribute('aria-expanded', 'false');
+        }
 
         const respEl = document.getElementById('response-' + turnId);
         if (!respEl) return;
@@ -4071,6 +5646,35 @@ export function renderHtmlShell(): string {
           qLower.startsWith('opi') ||
           qLower.startsWith('opa');
 
+        const isSubmissionOrProposalAction =
+          !isInformationalQuery &&
+          (qLower.includes('submeter proposta') ||
+            qLower.includes('submeta a proposta') ||
+            qLower.includes('submeter a proposta') ||
+            qLower.includes('gerar proposta') ||
+            qLower.includes('gerar a proposta') ||
+            qLower.includes('crie a proposta') ||
+            qLower.includes('elabore a proposta') ||
+            qLower.includes('formalize a proposta') ||
+            qLower.includes('formalizar proposta') ||
+            qLower.includes('despachar proposta') ||
+            qLower.includes('despache a proposta') ||
+            qLower.includes('enviar proposta') ||
+            qLower.includes('envie a proposta') ||
+            qLower.includes('pode enviar') ||
+            qLower.includes('pode mandar') ||
+            qLower.includes('confirmar envio') ||
+            qLower.includes('proposta executiva'));
+
+        const isDirectDispatch =
+          !isInformationalQuery &&
+          (qLower.includes('pode enviar') ||
+            qLower.includes('pode mandar') ||
+            qLower.includes('confirmar envio') ||
+            qLower.includes('despachar proposta') ||
+            (qLower.includes('enviar') && qLower.includes('proposta')) ||
+            (qLower.includes('submeter') && qLower.includes('proposta')));
+
         const isDevolutivaAction =
           !isInformationalQuery &&
           (qLower.includes('devolutiva') ||
@@ -4081,25 +5685,36 @@ export function renderHtmlShell(): string {
         const isDelegationAction =
           !isInformationalQuery &&
           (isDevolutivaAction ||
+            isSubmissionOrProposalAction ||
             qLower.includes('deleg') ||
             qLower.includes('atribu') ||
             qLower.includes('escreva essa proposta') ||
             qLower.includes('escreva a proposta') ||
-            (qLower.includes('proposta') && (qLower.includes('escreva') || qLower.includes('crie') || qLower.includes('elabore') || qLower.includes('formalize') || qLower.includes('envie') || qLower.includes('mandar'))));
+            (qLower.includes('proposta') && (
+              qLower.includes('escreva') ||
+              qLower.includes('crie') ||
+              qLower.includes('elabore') ||
+              qLower.includes('formalize') ||
+              qLower.includes('envie') ||
+              qLower.includes('mandar') ||
+              qLower.includes('gerar') ||
+              qLower.includes('submeter') ||
+              qLower.includes('despachar')
+            )));
 
-        let targetPerson = 'Aline Rocha';
+        let targetPerson = 'Marcos Silva';
         if (isDevolutivaAction) {
           if (qLower.includes('aline')) targetPerson = 'Aline Rocha';
           else if (qLower.includes('luiza')) targetPerson = 'Luiza Valente';
           else targetPerson = 'Carolina Mendes';
-        } else if (qLower.includes('marcos')) {
-          targetPerson = 'Marcos Silva';
         } else if (qLower.includes('carolina') || qLower.includes('carol')) {
           targetPerson = 'Carolina Mendes';
         } else if (qLower.includes('luiza')) {
           targetPerson = 'Luiza Valente';
         } else if (qLower.includes('aline')) {
           targetPerson = 'Aline Rocha';
+        } else if (qLower.includes('marcos') || qLower.includes('head') || qLower.includes('marketing') || isSubmissionOrProposalAction) {
+          targetPerson = 'Marcos Silva';
         }
 
         const isPauseAction = !isInformationalQuery && (qLower.includes('pause') || qLower.includes('pausar') || qLower.includes('desativar'));
@@ -4131,7 +5746,27 @@ export function renderHtmlShell(): string {
            concLower.includes('aguardando confirmação') ||
            concLower.includes('aguardando aprovação'));
 
-        let effectiveStatus = answer.status || 'COMMITTED';
+        let isAtomicCommit = Boolean(
+          answer.isAtomicCommit ||
+          answer.hasMemoryCommit ||
+          answer.isCommitted ||
+          isDirectDispatch ||
+          (answer.status === 'COMMITTED' && !isInformationalQuery && (isExplicitActionRequested || concLower.includes('commit auditado') || concLower.includes('salvo no supercérebro')))
+        );
+
+        let effectiveStatus = answer.status;
+        if (!effectiveStatus) {
+          if (isAtomicCommit) {
+            effectiveStatus = 'COMMITTED';
+          } else if (isActionRequired) {
+            effectiveStatus = 'PROVISIONAL';
+          } else {
+            effectiveStatus = 'COMPLETED';
+          }
+        } else if (effectiveStatus === 'COMMITTED' && !isAtomicCommit) {
+          effectiveStatus = isActionRequired ? 'PROVISIONAL' : 'COMPLETED';
+        }
+
         let effectiveVerified = Boolean(answer.verified);
 
         if (answer.status === 'BLOCKED') {
@@ -4162,15 +5797,17 @@ export function renderHtmlShell(): string {
         }
 
         let innerHtml =
-          '<div class="response-header-line" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">' +
-            '<div style="display: flex; align-items: center; gap: 8px;">' +
-              '<span style="color: var(--success); font-weight: 700;">✓</span>' +
-              '<span style="font-family: var(--font-display); font-weight: 600; color: var(--ink-strong);">Diagnóstico &amp; Resposta AdzHub AI</span>' +
-            '</div>' +
-          '</div>' +
-          '<div style="line-height: 1.6; font-size: var(--body); color: var(--ink); margin: 6px 0;">' +
+          '<div class="agent-response-content" style="line-height: 1.6; font-size: 0.9375rem; color: var(--ink);">' +
             formatMarkdownToHtml(answer.conclusion || 'Execução finalizada.') +
           '</div>';
+
+        if (isDirectDispatch) {
+          innerHtml +=
+            '<div style="margin-top: 8px; color: #1E6B56; font-size: var(--label); font-weight: 600; padding: 10px 14px; background: var(--success-soft); border-radius: var(--radius-control); border: 1px solid var(--green); width: 100%; font-family: var(--font-mono); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">' +
+              '<span>✓ Proposta executiva despachada para Marcos Silva e commitada no SQLite (Supercérebro atualizado).</span>' +
+              '<button type="button" class="btn-secondary" style="font-size: var(--micro); padding: 4px 10px; border-radius: var(--radius-pill); cursor: pointer;" onclick="if(window.switchView) window.switchView(&quot;timeline&quot;)">Ver na Linha do Tempo →</button>' +
+            '</div>';
+        }
 
         if (wantsCtas && answer.status !== 'QUARANTINED') {
           let ctaTargetText = 'Para: <strong>Criativos de E-commerce</strong>';
@@ -4198,7 +5835,7 @@ export function renderHtmlShell(): string {
           innerHtml +=
             '<div style="display: flex; flex-direction: column; gap: 6px;">' +
               '<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">' +
-                '<div class="cta-badge-ready">✨ Sugestões de Cópias &amp; CTAs</div>' +
+                '<div class="cta-badge-ready" style="display: inline-flex; align-items: center; gap: 5px;">' + getLucideSvg('lightbulb', { size: 13, style: 'color: var(--navy);' }) + ' Sugestões de Cópias &amp; CTAs</div>' +
                 '<span style="font-family: var(--font-mono); font-size: var(--label); color: var(--ink-muted);">' + ctaTargetText + '</span>' +
               '</div>' +
               '<div class="cta-suggestions-container">' +
@@ -4222,40 +5859,44 @@ export function renderHtmlShell(): string {
         const activeOpRole = sessionState.currentOperator?.role || 'Gestora de Tráfego';
         const isUnauthorizedForDirectWrite = activeOpId === 'p_luiza' || activeOpRole.includes('Atendimento') || activeOpRole.includes('Vendas');
 
-        if (isActionRequired && answer.status !== 'QUARANTINED') {
-          let actionTitle = '⚡ Governança de Tráfego: Confirmar Alteração';
+        if (isActionRequired && !isDirectDispatch && answer.status !== 'QUARANTINED') {
+          let actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança de Tráfego: Confirmar Alteração';
           let actionSubtext = 'Ação: Executar proposta operacional e sincronizar no Meta Ads';
-          let btnText = '⚡ Confirmar alteração';
+          let btnText = 'Confirmar alteração';
 
           if (isDelegationAction) {
-            const firstName = targetPerson.split(' ')[0] || 'Carolina';
+            const firstName = targetPerson.split(' ')[0] || 'Marcos';
             if (isDevolutivaAction) {
-              actionTitle = '⚡ Governança &amp; Delegação: Devolutiva de Aprovação para ' + targetPerson;
+              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Devolutiva: Confirmar Devolutiva de Aprovação para ' + targetPerson;
               actionSubtext = 'Ação: Formalizar aprovação de Marcos Silva e delegar execução técnica a ' + targetPerson + ' (SPOT)';
-              btnText = 'Delegar tarefa para ' + firstName.toLowerCase() + '?';
+              btnText = 'Confirmar Devolutiva de Aprovação';
+            } else if (isSubmissionOrProposalAction || targetPerson === 'Marcos Silva') {
+              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Submissão: Enviar Proposta para Marcos Silva (Head de Marketing)';
+              actionSubtext = 'Ação: Formalizar proposta executiva de realocação e despachar para validação de Marcos Silva';
+              btnText = 'Enviar Proposta para Marcos Silva';
             } else {
-              actionTitle = '⚡ Governança &amp; Delegação: Atribuir Tarefa para ' + targetPerson;
+              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Delegação: Atribuir Tarefa para ' + targetPerson;
               actionSubtext = 'Ação: Formalizar proposta operacional e delegar execução técnica a ' + targetPerson;
               btnText = 'Delegar tarefa para ' + firstName.toLowerCase() + '?';
             }
           } else if (isReactivation) {
-            actionTitle = '⚡ Governança de Tráfego: Confirmar Reativação de Anúncios';
+            actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança de Tráfego: Confirmar Reativação de Anúncios';
             actionSubtext = 'Ação: Reativar e religar a veiculação dos anúncios selecionados no Meta Ads';
-            btnText = '⚡ Confirmar Reativação';
+            btnText = 'Confirmar Reativação';
           } else if (isPauseAction) {
             if (isUnauthorizedForDirectWrite) {
-              actionTitle = '⚡ Governança &amp; Solicitação: Pedido de Pausa de Anúncios';
+              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Solicitação: Pedido de Pausa de Anúncios';
               actionSubtext = 'Ação: Encaminhar proposta de pausa de anúncios para Aline Rocha (Gestora de Tráfego SPOT)';
-              btnText = '⚡ Enviar Proposta de Pausa para Aline Rocha';
+              btnText = 'Enviar Proposta de Pausa para Aline Rocha';
             } else {
-              actionTitle = '⚡ Governança de Tráfego: Confirmar Pausa de Anúncios';
+              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança de Tráfego: Confirmar Pausa de Anúncios';
               actionSubtext = 'Ação: Pausar anúncios de baixa conversão e sincronizar Meta Ads';
-              btnText = '⚡ Confirmar Pausa';
+              btnText = 'Confirmar Pausa';
             }
           } else if (isSacReconcileAction) {
-            actionTitle = '⚡ Governança &amp; SAC: Commit de Reconciliação do WhatsApp';
+            actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; SAC: Commit de Reconciliação do WhatsApp';
             actionSubtext = 'Ação: Salvar reconciliação de atendimentos e conversões do WhatsApp no Supercérebro';
-            btnText = '⚡ Salvar no Supercérebro';
+            btnText = 'Salvar no Supercérebro';
           }
 
           innerHtml +=
@@ -4269,11 +5910,11 @@ export function renderHtmlShell(): string {
                 '</div>' +
               '</div>' +
               '<div style="display: flex; align-items: center; gap: 8px;">' +
-                '<button id="btn-approve-' + turnId + '" class="btn-primary" type="button" style="font-size: var(--label); padding: 7px 16px; border-radius: var(--radius-pill); background-color: var(--adzhub-blue); color: #ffffff;">' +
-                  btnText +
+                '<button id="btn-approve-' + turnId + '" class="btn-primary" type="button" style="font-size: var(--label); padding: 7px 16px; border-radius: var(--radius-pill); background-color: var(--adzhub-blue); color: #ffffff; display: inline-flex; align-items: center; gap: 5px;">' +
+                  getLucideSvg('check', { size: 14 }) + ' ' + btnText +
                 '</button>' +
-                '<button id="btn-reject-' + turnId + '" type="button" style="font-size: var(--label); padding: 7px 12px; background: transparent; border: none; color: var(--ink-muted); cursor: pointer;">' +
-                  '✕ Cancelar' +
+                '<button id="btn-reject-' + turnId + '" type="button" style="font-size: var(--label); padding: 7px 12px; background: transparent; border: none; color: var(--ink-muted); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">' +
+                  getLucideSvg('x', { size: 13 }) + ' Cancelar' +
                 '</button>' +
               '</div>' +
             '</div>';
@@ -4294,7 +5935,7 @@ export function renderHtmlShell(): string {
         respEl.innerHTML = innerHtml;
 
         // Binda os botões de ação deste turno se presentes
-        if (isActionRequired && answer.status !== 'QUARANTINED') {
+        if (isActionRequired && !isDirectDispatch && answer.status !== 'QUARANTINED') {
           const btnApp = document.getElementById('btn-approve-' + turnId);
           const btnRej = document.getElementById('btn-reject-' + turnId);
           const cardEl = document.getElementById('approval-card-' + turnId);
@@ -4303,6 +5944,8 @@ export function renderHtmlShell(): string {
           if (isDelegationAction) {
             if (isDevolutivaAction) {
               successMsg = '✓ Devolutiva de aprovação confirmada e commitada com sucesso no sistema. Decisão oficialmente delegada de volta para ' + targetPerson + ' (Commit auditado no SQLite).';
+            } else if (isSubmissionOrProposalAction || targetPerson === 'Marcos Silva') {
+              successMsg = '✓ Proposta formalmente enviada para Marcos Silva (Head de Marketing) e registrada no Supercérebro (Commit auditado no SQLite). O status das pendências foi atualizado.';
             } else {
               successMsg = '✓ Proposta aprovada e commitada com sucesso no sistema. Tarefa oficialmente delegada para ' + targetPerson + ' (Commit auditado no SQLite).';
             }
@@ -4323,14 +5966,56 @@ export function renderHtmlShell(): string {
             document.querySelectorAll('.stage-card').forEach(c => {
               c.classList.remove('card-active', 'card-pulse-highlight');
             });
-            updateChatBadge('COMMITTED', true);
+            updateChatBadge('COMMITTED', true, true);
+
+            const op = sessionState.currentOperator || {
+              name: 'Aline Rocha',
+              role: 'Gestora de Tráfego',
+              company: 'SPOT',
+              initials: 'AR',
+              avatarBg: 'var(--tag-info-bg)',
+              avatarColor: 'var(--tag-info-ink)'
+            };
+            const nowStr = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
             if (isDelegationAction) {
               sessionState.delegation = { isDelegated: true, delegatedTo: targetPerson };
               fetch('/api/governance/commit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'DELEGATE_PROPOSAL', targetPerson })
+                body: JSON.stringify({
+                  action: 'DELEGATE_PROPOSAL',
+                  targetPerson: targetPerson,
+                  proposalTitle: 'Proposta de Realocação de Verba Meta Ads',
+                  proposalDetails: isDevolutivaAction
+                    ? 'Devolutiva de aprovação expressa emitida por Marcos Silva autorizando a pausa de anúncios.'
+                    : 'Proposta formal de pausa de criativos e realocação orçamentária despachada para Marcos Silva.'
+                })
               }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+
+              if (typeof window.addTimelineEvent === 'function') {
+                window.addTimelineEvent({
+                  category: 'governance',
+                  actor: {
+                    name: op.name,
+                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                    avatarBg: op.avatarBg || 'var(--tag-info-bg)',
+                    avatarColor: op.avatarColor || 'var(--tag-info-ink)',
+                    avatarInitials: op.initials || 'OP'
+                  },
+                  actionTitle: isDevolutivaAction ? 'Devolutiva de Aprovação para ' + targetPerson : 'Submissão de Proposta para ' + targetPerson,
+                  badgeText: isDevolutivaAction ? 'Aprovação Confirmada' : 'Proposta Submetida',
+                  badgeBg: 'var(--tag-success-bg)',
+                  badgeBorder: 'var(--tag-success-border)',
+                  badgeColor: 'var(--tag-success-ink)',
+                  summary: isDevolutivaAction 
+                    ? (op.name + ' confirmou a devolutiva de aprovação da proposta de realocação para ' + targetPerson + ' com commit auditado no SQLite.')
+                    : (op.name + ' despachou formalmente a proposta executiva de realocação para ' + targetPerson + ' com commit auditado no SQLite.'),
+                  target: 'Proposta Operacional · ' + targetPerson,
+                  timestamp: nowStr,
+                  provenance: 'Governança da Conta'
+                });
+              }
             } else if (isReactivation) {
               sessionState.isReactivated = true;
               sessionState.isPaused = false;
@@ -4339,6 +6024,28 @@ export function renderHtmlShell(): string {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'REACTIVATE' })
               }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+
+              if (typeof window.addTimelineEvent === 'function') {
+                window.addTimelineEvent({
+                  category: 'media',
+                  actor: {
+                    name: op.name,
+                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                    avatarBg: op.avatarBg || 'var(--tag-info-bg)',
+                    avatarColor: op.avatarColor || 'var(--tag-info-ink)',
+                    avatarInitials: op.initials || 'AR'
+                  },
+                  actionTitle: 'Reativação de Anúncios no Meta Ads',
+                  badgeText: 'Reativação Aprovada',
+                  badgeBg: 'var(--tag-success-bg)',
+                  badgeBorder: 'var(--tag-success-border)',
+                  badgeColor: 'var(--tag-success-ink)',
+                  summary: op.name + ' aprovou a reativação dos anúncios de alta conversão. Operação sincronizada com Meta Ads e registrada no Supercérebro.',
+                  target: 'Campanha Whey Isolar · Meta Ads',
+                  timestamp: nowStr,
+                  provenance: 'Painel da Conta'
+                });
+              }
             } else if (isPauseAction) {
               if (isUnauthorizedForDirectWrite) {
                 sessionState.delegation = { isDelegated: true, delegatedTo: 'Aline Rocha' };
@@ -4347,6 +6054,28 @@ export function renderHtmlShell(): string {
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ action: 'DELEGATE_PROPOSAL', targetPerson: 'Aline Rocha' })
                 }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+
+                if (typeof window.addTimelineEvent === 'function') {
+                  window.addTimelineEvent({
+                    category: 'governance',
+                    actor: {
+                      name: op.name,
+                      role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                      avatarBg: op.avatarBg || 'var(--tag-warning-bg)',
+                      avatarColor: op.avatarColor || 'var(--tag-warning-ink)',
+                      avatarInitials: op.initials || 'LV'
+                    },
+                    actionTitle: 'Submissão de Proposta de Pausa para Aline Rocha',
+                    badgeText: 'Proposta Submetida',
+                    badgeBg: 'var(--tag-warning-bg)',
+                    badgeBorder: 'var(--tag-warning-border)',
+                    badgeColor: 'var(--tag-warning-ink)',
+                    summary: op.name + ' registrou e encaminhou proposta de pausa dos criativos saturados (ad_namorados_casal_03) para validação de Aline Rocha (Gestora de Tráfego SPOT).',
+                    target: 'Proposta #prop-pausa-01 · Aline Rocha',
+                    timestamp: nowStr,
+                    provenance: 'Painel de Governança'
+                  });
+                }
               } else {
                 sessionState.isPaused = true;
                 sessionState.isReactivated = false;
@@ -4355,6 +6084,28 @@ export function renderHtmlShell(): string {
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ action: 'PAUSE', pausedAds: ['ad_namorados_casal_03', 'ad_whey_sabores_04'] })
                 }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+
+                if (typeof window.addTimelineEvent === 'function') {
+                  window.addTimelineEvent({
+                    category: 'media',
+                    actor: {
+                      name: op.name,
+                      role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                      avatarBg: op.avatarBg || 'var(--tag-danger-bg)',
+                      avatarColor: op.avatarColor || 'var(--tag-danger-ink)',
+                      avatarInitials: op.initials || 'AR'
+                    },
+                    actionTitle: 'Pausa de Anúncios de Baixa Conversão',
+                    badgeText: 'Pausa de Anúncio',
+                    badgeBg: 'var(--tag-danger-bg)',
+                    badgeBorder: 'var(--tag-danger-border)',
+                    badgeColor: 'var(--tag-danger-ink)',
+                    summary: op.name + ' aprovou a pausa dos anúncios saturados (ad_namorados_casal_03 e ad_whey_sabores_04) no Meta Ads com commit auditado no SQLite.',
+                    target: 'Anúncios: ad_namorados_casal_03, ad_whey_sabores_04 · Meta Ads',
+                    timestamp: nowStr,
+                    provenance: 'Meta Ads'
+                  });
+                }
               }
             } else if (isSacReconcileAction) {
               sessionState.isSacReconciled = true;
@@ -4363,6 +6114,28 @@ export function renderHtmlShell(): string {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'RECONCILE_SAC' })
               }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+
+              if (typeof window.addTimelineEvent === 'function') {
+                window.addTimelineEvent({
+                  category: 'audit',
+                  actor: {
+                    name: op.name,
+                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                    avatarBg: op.avatarBg || 'var(--tag-neutral-bg)',
+                    avatarColor: op.avatarColor || 'var(--tag-neutral-ink)',
+                    avatarInitials: op.initials || 'LV'
+                  },
+                  actionTitle: 'Reconciliação de Atendimentos WhatsApp com CRM',
+                  badgeText: 'Reconciliação Auditada',
+                  badgeBg: 'var(--tag-info-bg)',
+                  badgeBorder: 'var(--tag-info-border)',
+                  badgeColor: 'var(--tag-info-ink)',
+                  summary: op.name + ' auditou e confirmou a reconciliação das conversões do WhatsApp Business com os registros de vendas no CRM, gravando no Supercérebro.',
+                  target: 'SAC WhatsApp & CRM · Supercérebro',
+                  timestamp: nowStr,
+                  provenance: 'Motor de Auditoria'
+                });
+              }
             }
             if (cardEl) {
               cardEl.innerHTML = '<div style="color: #1E6B56; font-size: var(--label); font-weight: 600; padding: 8px 12px; background: var(--success-soft); border-radius: var(--radius-small); border: 1px solid var(--success); width: 100%; font-family: var(--font-mono);">' + successMsg + '</div>';
@@ -4383,7 +6156,8 @@ export function renderHtmlShell(): string {
         const userMsgText = document.getElementById('chat-user-message-text');
         if (userMsgText) userMsgText.textContent = queryText || '';
 
-        updateChatBadge(effectiveStatus, effectiveVerified);
+        updateChatBadge(effectiveStatus, effectiveVerified, isAtomicCommit);
+        scrollChatToBottom(true);
       }
 
       function renderStructuredAnswer(answer) {
@@ -4476,13 +6250,21 @@ export function renderHtmlShell(): string {
         validateExecution();
       });
 
-      modelSelect?.addEventListener('change', (e) => {
-        sessionState.model = e.target.value;
-        validateExecution();
-      });
+      function autoResizeChatInput() {
+        if (!interactiveInput) return;
+        interactiveInput.style.height = 'auto';
+        if (interactiveInput.value) {
+          interactiveInput.style.height = Math.min(interactiveInput.scrollHeight, 120) + 'px';
+          interactiveInput.style.overflowY = interactiveInput.scrollHeight > 120 ? 'auto' : 'hidden';
+        } else {
+          interactiveInput.style.height = '';
+          interactiveInput.style.overflowY = 'hidden';
+        }
+      }
 
       interactiveInput?.addEventListener('input', (e) => {
         if (goalInput) goalInput.value = e.target.value;
+        autoResizeChatInput();
         validateExecution();
       });
 
@@ -4558,19 +6340,6 @@ export function renderHtmlShell(): string {
         }, 50);
       });
 
-      btnSaveKey?.addEventListener('click', () => {
-        const key = apiKeyInput?.value.trim() || '';
-        sessionState.apiKey = key;
-        if (key) {
-          sessionStorage.setItem('adzhub_session_key', key);
-          localStorage.setItem('adzhub_session_key', key);
-          alert('✓ Chave de API salva na sessão com sucesso.');
-        } else {
-          alert('Por favor, insira uma chave de API antes de salvar.');
-        }
-        updateKeyUI();
-      });
-
       btnForgetKey?.addEventListener('click', () => {
         sessionState.apiKey = '';
         if (apiKeyInput) apiKeyInput.value = '';
@@ -4617,6 +6386,7 @@ export function renderHtmlShell(): string {
         sessionState.events = [];
         sessionState.selectedEventIndex = -1;
         sessionState.chatHistory = [];
+        currentSelectedDocId = null;
 
         const container = document.getElementById('chat-messages-container');
         if (container) container.innerHTML = '';
@@ -4652,7 +6422,6 @@ export function renderHtmlShell(): string {
       }
 
       btnChatBack?.addEventListener('click', resetChatToMainScreen);
-      btnReset?.addEventListener('click', resetChatToMainScreen);
 
       async function executeCurrentRun() {
         if (sessionState.isExecuting) return;
@@ -4660,7 +6429,11 @@ export function renderHtmlShell(): string {
         const goalVal = (interactiveInput?.value || goalInput?.value || '').trim();
         if (!goalVal) return;
 
-        if (interactiveInput) interactiveInput.value = '';
+        if (interactiveInput) {
+          interactiveInput.value = '';
+          interactiveInput.style.height = '';
+          interactiveInput.style.overflowY = 'hidden';
+        }
         if (goalInput) goalInput.value = '';
 
         setExecutionActive(true);
@@ -4677,6 +6450,62 @@ export function renderHtmlShell(): string {
           const stepR2 = document.getElementById('step-r2-' + turnId);
           const stepT2 = document.getElementById('step-t2-' + turnId);
 
+          const goalLower = goalVal.toLowerCase();
+          const isDirectDispatch =
+            goalLower.includes('pode enviar') ||
+            goalLower.includes('pode mandar') ||
+            goalLower.includes('confirmar envio') ||
+            goalLower.includes('despachar proposta') ||
+            (goalLower.includes('enviar') && goalLower.includes('proposta')) ||
+            (goalLower.includes('submeter') && goalLower.includes('proposta'));
+
+          if (isDirectDispatch) {
+            sessionState.delegation = { isDelegated: true, delegatedTo: 'Marcos Silva' };
+            fetch('/api/governance/commit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                action: 'DELEGATE_PROPOSAL',
+                targetPerson: 'Marcos Silva',
+                proposalTitle: 'Proposta de Realocação de Verba Meta Ads',
+                proposalDetails: 'Proposta formal de pausa de criativos e realocação orçamentária despachada para Marcos Silva.'
+              })
+            }).then(function() {
+              loadSupercerebroPendencies();
+            }).catch(() => {});
+
+            if (typeof window.addTimelineEvent === 'function') {
+              const op = sessionState.currentOperator || {
+                name: 'Carolina Mendes',
+                role: 'Gerente de Contas',
+                company: 'SPOT',
+                initials: 'CM',
+                avatarBg: 'var(--tag-info-bg)',
+                avatarColor: 'var(--tag-info-ink)'
+              };
+              const nowStr = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+              window.addTimelineEvent({
+                category: 'governance',
+                actor: {
+                  name: op.name,
+                  role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                  avatarBg: op.avatarBg || 'var(--tag-info-bg)',
+                  avatarColor: op.avatarColor || 'var(--tag-info-ink)',
+                  avatarInitials: op.initials || 'CM'
+                },
+                actionTitle: 'Submissão de Proposta para Marcos Silva',
+                badgeText: 'Proposta Submetida',
+                badgeBg: 'var(--tag-success-bg)',
+                badgeBorder: 'var(--tag-success-border)',
+                badgeColor: 'var(--tag-success-ink)',
+                summary: op.name + ' despachou formalmente a proposta executiva de realocação de verba para Marcos Silva com commit auditado no SQLite.',
+                target: 'Proposta Operacional · Marcos Silva',
+                timestamp: nowStr,
+                provenance: 'Governança da Conta'
+              });
+            }
+          }
+
           const contract = {
             schemaVersion: '1.0.0',
             taskId: 'task_custom_' + Date.now(),
@@ -4692,8 +6521,8 @@ export function renderHtmlShell(): string {
               scenario: sessionState.scenario,
               isReactivated: Boolean(sessionState.isReactivated),
               isPaused: Boolean(sessionState.isPaused),
-              isDelegated: Boolean(sessionState.delegation?.isDelegated),
-              delegatedTo: sessionState.delegation?.delegatedTo,
+              isDelegated: Boolean(sessionState.delegation?.isDelegated || isDirectDispatch),
+              delegatedTo: sessionState.delegation?.delegatedTo || (isDirectDispatch ? 'Marcos Silva' : undefined),
               requester: (sessionState.currentOperator?.name || 'Aline Rocha') + ' (' + (sessionState.currentOperator?.role || 'Gestora de Tráfego') + ' · ' + (sessionState.currentOperator?.company || 'SPOT') + ')',
               operatorId: sessionState.currentOperator?.id || 'p_aline',
               operatorName: sessionState.currentOperator?.name || 'Aline Rocha',
@@ -4710,10 +6539,12 @@ export function renderHtmlShell(): string {
             body: JSON.stringify({ taskContract: contract, mode: sessionState.mode, model: sessionState.model, apiKey: sessionState.apiKey, chatHistory: sessionState.chatHistory })
           });
 
-          const streamBody = document.getElementById('chat-stream-body');
-          const scrollToBottom = () => { if (streamBody) streamBody.scrollTop = streamBody.scrollHeight; };
-          scrollToBottom();
+          scrollChatToBottom(true);
 
+          const reasoningCard = document.getElementById('reasoning-card-' + turnId);
+          if (reasoningCard) reasoningCard.style.display = 'block';
+          const reasoningContent = document.getElementById('reasoning-content-' + turnId);
+          if (reasoningContent) reasoningContent.style.display = 'flex';
           const stepsStream = document.getElementById('steps-stream-' + turnId);
           if (stepsStream) stepsStream.style.display = 'flex';
 
@@ -4723,24 +6554,24 @@ export function renderHtmlShell(): string {
           await delay(300);
           setFlowStep(1);
           if (stepR1) stepR1.style.display = 'flex';
-          scrollToBottom();
+          scrollChatToBottom(true);
 
           await delay(450);
           setFlowStep(2);
           if (stepT1) stepT1.style.display = 'flex';
           setStageState({ selectedCards: mapping.t1Selected, observedCards: mapping.t1Observed, isFinal: false });
-          scrollToBottom();
+          scrollChatToBottom(true);
 
           await delay(400);
           setFlowStep(3);
           if (stepR2) stepR2.style.display = 'flex';
-          scrollToBottom();
+          scrollChatToBottom(true);
 
           await delay(450);
           setFlowStep(4);
           if (stepT2) stepT2.style.display = 'flex';
           setStageState({ selectedCards: mapping.t2Selected, observedCards: mapping.t2Observed, isFinal: false });
-          scrollToBottom();
+          scrollChatToBottom(true);
 
           const res = await fetchPromise;
           const runRecord = await res.json();
@@ -4794,6 +6625,7 @@ export function renderHtmlShell(): string {
             renderTurnStructuredAnswer(turnId, errAnswer, goalVal);
             sessionState.chatHistory.push({ role: 'assistant', content: errAnswer.conclusion });
             setExecutionActive(false);
+            scrollChatToBottom(true);
             return;
           }
 
@@ -4801,13 +6633,15 @@ export function renderHtmlShell(): string {
           sessionState.activeContract = contract;
 
           const structured = runRecord.structuredAnswer || {};
+          const isRealCommit = Boolean(runRecord.isAtomicCommit || structured.isAtomicCommit || isDirectDispatch);
           const structuredAnswer = {
             question: structured.question || goalVal,
             conclusion: structured.conclusion || runRecord.finalOutput || 'Diagnóstico concluído com sucesso.',
             limitations: structured.limitations || [],
             evidenceRefs: structured.evidenceRefs || [],
-            status: structured.status || runRecord.status || 'COMMITTED',
-            verified: Boolean(runRecord.verified !== undefined ? runRecord.verified : structured.verified)
+            status: structured.status || (isRealCommit ? 'COMMITTED' : (runRecord.status || 'COMPLETED')),
+            verified: Boolean(runRecord.verified !== undefined ? runRecord.verified : structured.verified),
+            isAtomicCommit: isRealCommit
           };
 
           renderTurnStructuredAnswer(turnId, structuredAnswer, goalVal);
@@ -4820,51 +6654,25 @@ export function renderHtmlShell(): string {
 
           inspectItem('Contrato da Tarefa (' + contract.taskId + ')', contract);
 
-          if (typeof window.addTimelineEvent === 'function') {
-            window.addTimelineEvent({
-              category: 'audit',
-              actor: { name: 'Supercérebro IA', role: 'Orquestrador', avatarBg: '#e0f2fe', avatarColor: '#0369a1', avatarInitials: 'IA' },
-              actionTitle: (goalVal.length > 50 ? goalVal.substring(0, 50) + '...' : goalVal),
-              badgeText: 'Auditoria Realizada',
-              badgeBg: '#dcfce7',
-              badgeColor: '#166534',
-              summary: 'Supercérebro IA processou o objetivo "' + goalVal + '" com status ' + structuredAnswer.status + ' e verificação (' + (structuredAnswer.verified ? 'Verificado' : 'Provisório') + ').',
-              target: 'Agente AdzHub · Operação em Tempo Real',
-              timestamp: new Date().toLocaleString('pt-BR'),
-              provenance: 'Supercérebro Engine Runtime'
-            });
-          }
-
           setExecutionActive(false);
-          scrollToBottom();
+          scrollChatToBottom(true);
         } catch (err) {
           console.error('[AdzHub UI] Erro ao executar tarefa:', err);
           const errAnswer = { question: goalVal, conclusion: '❌ Falha de rede ou conexão ao orquestrar tarefa.', limitations: ['Verifique se o servidor backend está online e se a chave de API está correta.'], status: 'FAILED', verified: false };
           renderTurnStructuredAnswer(turnId, errAnswer, goalVal);
           sessionState.chatHistory.push({ role: 'assistant', content: errAnswer.conclusion });
           setExecutionActive(false);
+          scrollChatToBottom(true);
         }
       }
 
       window._executeCurrentRun = executeCurrentRun;
 
-      btnCompare?.addEventListener('click', async () => {
-        if (comparisonModal) comparisonModal.style.display = 'flex';
+      async function executeComparison(userGoal) {
+        if (!userGoal) return;
+        if (comparisonPromptStep) comparisonPromptStep.style.display = 'none';
         if (comparisonLoading) comparisonLoading.style.display = 'flex';
         if (comparisonResults) comparisonResults.style.display = 'none';
-
-        let userGoal = '';
-        if (Array.isArray(sessionState.chatHistory)) {
-          for (let i = sessionState.chatHistory.length - 1; i >= 0; i--) {
-            if (sessionState.chatHistory[i]?.role === 'user' && sessionState.chatHistory[i]?.content) {
-              userGoal = sessionState.chatHistory[i].content.trim();
-              break;
-            }
-          }
-        }
-        if (!userGoal) userGoal = (interactiveInput?.value || goalInput?.value || '').trim();
-        if (!userGoal && sessionState.activeContract?.goal) userGoal = sessionState.activeContract.goal.trim();
-        if (!userGoal) userGoal = 'Audite as métricas de performance da conta Housewhey cruzando Meta Ads e CRM';
 
         const contract = {
           schemaVersion: '1.0.0',
@@ -4914,6 +6722,88 @@ export function renderHtmlShell(): string {
             comparisonSummaryCard.innerHTML = '<div style="background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-small); padding: 12px 14px; color: #8F2D36; font-family: var(--font-mono); font-size: var(--label);"><strong>❌ Erro de conexão ao comparar execuções.</strong></div>';
           }
           if (comparisonResults) comparisonResults.style.display = 'block';
+        }
+      }
+
+      btnCompare?.addEventListener('click', () => {
+        if (comparisonModal) comparisonModal.style.display = 'flex';
+
+        let userGoal = '';
+        if (Array.isArray(sessionState.chatHistory)) {
+          for (let i = sessionState.chatHistory.length - 1; i >= 0; i--) {
+            if (sessionState.chatHistory[i]?.role === 'user' && sessionState.chatHistory[i]?.content) {
+              const c = sessionState.chatHistory[i].content.trim();
+              if (c) {
+                userGoal = c;
+                break;
+              }
+            }
+          }
+        }
+        if (!userGoal) userGoal = (interactiveInput?.value || goalInput?.value || '').trim();
+
+        if (userGoal) {
+          executeComparison(userGoal);
+        } else {
+          // Nenhum prompt no chat nem no input: exibe a etapa de solicitação de prompt no modal
+          if (comparisonLoading) comparisonLoading.style.display = 'none';
+          if (comparisonResults) comparisonResults.style.display = 'none';
+          if (comparisonPromptStep) comparisonPromptStep.style.display = 'block';
+          if (comparisonPromptInput) {
+            comparisonPromptInput.value = '';
+            comparisonPromptInput.style.borderColor = 'var(--line)';
+            setTimeout(() => comparisonPromptInput.focus(), 60);
+          }
+        }
+      });
+
+      btnStartComparisonPrompt?.addEventListener('click', () => {
+        const customPrompt = (comparisonPromptInput?.value || '').trim();
+        if (!customPrompt) {
+          if (comparisonPromptInput) {
+            comparisonPromptInput.style.borderColor = 'var(--danger)';
+            comparisonPromptInput.focus();
+          }
+          return;
+        }
+        executeComparison(customPrompt);
+      });
+
+      btnCancelComparisonPrompt?.addEventListener('click', () => {
+        if (comparisonModal) comparisonModal.style.display = 'none';
+      });
+
+      btnRecompare?.addEventListener('click', () => {
+        if (comparisonResults) comparisonResults.style.display = 'none';
+        if (comparisonLoading) comparisonLoading.style.display = 'none';
+        if (comparisonPromptStep) comparisonPromptStep.style.display = 'block';
+        if (comparisonPromptInput) {
+          comparisonPromptInput.style.borderColor = 'var(--line)';
+          setTimeout(() => comparisonPromptInput.focus(), 60);
+        }
+      });
+
+      document.querySelectorAll('.comparison-suggestion-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const prompt = chip.getAttribute('data-prompt');
+          if (prompt && comparisonPromptInput) {
+            comparisonPromptInput.value = prompt;
+            comparisonPromptInput.style.borderColor = 'var(--adzhub-blue)';
+            comparisonPromptInput.focus();
+          }
+        });
+      });
+
+      comparisonPromptInput?.addEventListener('input', () => {
+        if (comparisonPromptInput.value.trim()) {
+          comparisonPromptInput.style.borderColor = 'var(--line)';
+        }
+      });
+
+      comparisonPromptInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          btnStartComparisonPrompt?.click();
         }
       });
 
@@ -5119,10 +7009,51 @@ export function renderHtmlShell(): string {
       const detailNodeTypeBadge = document.getElementById('detail-node-type-badge');
       const detailNodeContent = document.getElementById('detail-node-content');
 
+      const DEFAULT_SUPERCEREBRO_NODES = [
+        { id: 'client_housewhey_spot', type: 'organization', label: 'Housewhey & SPOT', props: { marketSegment: 'Suplementos Premium', coreOffer: 'Whey Isolado Grass-Fed' } },
+        { id: 'meta_ad_acc_spot_01', type: 'meta_ad_account', label: 'Meta Ads Account (SPOT)', props: { currency: 'BRL', status: 'ACTIVE' } },
+        { id: 'cmp_whey_baunilha_01', type: 'campaign', label: 'Whey Isolado Baunilha (CPA R$ 48)', props: { budget: 2450, cpa: 48.0 } },
+        { id: 'ad_whey_sabores_04', type: 'ad', label: 'UGC - Oferta A (Whey)', props: { cpa: 94.5, ctr: 1.2, recommendation: 'PAUSAR' } },
+        { id: 'ad_whey_baunilha_01', type: 'ad', label: 'Hook Prova Social (Campeão)', props: { cpa: 42.1, ctr: 2.8, recommendation: 'ESCALAR' } },
+        { id: 'offer_whey_isolado', type: 'offer', label: 'Whey Isolado 900g Glanbia', props: { price: 240.0 } },
+        { id: 'p_aline', type: 'operator', label: 'Aline Rocha (SPOT)', props: { role: 'Gestora de Tráfego' } },
+        { id: 'p_marcos', type: 'operator', label: 'Marcos Silva (Housewhey)', props: { role: 'Head de Marketing' } },
+        { id: 'p_carolina', type: 'operator', label: 'Carolina Mendes (SPOT)', props: { role: 'Gerente de Contas' } },
+        {
+          id: 'pendency_pause_ad',
+          type: 'pendency',
+          label: 'Pendência: Pausar Criativos Fracos',
+          props: {
+            operador_responsavel: 'Carolina Mendes (SPOT)',
+            motivo_pendencia: 'Aguardando proposta formal de outro operador (Carolina Mendes)',
+            status: 'Aguardando Aprovação de Proposta',
+            target_ad: 'ad_whey_sabores_04',
+            cpa_brl: 'R$ 94,50'
+          }
+        }
+      ];
+
+      const DEFAULT_SUPERCEREBRO_EDGES = [
+        { id: 'e1', source: 'client_housewhey_spot', target: 'meta_ad_acc_spot_01', relationship: 'POSSUI' },
+        { id: 'e2', source: 'meta_ad_acc_spot_01', target: 'cmp_whey_baunilha_01', relationship: 'RODA' },
+        { id: 'e3', source: 'cmp_whey_baunilha_01', target: 'ad_whey_sabores_04', relationship: 'CONTÉM' },
+        { id: 'e4', source: 'cmp_whey_baunilha_01', target: 'ad_whey_baunilha_01', relationship: 'CONTÉM' },
+        { id: 'e5', source: 'client_housewhey_spot', target: 'offer_whey_isolado', relationship: 'OFERECE' },
+        { id: 'e6', source: 'p_aline', target: 'client_housewhey_spot', relationship: 'GERENCIA' },
+        { id: 'e7', source: 'p_marcos', target: 'client_housewhey_spot', relationship: 'APROVA' },
+        { id: 'e9', source: 'ad_whey_sabores_04', target: 'pendency_pause_ad', relationship: 'GEROU_PENDENCIA' },
+        { id: 'e10', source: 'p_carolina', target: 'pendency_pause_ad', relationship: 'PROPOS' }
+      ];
+
+      const DEFAULT_SUPERCEREBRO_EVENTS = [
+        { id: 'ev1', title: 'Auditoria de Criativos', summary: 'UGC Oferta A com CPA elevado de R$ 94,50.', relatedNodeIds: ['ad_whey_sabores_04', 'pendency_pause_ad'] },
+        { id: 'ev2', title: 'Aprovação de Proposta', summary: 'Carolina Mendes enviou proposta formal de pausa.', relatedNodeIds: ['p_carolina', 'pendency_pause_ad'] }
+      ];
+
       let graphState = {
-        nodes: [],
-        edges: [],
-        events: [],
+        nodes: JSON.parse(JSON.stringify(DEFAULT_SUPERCEREBRO_NODES)),
+        edges: JSON.parse(JSON.stringify(DEFAULT_SUPERCEREBRO_EDGES)),
+        events: JSON.parse(JSON.stringify(DEFAULT_SUPERCEREBRO_EVENTS)),
         filter: 'all',
         selectedNodeId: null,
         zoom: 1,
@@ -5186,40 +7117,42 @@ export function renderHtmlShell(): string {
         return NODE_TYPE_STYLES[type] || { color: '#53B58A', label: type, radius: 15 };
       }
 
-      function initGraphPositions(nodes) {
-        const width = graphWrapper ? graphWrapper.clientWidth || 700 : 700;
-        const height = graphWrapper ? graphWrapper.clientHeight || 500 : 500;
-        const centerX = width / 2;
-        const centerY = height / 2;
-
+      function initGraphPositions(nodes, force = false) {
+        if (!Array.isArray(nodes)) return;
         nodes.forEach((node, idx) => {
-          if (node.x === undefined || node.y === undefined) {
+          if (force || node.relX === undefined || node.relY === undefined) {
             if (node.type === 'organization' || node.type === 'client' || idx === 0) {
-              node.x = centerX;
-              node.y = centerY;
+              node.relX = 0;
+              node.relY = 0;
             } else {
               const angle = (idx / (nodes.length - 1 || 1)) * Math.PI * 2;
-              const radius = 140 + (idx % 3) * 60;
-              node.x = centerX + Math.cos(angle) * radius;
-              node.y = centerY + Math.sin(angle) * radius;
+              const radius = 150 + (idx % 3) * 45;
+              node.relX = Math.cos(angle) * radius;
+              node.relY = Math.sin(angle) * radius;
             }
           }
         });
       }
 
       function renderCanvasGraph() {
-        if (!graphCanvas) return;
+        if (!graphCanvas || !graphWrapper) return;
         const ctx = graphCanvas.getContext('2d');
         if (!ctx) return;
 
+        const rect = graphWrapper.getBoundingClientRect();
+        const width = rect.width > 50 ? rect.width : (graphWrapper.clientWidth || 800);
+        const height = rect.height > 50 ? rect.height : (graphWrapper.clientHeight || 550);
         const dpr = window.devicePixelRatio || 1;
-        const width = graphWrapper ? graphWrapper.clientWidth : 700;
-        const height = graphWrapper ? graphWrapper.clientHeight : 500;
 
-        if (graphCanvas.width !== width * dpr || graphCanvas.height !== height * dpr) {
-          graphCanvas.width = width * dpr;
-          graphCanvas.height = height * dpr;
+        if (graphCanvas.width !== Math.round(width * dpr) || graphCanvas.height !== Math.round(height * dpr)) {
+          graphCanvas.width = Math.round(width * dpr);
+          graphCanvas.height = Math.round(height * dpr);
+          graphCanvas.style.width = width + 'px';
+          graphCanvas.style.height = height + 'px';
         }
+
+        const centerX = width / 2;
+        const centerY = height / 2;
 
         ctx.save();
         ctx.scale(dpr, dpr);
@@ -5227,26 +7160,16 @@ export function renderHtmlShell(): string {
         ctx.fillStyle = '#F8F8F7';
         ctx.fillRect(0, 0, width, height);
 
-        ctx.strokeStyle = 'rgba(232, 234, 236, 0.8)';
-        ctx.lineWidth = 1;
-        const gridSize = 40 * graphState.zoom;
-        const startX = (graphState.offsetX % gridSize);
-        const startY = (graphState.offsetY % gridSize);
-        for (let x = startX; x < width; x += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, height);
-          ctx.stroke();
-        }
-        for (let y = startY; y < height; y += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(width, y);
-          ctx.stroke();
-        }
-
         ctx.translate(graphState.offsetX, graphState.offsetY);
         ctx.scale(graphState.zoom, graphState.zoom);
+
+        // Posiciona nós de forma dinâmica em torno do centro real do canvas
+        graphState.nodes.forEach(node => {
+          if (!node.isUserDragged) {
+            node.x = centerX + (node.relX !== undefined ? node.relX : 0);
+            node.y = centerY + (node.relY !== undefined ? node.relY : 0);
+          }
+        });
 
         const nodeMap = new Map();
         graphState.nodes.forEach(n => nodeMap.set(n.id, n));
@@ -5418,9 +7341,25 @@ export function renderHtmlShell(): string {
           const res = await fetch('/api/supercerebro/graph');
           if (res.ok) {
             const data = await res.json();
-            graphState.nodes = data.nodes || [];
-            graphState.edges = data.edges || [];
-            graphState.events = data.events || [];
+            const newNodes = data.nodes || [];
+            const newEdges = data.edges || [];
+            const newEvents = data.events || [];
+
+            const prevMap = new Map();
+            graphState.nodes.forEach(n => prevMap.set(n.id, n));
+
+            newNodes.forEach(n => {
+              const prev = prevMap.get(n.id);
+              if (prev && prev.isUserDragged) {
+                n.isUserDragged = true;
+                n.relX = prev.relX;
+                n.relY = prev.relY;
+              }
+            });
+
+            graphState.nodes = newNodes;
+            graphState.edges = newEdges;
+            graphState.events = newEvents;
 
             const hasPendencyNode = graphState.nodes.some(n => n.type === 'pendency' || n.id === 'pendency_pause_ad');
             if (!hasPendencyNode) {
@@ -5469,62 +7408,17 @@ export function renderHtmlShell(): string {
           console.warn('[Supercerebro] API fetch fallback to embedded dataset', e);
         }
 
-        graphState.nodes = [
-          { id: 'client_housewhey_spot', type: 'organization', label: 'Housewhey & SPOT', props: { marketSegment: 'Suplementos Premium', coreOffer: 'Whey Isolado Grass-Fed' } },
-          { id: 'meta_ad_acc_spot_01', type: 'meta_ad_account', label: 'Meta Ads Account (SPOT)', props: { currency: 'BRL', status: 'ACTIVE' } },
-          { id: 'cmp_whey_baunilha_01', type: 'campaign', label: 'Whey Isolado Baunilha (CPA R$ 48)', props: { budget: 2450, cpa: 48.0 } },
-          { id: 'ad_whey_sabores_04', type: 'ad', label: 'UGC - Oferta A (Whey)', props: { cpa: 94.5, ctr: 1.2, recommendation: 'PAUSAR' } },
-          { id: 'ad_whey_baunilha_01', type: 'ad', label: 'Hook Prova Social (Campeão)', props: { cpa: 42.1, ctr: 2.8, recommendation: 'ESCALAR' } },
-          { id: 'offer_whey_isolado', type: 'offer', label: 'Whey Isolado 900g Glanbia', props: { price: 240.0 } },
-          { id: 'p_aline', type: 'operator', label: 'Aline Rocha (SPOT)', props: { role: 'Gestora de Tráfego' } },
-          { id: 'p_marcos', type: 'operator', label: 'Marcos Silva (Housewhey)', props: { role: 'Head de Marketing' } },
-          { id: 'p_carolina', type: 'operator', label: 'Carolina Mendes (SPOT)', props: { role: 'Gerente de Contas' } },
-          {
-            id: 'pendency_pause_ad',
-            type: 'pendency',
-            label: 'Pendência: Pausar Criativos Fracos',
-            props: {
-              operador_responsavel: 'Carolina Mendes (SPOT)',
-              motivo_pendencia: 'Aguardando proposta formal de outro operador (Carolina Mendes)',
-              status: 'Aguardando Aprovação de Proposta',
-              target_ad: 'ad_whey_sabores_04',
-              cpa_brl: 'R$ 94,50'
-            }
-          }
-        ];
-
-        graphState.edges = [
-          { id: 'e1', source: 'client_housewhey_spot', target: 'meta_ad_acc_spot_01', relationship: 'POSSUI' },
-          { id: 'e2', source: 'meta_ad_acc_spot_01', target: 'cmp_whey_baunilha_01', relationship: 'RODA' },
-          { id: 'e3', source: 'cmp_whey_baunilha_01', target: 'ad_whey_sabores_04', relationship: 'CONTÉM' },
-          { id: 'e4', source: 'cmp_whey_baunilha_01', target: 'ad_whey_baunilha_01', relationship: 'CONTÉM' },
-          { id: 'e5', source: 'client_housewhey_spot', target: 'offer_whey_isolado', relationship: 'OFERECE' },
-          { id: 'e6', source: 'p_aline', target: 'client_housewhey_spot', relationship: 'GERENCIA' },
-          { id: 'e7', source: 'p_marcos', target: 'client_housewhey_spot', relationship: 'APROVA' },
-          { id: 'e9', source: 'ad_whey_sabores_04', target: 'pendency_pause_ad', relationship: 'GEROU_PENDENCIA' },
-          { id: 'e10', source: 'p_carolina', target: 'pendency_pause_ad', relationship: 'PROPOS' }
-        ];
-
-        graphState.events = [
-          { id: 'ev1', title: 'Auditoria de Criativos', summary: 'UGC Oferta A com CPA elevado de R$ 94,50.', relatedNodeIds: ['ad_whey_sabores_04', 'pendency_pause_ad'] },
-          { id: 'ev2', title: 'Aprovação de Proposta', summary: 'Carolina Mendes enviou proposta formal de pausa.', relatedNodeIds: ['p_carolina', 'pendency_pause_ad'] }
-        ];
-
         initGraphPositions(graphState.nodes);
         updateGraphStats();
         renderCanvasGraph();
       }
 
       function openSupercerebroModal() {
-        if (!supercerebroModal) return;
-        supercerebroModal.style.display = 'flex';
-        fetchAndRenderSupercerebroGraph();
-        setTimeout(renderCanvasGraph, 50);
+        switchView('supercerebro');
       }
 
       function closeSupercerebroModal() {
-        if (!supercerebroModal) return;
-        supercerebroModal.style.display = 'none';
+        switchView('chat');
       }
 
       // ==========================================
@@ -5541,7 +7435,9 @@ export function renderHtmlShell(): string {
           id: 'doc-briefing-q3',
           type: 'briefing',
           typeName: 'Briefing',
-          badgeColor: '#2563eb',
+          badgeBg: 'var(--tag-info-bg)',
+          badgeBorder: 'var(--tag-info-border)',
+          badgeColor: 'var(--tag-info-ink)',
           title: 'Briefing de Campanha: Lançamento Whey Isolar HouseWhey Q3',
           date: '27/08/2026 09:30',
           author: 'Aline Santos & Agente AdzHub',
@@ -5582,7 +7478,9 @@ export function renderHtmlShell(): string {
           id: 'doc-pauta-ugc-01',
           type: 'pauta',
           typeName: 'Pauta & UGC',
-          badgeColor: '#7c3aed',
+          badgeBg: 'var(--tag-neutral-bg)',
+          badgeBorder: 'var(--tag-neutral-border)',
+          badgeColor: 'var(--tag-neutral-ink)',
           title: 'Pauta UGC Criativos TikTok/Reels: 5 Variações de Hook Alta Conversão',
           date: '27/08/2026 10:15',
           author: 'Luiza Valente (Atendimento & Vendas)',
@@ -5615,7 +7513,9 @@ export function renderHtmlShell(): string {
           id: 'doc-relatorio-cpa-01',
           type: 'relatorio',
           typeName: 'Relatório',
-          badgeColor: '#059669',
+          badgeBg: 'var(--tag-success-bg)',
+          badgeBorder: 'var(--tag-success-border)',
+          badgeColor: 'var(--tag-success-ink)',
           title: 'Relatório de Auditoria: Performance CPA & Atribuição no Meta Ads',
           date: '27/08/2026 11:00',
           author: 'Marcos Silva (Head de Marketing)',
@@ -5649,7 +7549,9 @@ export function renderHtmlShell(): string {
           id: 'doc-proposta-jit-01',
           type: 'proposta',
           typeName: 'Proposta',
-          badgeColor: '#d97706',
+          badgeBg: 'var(--tag-warning-bg)',
+          badgeBorder: 'var(--tag-warning-border)',
+          badgeColor: 'var(--tag-warning-ink)',
           title: 'Proposta: Pausa do Anúncio ad_04 e Realocação para Criativo Campeão',
           date: '27/08/2026 11:45',
           author: 'Carolina Mendes (Mídia & Governança)',
@@ -5676,7 +7578,9 @@ export function renderHtmlShell(): string {
           id: 'doc-plano-escala-01',
           type: 'plano',
           typeName: 'Plano de Ação',
-          badgeColor: '#0284c7',
+          badgeBg: 'var(--tag-neutral-bg)',
+          badgeBorder: 'var(--tag-neutral-border)',
+          badgeColor: 'var(--tag-neutral-ink)',
           title: 'Plano de Escala de Mídia: Distribuição Regional H2',
           date: '26/08/2026 16:20',
           author: 'Agente AdzHub',
@@ -5761,8 +7665,8 @@ export function renderHtmlShell(): string {
 
         if (filtered.length === 0) {
           container.innerHTML =
-            '<div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--ink-muted);">' +
-              '<span style="font-size: 2rem; display: block; margin-bottom: 8px;">🔍</span>' +
+            '<div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--ink-muted); display: flex; flex-direction: column; align-items: center;">' +
+              '<div style="margin-bottom: 8px; opacity: 0.45; color: var(--navy);">' + getLucideSvg('search', { size: 32 }) + '</div>' +
               '<p style="margin: 0; font-size: 0.9rem;">Nenhum documento encontrado para o filtro/busca atual.</p>' +
             '</div>';
           return;
@@ -5771,10 +7675,10 @@ export function renderHtmlShell(): string {
         container.innerHTML = filtered.map(doc => {
           const isSelected = doc.id === currentSelectedDocId;
           return (
-            '<div class="doc-card-item ' + (isSelected ? 'selected' : '') + '" data-doc-id="' + doc.id + '" style="background: var(--surface); border: 1px solid ' + (isSelected ? '#2563eb' : 'var(--line)') + '; border-radius: var(--radius-card); padding: 14px; cursor: pointer; transition: all 0.15s ease; box-shadow: ' + (isSelected ? '0 0 0 2px rgba(37,99,235,0.2)' : 'none') + '; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">' +
+            '<div class="doc-card-item ' + (isSelected ? 'selected' : '') + '" data-doc-id="' + doc.id + '" style="background: var(--surface); border: 1px solid ' + (isSelected ? 'var(--navy)' : 'var(--line)') + '; border-radius: var(--radius-card); padding: 14px; cursor: pointer; transition: all 0.15s ease; box-shadow: ' + (isSelected ? '0 0 0 2px rgba(41,74,145,0.18)' : 'none') + '; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">' +
               '<div>' +
                 '<div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px;">' +
-                  '<span style="font-size: 0.68rem; font-weight: 700; background: ' + doc.badgeColor + '15; color: ' + doc.badgeColor + '; border: 1px solid ' + doc.badgeColor + '40; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase;">' +
+                  '<span style="font-size: 0.68rem; font-weight: 600; background: ' + (doc.badgeBg || 'var(--tag-neutral-bg)') + '; color: ' + (doc.badgeColor || 'var(--tag-neutral-ink)') + '; border: 1px solid ' + (doc.badgeBorder || 'var(--tag-neutral-border)') + '; padding: 2px 8px; border-radius: var(--radius-pill); text-transform: uppercase;">' +
                     doc.typeName +
                   '</span>' +
                   '<span style="font-size: 0.72rem; color: var(--ink-muted); font-family: var(--font-mono);">' + doc.date + '</span>' +
@@ -5786,9 +7690,8 @@ export function renderHtmlShell(): string {
                   doc.summary +
                 '</p>' +
               '</div>' +
-              '<div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 4px; font-size: 0.72rem; color: var(--ink-muted);">' +
-                '<span>👤 ' + doc.author + '</span>' +
-                '<span style="font-weight: 600; color: #2563eb;">Visualizar →</span>' +
+              '<div style="border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 4px; font-size: 0.72rem; color: var(--ink-muted); display: flex; align-items: center;">' +
+                '<span style="display: inline-flex; align-items: center; gap: 4px;">' + getLucideSvg('user', { size: 12, style: 'color: var(--ink-muted);' }) + ' ' + doc.author + '</span>' +
               '</div>' +
             '</div>'
           );
@@ -5834,7 +7737,7 @@ export function renderHtmlShell(): string {
             let formatted = '';
             for (let p = 0; p < parts.length; p++) {
               if (p % 2 === 1) {
-                formatted += '<code style="background: var(--surface-soft); color: #2563eb; padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.82rem;">' + parts[p] + '</code>';
+                formatted += '<code style="background: var(--surface-soft); color: var(--navy); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.82rem;">' + parts[p] + '</code>';
               } else {
                 formatted += parts[p];
               }
@@ -5847,19 +7750,19 @@ export function renderHtmlShell(): string {
             html += '<h2 style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink-strong); margin: 16px 0 10px 0; border-bottom: 1px solid var(--line); padding-bottom: 6px;">' + line.substring(2) + '</h2>';
           } else if (line.startsWith('### ')) {
             if (inList) { html += '</ul>'; inList = false; }
-            html += '<h4 style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: #2563eb; margin: 14px 0 6px 0;">' + line.substring(4) + '</h4>';
+            html += '<h4 style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--navy); margin: 14px 0 6px 0;">' + line.substring(4) + '</h4>';
           } else if (line.startsWith('## ')) {
             if (inList) { html += '</ul>'; inList = false; }
             html += '<h3 style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--ink-strong); margin: 14px 0 6px 0;">' + line.substring(3) + '</h3>';
           } else if (line === '---') {
             if (inList) { html += '</ul>'; inList = false; }
             html += '<hr style="border: 0; border-top: 1px dashed var(--line); margin: 14px 0;"/>';
-          } else if (line.startsWith('- ')) {
-            if (!inList) { html += '<ul style="margin: 6px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px;">'; inList = true; }
-            html += '<li style="color: var(--ink); line-height: 1.5;">' + line.substring(2) + '</li>';
+          } else if (line.startsWith('- ') || line.startsWith('* ')) {
+            if (!inList) { html += '<ul style="margin: 6px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 5px;">'; inList = true; }
+            html += '<li style="color: var(--ink); line-height: 1.6; font-size: 0.9375rem;">' + line.substring(2) + '</li>';
           } else {
             if (inList) { html += '</ul>'; inList = false; }
-            html += '<p style="margin: 6px 0; line-height: 1.55; color: var(--ink);">' + line + '</p>';
+            html += '<p style="margin: 6px 0; line-height: 1.6; color: var(--ink); font-size: 0.9375rem;">' + line + '</p>';
           }
         }
 
@@ -5869,11 +7772,36 @@ export function renderHtmlShell(): string {
 
       function selectDocument(docId) {
         currentSelectedDocId = docId;
-        renderDocumentsList();
+
+        // Atualização rápida de classes sem recriar o DOM dos cartões
+        const container = document.getElementById('doc-cards-container');
+        if (container) {
+          container.querySelectorAll('.doc-card-item').forEach(card => {
+            const isSelected = card.getAttribute('data-doc-id') === docId;
+            if (isSelected) {
+              card.classList.add('selected');
+              card.style.borderColor = 'var(--navy)';
+              card.style.boxShadow = '0 0 0 2px rgba(41,74,145,0.18)';
+            } else {
+              card.classList.remove('selected');
+              card.style.borderColor = 'var(--line)';
+              card.style.boxShadow = 'none';
+            }
+          });
+        }
 
         const doc = documentsList.find(d => d.id === docId);
         const emptyView = document.getElementById('doc-reader-empty');
         const contentView = document.getElementById('doc-reader-content');
+        const btnDocBackList = document.getElementById('btn-doc-back-list');
+        const readerPanel = document.getElementById('doc-reader-panel');
+
+        // Se estiver no mobile, alterna para o leitor em tela cheia
+        if (window.innerWidth <= 900) {
+          if (container) container.classList.add('doc-cards-mobile-hidden');
+          if (readerPanel) readerPanel.classList.add('doc-reader-mobile-active');
+          if (btnDocBackList) btnDocBackList.style.display = 'inline-flex';
+        }
 
         if (!doc) {
           if (emptyView) emptyView.style.display = 'flex';
@@ -5892,14 +7820,31 @@ export function renderHtmlShell(): string {
 
         if (badgeEl) {
           badgeEl.textContent = doc.typeName;
-          badgeEl.style.background = doc.badgeColor + '15';
-          badgeEl.style.color = doc.badgeColor;
-          badgeEl.style.border = '1px solid ' + doc.badgeColor + '40';
+          badgeEl.style.background = doc.badgeBg || 'var(--tag-neutral-bg)';
+          badgeEl.style.color = doc.badgeColor || 'var(--tag-neutral-ink)';
+          badgeEl.style.border = '1px solid ' + (doc.badgeBorder || 'var(--tag-neutral-border)');
         }
         if (dateEl) dateEl.textContent = doc.date;
         if (titleEl) titleEl.textContent = doc.title;
         if (metaEl) metaEl.textContent = 'Autor: ' + doc.author + ' · Status: ' + doc.status;
         if (bodyEl) bodyEl.innerHTML = formatMarkdownToHtml(doc.content);
+      }
+
+      function resetDocumentReader() {
+        currentSelectedDocId = null;
+        const emptyView = document.getElementById('doc-reader-empty');
+        const contentView = document.getElementById('doc-reader-content');
+        if (emptyView) emptyView.style.display = 'flex';
+        if (contentView) contentView.style.display = 'none';
+
+        const container = document.getElementById('doc-cards-container');
+        if (container) {
+          container.querySelectorAll('.doc-card-item').forEach(card => {
+            card.classList.remove('selected');
+            card.style.borderColor = 'var(--line)';
+            card.style.boxShadow = 'none';
+          });
+        }
       }
 
       function switchView(viewName) {
@@ -5908,6 +7853,13 @@ export function renderHtmlShell(): string {
         const btnRailSupercerebro = document.getElementById('btn-rail-supercerebro');
         const btnRailInspector = document.getElementById('btn-rail-inspector');
 
+        const btnMobChat = document.getElementById('btn-mobile-nav-chat');
+        const btnMobTasks = document.getElementById('btn-mobile-nav-tasks');
+        const btnMobSuper = document.getElementById('btn-mobile-nav-supercerebro');
+        const btnMobTimeline = document.getElementById('btn-mobile-nav-timeline');
+        const btnMobControls = document.getElementById('btn-mobile-nav-controls');
+        const btnMobPalco = document.getElementById('btn-mobile-nav-palco');
+
         const chatWrapper = document.getElementById('chat-messages-wrapper');
         const documentsModal = document.getElementById('documents-modal');
         const supercerebroModal = document.getElementById('supercerebro-modal');
@@ -5915,6 +7867,7 @@ export function renderHtmlShell(): string {
 
         const paneControls = document.getElementById('pane-controls');
         const panePalco = document.getElementById('pane-palco');
+        const paneChat = document.getElementById('pane-chat');
         const blueprintGrid = document.querySelector('.blueprint-grid');
 
         const composerCard = document.querySelector('.chat-input-wrapper');
@@ -5922,51 +7875,99 @@ export function renderHtmlShell(): string {
         const titleEl = document.getElementById('center-pane-title');
 
         document.querySelectorAll('.rail-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
 
         if (chatWrapper) chatWrapper.style.display = 'none';
         if (documentsModal) documentsModal.style.display = 'none';
         if (supercerebroModal) supercerebroModal.style.display = 'none';
         if (timelineModal) timelineModal.style.display = 'none';
 
+        // Atualização de classes de grid para layout perfeito sem desalinhamento
+        if (blueprintGrid) {
+          blueprintGrid.classList.remove(
+            'view-chat',
+            'view-documents',
+            'view-supercerebro',
+            'view-timeline',
+            'view-controls',
+            'view-palco',
+            'view-full',
+            'hide-palco',
+            'hide-controls-and-palco'
+          );
+          blueprintGrid.classList.add('view-' + viewName);
+        }
+
+        // Limpar overrides inline para funcionamento limpo do CSS
+        if (paneControls) paneControls.style.display = '';
+        if (panePalco) panePalco.style.display = '';
+        if (paneChat) paneChat.style.display = '';
+
         if (viewName === 'documents') {
           btnRailTasks?.classList.add('active');
-          if (paneControls) paneControls.style.display = 'none';
-          if (panePalco) panePalco.style.display = 'none';
-          if (blueprintGrid) blueprintGrid.classList.add('hide-palco');
+          btnMobTasks?.classList.add('active');
+          if (blueprintGrid) blueprintGrid.classList.add('view-full', 'hide-palco');
           if (documentsModal) documentsModal.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'none';
           if (btnChatBack) btnChatBack.style.display = 'inline-flex';
           if (titleEl) titleEl.textContent = 'Central de Documentos & Artefatos';
-          renderDocumentsList();
-          if (documentsList.length > 0 && !currentSelectedDocId) {
-            selectDocument(documentsList[0].id);
+          
+          const docCardsContainer = document.getElementById('doc-cards-container');
+          if (!docCardsContainer || !docCardsContainer.children.length) {
+            renderDocumentsList();
+          }
+          if (window.innerWidth > 900) {
+            if (currentSelectedDocId) {
+              selectDocument(currentSelectedDocId);
+            } else {
+              resetDocumentReader();
+            }
+          } else {
+            if (docCardsContainer) docCardsContainer.classList.remove('doc-cards-mobile-hidden');
+            const readerPanel = document.getElementById('doc-reader-panel');
+            if (readerPanel) readerPanel.classList.remove('doc-reader-mobile-active');
+            const btnDocBackList = document.getElementById('btn-doc-back-list');
+            if (btnDocBackList) btnDocBackList.style.display = 'none';
           }
         } else if (viewName === 'supercerebro') {
           btnRailSupercerebro?.classList.add('active');
-          if (paneControls) paneControls.style.display = 'none';
-          if (panePalco) panePalco.style.display = 'none';
-          if (blueprintGrid) blueprintGrid.classList.add('hide-palco');
+          btnMobSuper?.classList.add('active');
+          if (blueprintGrid) blueprintGrid.classList.add('view-full', 'hide-palco');
           if (supercerebroModal) supercerebroModal.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'none';
           if (btnChatBack) btnChatBack.style.display = 'inline-flex';
           if (titleEl) titleEl.textContent = 'Supercérebro — Grafo de Conhecimento';
+
+          // Renderização instantânea sem glitch nem atraso
+          initGraphPositions(graphState.nodes);
+          renderCanvasGraph();
+          requestAnimationFrame(renderCanvasGraph);
+
+          // Atualização de dados assíncrona em segundo plano
           fetchAndRenderSupercerebroGraph();
-          setTimeout(renderCanvasGraph, 50);
         } else if (viewName === 'timeline') {
           btnRailInspector?.classList.add('active');
-          if (paneControls) paneControls.style.display = 'none';
-          if (panePalco) panePalco.style.display = 'none';
-          if (blueprintGrid) blueprintGrid.classList.add('hide-palco');
+          btnMobTimeline?.classList.add('active');
+          if (blueprintGrid) blueprintGrid.classList.add('view-full', 'hide-palco');
           if (timelineModal) timelineModal.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'none';
           if (btnChatBack) btnChatBack.style.display = 'inline-flex';
           if (titleEl) titleEl.textContent = 'Histórico & Linha do Tempo';
           renderTimelineEvents();
+        } else if (viewName === 'controls') {
+          btnMobControls?.classList.add('active');
+          if (composerCard) composerCard.style.display = 'none';
+          if (btnChatBack) btnChatBack.style.display = 'inline-flex';
+          if (titleEl) titleEl.textContent = 'Mesa de Controles & BYOK';
+        } else if (viewName === 'palco') {
+          btnMobPalco?.classList.add('active');
+          if (composerCard) composerCard.style.display = 'none';
+          if (btnChatBack) btnChatBack.style.display = 'inline-flex';
+          if (titleEl) titleEl.textContent = 'Palco Operacional da Conta';
         } else {
           btnRailChat?.classList.add('active');
-          if (paneControls) paneControls.style.display = 'flex';
-          if (panePalco) panePalco.style.display = 'flex';
-          if (blueprintGrid) blueprintGrid.classList.remove('hide-palco');
+          btnMobChat?.classList.add('active');
+          if (blueprintGrid) blueprintGrid.classList.add('view-chat');
           if (chatWrapper) chatWrapper.style.display = 'flex';
           if (composerCard) composerCard.style.display = 'block';
           if (btnChatBack) btnChatBack.style.display = 'none';
@@ -5995,6 +7996,26 @@ export function renderHtmlShell(): string {
 
       btnCloseDocuments?.addEventListener('click', closeDocumentsModal);
 
+      document.getElementById('btn-doc-back-list')?.addEventListener('click', () => {
+        const container = document.getElementById('doc-cards-container');
+        if (container) container.classList.remove('doc-cards-mobile-hidden');
+        const readerPanel = document.getElementById('doc-reader-panel');
+        if (readerPanel) readerPanel.classList.remove('doc-reader-mobile-active');
+        const btn = document.getElementById('btn-doc-back-list');
+        if (btn) btn.style.display = 'none';
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) {
+          const container = document.getElementById('doc-cards-container');
+          const readerPanel = document.getElementById('doc-reader-panel');
+          const btnDocBackList = document.getElementById('btn-doc-back-list');
+          if (container) container.classList.remove('doc-cards-mobile-hidden');
+          if (readerPanel) readerPanel.classList.remove('doc-reader-mobile-active');
+          if (btnDocBackList) btnDocBackList.style.display = 'none';
+        }
+      });
+
       document.querySelectorAll('#doc-filter-tabs .doc-tab-btn').forEach(tab => {
         tab.addEventListener('click', () => {
           document.querySelectorAll('#doc-filter-tabs .doc-tab-btn').forEach(t => {
@@ -6004,23 +8025,27 @@ export function renderHtmlShell(): string {
           tab.classList.add('active', 'btn-primary');
           tab.classList.remove('btn-secondary');
           currentDocFilter = tab.getAttribute('data-doc-filter') || 'all';
+          resetDocumentReader();
           renderDocumentsList();
         });
       });
 
       document.getElementById('doc-search-input')?.addEventListener('input', () => {
+        resetDocumentReader();
         renderDocumentsList();
       });
 
       document.getElementById('doc-date-preset')?.addEventListener('change', () => {
         const dateInput = document.getElementById('doc-date-input');
         if (dateInput) dateInput.value = '';
+        resetDocumentReader();
         renderDocumentsList();
       });
 
       document.getElementById('doc-date-input')?.addEventListener('change', () => {
         const datePreset = document.getElementById('doc-date-preset');
         if (datePreset) datePreset.value = 'all';
+        resetDocumentReader();
         renderDocumentsList();
       });
 
@@ -6067,14 +8092,15 @@ export function renderHtmlShell(): string {
           actor: {
             name: 'Aline Rocha',
             role: 'Tráfego Pago (SPOT)',
-            avatarBg: '#dbeafe',
-            avatarColor: '#1d4ed8',
+            avatarBg: 'var(--tag-info-bg)',
+            avatarColor: 'var(--tag-info-ink)',
             avatarInitials: 'AR'
           },
           actionTitle: 'Pausa do Anúncio ad_whey_sabores_04',
           badgeText: 'Pausa de Anúncio',
-          badgeBg: '#fee2e2',
-          badgeColor: '#991b1b',
+          badgeBg: 'var(--tag-danger-bg)',
+          badgeBorder: 'var(--tag-danger-border)',
+          badgeColor: 'var(--tag-danger-ink)',
           summary: 'Aline Rocha pausou o criativo carrossel ad_whey_sabores_04 após identificar disparada de CPA para R$ 94,50 (limite de tolerância: R$ 35,00), realocando verba para o criativo campeão de Baunilha.',
           target: 'Anúncio: ad_whey_sabores_04 · Meta Ads',
           timestamp: '27/08/2026 14:15',
@@ -6086,14 +8112,15 @@ export function renderHtmlShell(): string {
           actor: {
             name: 'Luiza Valente',
             role: 'Atendimento & Vendas',
-            avatarBg: '#f3e8ff',
-            avatarColor: '#6b21a8',
+            avatarBg: 'var(--tag-neutral-bg)',
+            avatarColor: 'var(--tag-neutral-ink)',
             avatarInitials: 'LV'
           },
           actionTitle: 'Recebimento do Documento "Pauta UGC TikTok/Reels"',
           badgeText: 'Documento Recebido',
-          badgeBg: '#ede9fe',
-          badgeColor: '#5b21b6',
+          badgeBg: 'var(--tag-neutral-bg)',
+          badgeBorder: 'var(--tag-neutral-border)',
+          badgeColor: 'var(--tag-neutral-ink)',
           summary: 'Luiza Valente recebeu e anexou a pauta de criativos UGC contendo 5 roteiros de alta conversão para gravação com influenciadores.',
           target: 'Documento: doc-pauta-ugc-01',
           timestamp: '27/08/2026 13:40',
@@ -6105,14 +8132,15 @@ export function renderHtmlShell(): string {
           actor: {
             name: 'Marcos Silva',
             role: 'Head de Marketing (HouseWhey)',
-            avatarBg: '#dcfce7',
-            avatarColor: '#15803d',
+            avatarBg: 'var(--tag-success-bg)',
+            avatarColor: 'var(--tag-success-ink)',
             avatarInitials: 'MS'
           },
           actionTitle: 'Aprovação da Proposta de Remanejamento de Orçamento',
           badgeText: 'Proposta Aprovada',
-          badgeBg: '#dcfce7',
-          badgeColor: '#166534',
+          badgeBg: 'var(--tag-success-bg)',
+          badgeBorder: 'var(--tag-success-border)',
+          badgeColor: 'var(--tag-success-ink)',
           summary: 'Marcos Silva aprovou a proposta #prop-8921 permitindo o remanejamento de R$ 500,00/dia da campanha Namorados para alavancar o lançamento de Whey Isolar.',
           target: 'Proposta #prop-8921 · Aprovada por Marcos Silva',
           timestamp: '27/08/2026 12:20',
@@ -6124,14 +8152,15 @@ export function renderHtmlShell(): string {
           actor: {
             name: 'Agente AdzHub',
             role: 'Auditoria & Integridade',
-            avatarBg: '#e0f2fe',
-            avatarColor: '#0369a1',
+            avatarBg: 'var(--tag-info-bg)',
+            avatarColor: 'var(--tag-info-ink)',
             avatarInitials: 'AH'
           },
           actionTitle: 'Auditoria de Regras da Conta',
           badgeText: 'Auditoria Salva',
-          badgeBg: '#e0f2fe',
-          badgeColor: '#075985',
+          badgeBg: 'var(--tag-info-bg)',
+          badgeBorder: 'var(--tag-info-border)',
+          badgeColor: 'var(--tag-info-ink)',
           summary: 'Agente AdzHub executou a validação de regras da conta, confirmando a integridade das metas de CPA e investimento.',
           target: 'Verificação de Integridade',
           timestamp: '27/08/2026 11:05',
@@ -6143,14 +8172,15 @@ export function renderHtmlShell(): string {
           actor: {
             name: 'Carolina Mendes',
             role: 'Gerente Operacional (SPOT)',
-            avatarBg: '#fef3c7',
-            avatarColor: '#b45309',
+            avatarBg: 'var(--tag-warning-bg)',
+            avatarColor: 'var(--tag-warning-ink)',
             avatarInitials: 'CM'
           },
           actionTitle: 'Submissão de Proposta de Controle de Tolerância',
           badgeText: 'Proposta Submetida',
-          badgeBg: '#fef3c7',
-          badgeColor: '#92400e',
+          badgeBg: 'var(--tag-warning-bg)',
+          badgeBorder: 'var(--tag-warning-border)',
+          badgeColor: 'var(--tag-warning-ink)',
           summary: 'Carolina Mendes registrou nova regra de tolerância: anúncios com CPA > 2.5x a meta após 1.000 impressões devem gerar pendência imediata de pausa.',
           target: 'Regra de Tolerância #gov-rule-04',
           timestamp: '27/08/2026 09:45',
@@ -6162,14 +8192,15 @@ export function renderHtmlShell(): string {
           actor: {
             name: 'Aline Rocha',
             role: 'Tráfego Pago (SPOT)',
-            avatarBg: '#dbeafe',
-            avatarColor: '#1d4ed8',
+            avatarBg: 'var(--tag-info-bg)',
+            avatarColor: 'var(--tag-info-ink)',
             avatarInitials: 'AR'
           },
           actionTitle: 'Vínculo do Briefing Q3 na Conta',
           badgeText: 'Briefing Registrado',
-          badgeBg: '#dbeafe',
-          badgeColor: '#1e40af',
+          badgeBg: 'var(--tag-neutral-bg)',
+          badgeBorder: 'var(--tag-neutral-border)',
+          badgeColor: 'var(--tag-neutral-ink)',
           summary: 'Aline Rocha cadastrou o Briefing de Lançamento Whey Isolar HouseWhey Q3, conectando público, metas de CPA e canais de veiculação.',
           target: 'Documento: doc-briefing-q3',
           timestamp: '27/08/2026 09:30',
@@ -6187,14 +8218,15 @@ export function renderHtmlShell(): string {
           actor: evt.actor || {
             name: 'Supercérebro IA',
             role: 'Orquestrador Autônomo',
-            avatarBg: '#e0f2fe',
-            avatarColor: '#0369a1',
+            avatarBg: 'var(--tag-info-bg)',
+            avatarColor: 'var(--tag-info-ink)',
             avatarInitials: 'IA'
           },
           actionTitle: evt.actionTitle || 'Ação Registrada',
           badgeText: evt.badgeText || 'Em Tempo Real',
-          badgeBg: evt.badgeBg || '#e0f2fe',
-          badgeColor: evt.badgeColor || '#0369a1',
+          badgeBg: evt.badgeBg || 'var(--tag-info-bg)',
+          badgeBorder: evt.badgeBorder || 'var(--tag-info-border)',
+          badgeColor: evt.badgeColor || 'var(--tag-info-ink)',
           summary: evt.summary || '',
           target: evt.target || 'Supercérebro Session',
           timestamp: evt.timestamp || new Date().toLocaleString('pt-BR'),
@@ -6227,51 +8259,51 @@ export function renderHtmlShell(): string {
         if (filtered.length === 0) {
           container.innerHTML =
             '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 16px; text-align: center; color: var(--ink-muted);">' +
-              '<div style="font-size: 2rem; margin-bottom: 12px; opacity: 0.6;">🔍</div>' +
+              '<div style="margin-bottom: 12px; opacity: 0.45; color: var(--navy);">' + getLucideSvg('search', { size: 32 }) + '</div>' +
               '<div style="font-weight: 600; color: var(--ink-strong); font-size: 0.95rem; margin-bottom: 4px;">Nenhum evento encontrado</div>' +
               '<div style="font-size: 0.8rem;">Tente ajustar o termo da busca ou selecione outra aba de filtro.</div>' +
             '</div>';
           return;
         }
 
-        let html = '<div style="display: flex; flex-direction: column; gap: 16px; position: relative; max-width: 900px; margin: 0 auto;">';
-        html += '<div style="position: absolute; top: 16px; bottom: 16px; left: 11px; width: 2px; background: var(--line-strong); opacity: 0.5; z-index: 1;"></div>';
+        let html = '<div style="display: flex; flex-direction: column; gap: 16px; position: relative; width: 100%; box-sizing: border-box; margin: 0;">';
+        html += '<div style="position: absolute; top: 18px; bottom: 18px; left: 13px; width: 2px; background: var(--line-strong); opacity: 0.5; z-index: 1;"></div>';
 
         filtered.forEach(function(item) {
-          const dotColor = item.badgeColor || '#294A91';
+          const dotColor = item.badgeColor || 'var(--navy)';
           html +=
-            '<div style="display: flex; gap: 14px; position: relative; z-index: 2; align-items: flex-start;">' +
-              '<div style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; top: 10px;" title="' + item.actor.name + ' (' + item.actor.role + ')">' +
-                '<div style="width: 12px; height: 12px; border-radius: 50%; background: ' + dotColor + '; border: 2px solid var(--surface); box-shadow: 0 0 0 2px ' + dotColor + '33; flex-shrink: 0;"></div>' +
+            '<div style="display: flex; gap: 16px; position: relative; z-index: 2; align-items: flex-start; width: 100%; box-sizing: border-box;">' +
+              '<div style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; top: 12px;" title="' + item.actor.name + ' (' + item.actor.role + ')">' +
+                '<div style="width: 12px; height: 12px; border-radius: 50%; background: ' + dotColor + '; border: 2px solid var(--surface); box-shadow: 0 0 0 2px rgba(41,74,145,0.18); flex-shrink: 0;"></div>' +
               '</div>' +
 
-              '<div style="flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 14px 18px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 8px;">' +
+              '<div style="flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 16px 22px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 10px;">' +
                 
                 '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">' +
-                  '<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">' +
-                    '<span style="font-weight: 700; color: var(--ink-strong); font-size: 0.92rem; font-family: var(--font-display);">' +
+                  '<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">' +
+                    '<span style="font-weight: 700; color: var(--ink-strong); font-size: 1.05rem; font-family: var(--font-display); line-height: 1.35;">' +
                       item.actionTitle +
                     '</span>' +
-                    '<span style="font-size: 0.72rem; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-pill); background: ' + item.badgeBg + '; color: ' + item.badgeColor + ';">' +
+                    '<span style="font-size: 0.78rem; font-weight: 600; padding: 3px 10px; border-radius: var(--radius-pill); border: 1px solid ' + (item.badgeBorder || 'var(--line)') + '; background: ' + item.badgeBg + '; color: ' + item.badgeColor + ';">' +
                       item.badgeText +
                     '</span>' +
                   '</div>' +
-                  '<span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted); background: var(--surface-soft); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line);">' +
-                    '🕒 ' + item.timestamp +
+                  '<span style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--ink-muted); background: var(--surface-soft); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--line); display: inline-flex; align-items: center; gap: 5px;">' +
+                    getLucideSvg('clock', { size: 13, style: 'color: var(--ink-muted);' }) + ' ' + item.timestamp +
                   '</span>' +
                 '</div>' +
 
-                '<div style="font-size: 0.85rem; line-height: 1.5; color: var(--ink); font-family: var(--font-sans);">' +
+                '<div style="font-size: 0.9375rem; line-height: 1.55; color: var(--ink); font-family: var(--font-sans);">' +
                   item.summary +
                 '</div>' +
 
-                '<div style="display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px dashed var(--line); margin-top: 2px; font-size: 0.76rem; color: var(--ink-muted); flex-wrap: wrap; gap: 6px;">' +
-                  '<div style="display: flex; align-items: center; gap: 10px;">' +
-                    '<span><strong>Operador:</strong> ' + item.actor.name + ' <span style="opacity: 0.75;">(' + item.actor.role + ')</span></span>' +
+                '<div style="display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px dashed var(--line); margin-top: 2px; font-size: 0.84rem; color: var(--ink-muted); flex-wrap: wrap; gap: 8px;">' +
+                  '<div style="display: flex; align-items: center; gap: 12px;">' +
+                    '<span style="display: inline-flex; align-items: center; gap: 5px;">' + getLucideSvg('user', { size: 14, style: 'color: var(--ink-muted);' }) + ' <strong>Operador:</strong> ' + item.actor.name + ' <span style="opacity: 0.85;">(' + item.actor.role + ')</span></span>' +
                   '</div>' +
                   '<div style="display: flex; align-items: center; gap: 10px;">' +
-                    '<span style="background: var(--surface-soft); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--line);">🎯 ' + item.target + '</span>' +
-                    '<span style="font-family: var(--font-mono); opacity: 0.85;">⚡ ' + item.provenance + '</span>' +
+                    '<span style="background: var(--surface-soft); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--line); display: inline-flex; align-items: center; gap: 5px;">' + getLucideSvg('target', { size: 13, style: 'color: var(--ink-muted);' }) + ' ' + item.target + '</span>' +
+                    '<span style="font-family: var(--font-mono); opacity: 0.9; display: inline-flex; align-items: center; gap: 4px;">' + getLucideSvg('zap', { size: 13, style: 'color: var(--navy);' }) + ' ' + item.provenance + '</span>' +
                   '</div>' +
                 '</div>' +
 
@@ -6319,7 +8351,7 @@ export function renderHtmlShell(): string {
       btnRefreshGraph?.addEventListener('click', fetchAndRenderSupercerebroGraph);
 
       if (graphCanvas) {
-        graphCanvas.addEventListener('mousedown', (e) => {
+        const handleCanvasPointerDown = (e) => {
           const rect = graphCanvas.getBoundingClientRect();
           const mouseX = (e.clientX - rect.left - graphState.offsetX) / graphState.zoom;
           const mouseY = (e.clientY - rect.top - graphState.offsetY) / graphState.zoom;
@@ -6329,7 +8361,7 @@ export function renderHtmlShell(): string {
             const n = graphState.nodes[i];
             const style = getNodeStyle(n.type);
             const dist = Math.hypot(n.x - mouseX, n.y - mouseY);
-            if (dist <= style.radius + 6) {
+            if (dist <= style.radius + 10) {
               clickedNode = n;
               break;
             }
@@ -6337,6 +8369,7 @@ export function renderHtmlShell(): string {
 
           if (clickedNode) {
             graphState.draggedNode = clickedNode;
+            clickedNode.isUserDragged = true;
             selectGraphNode(clickedNode);
           } else {
             graphState.isDraggingCanvas = true;
@@ -6344,25 +8377,44 @@ export function renderHtmlShell(): string {
             graphState.dragStartY = e.clientY - graphState.offsetY;
             selectGraphNode(null);
           }
-        });
+        };
 
-        window.addEventListener('mousemove', (e) => {
+        const handleCanvasPointerMove = (e) => {
           if (graphState.draggedNode) {
             const rect = graphCanvas.getBoundingClientRect();
-            graphState.draggedNode.x = (e.clientX - rect.left - graphState.offsetX) / graphState.zoom;
-            graphState.draggedNode.y = (e.clientY - rect.top - graphState.offsetY) / graphState.zoom;
+            const width = rect.width > 50 ? rect.width : (graphWrapper.clientWidth || 800);
+            const height = rect.height > 50 ? rect.height : (graphWrapper.clientHeight || 550);
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const newX = (e.clientX - rect.left - graphState.offsetX) / graphState.zoom;
+            const newY = (e.clientY - rect.top - graphState.offsetY) / graphState.zoom;
+            graphState.draggedNode.x = newX;
+            graphState.draggedNode.y = newY;
+            graphState.draggedNode.relX = newX - centerX;
+            graphState.draggedNode.relY = newY - centerY;
+            graphState.draggedNode.isUserDragged = true;
             renderCanvasGraph();
           } else if (graphState.isDraggingCanvas) {
             graphState.offsetX = e.clientX - graphState.dragStartX;
             graphState.offsetY = e.clientY - graphState.dragStartY;
             renderCanvasGraph();
           }
-        });
+        };
 
-        window.addEventListener('mouseup', () => {
+        const handleCanvasPointerUp = () => {
           graphState.draggedNode = null;
           graphState.isDraggingCanvas = false;
-        });
+        };
+
+        graphCanvas.addEventListener('pointerdown', handleCanvasPointerDown);
+        window.addEventListener('pointermove', handleCanvasPointerMove);
+        window.addEventListener('pointerup', handleCanvasPointerUp);
+        window.addEventListener('pointercancel', handleCanvasPointerUp);
+
+        // Fallback para mouse events
+        graphCanvas.addEventListener('mousedown', handleCanvasPointerDown);
+        window.addEventListener('mousemove', handleCanvasPointerMove);
+        window.addEventListener('mouseup', handleCanvasPointerUp);
 
         graphCanvas.addEventListener('wheel', (e) => {
           e.preventDefault();
@@ -6397,7 +8449,12 @@ export function renderHtmlShell(): string {
         graphState.zoom = 1;
         graphState.offsetX = 0;
         graphState.offsetY = 0;
-        initGraphPositions(graphState.nodes);
+        graphState.nodes.forEach(n => {
+          n.isUserDragged = false;
+          delete n.relX;
+          delete n.relY;
+        });
+        initGraphPositions(graphState.nodes, true);
         renderCanvasGraph();
       });
 
@@ -6409,9 +8466,35 @@ export function renderHtmlShell(): string {
         }
       });
 
+      // Observador para auto-scroll automático durante streaming/execução
+      const chatContainerEl = document.getElementById('chat-messages-container');
+      if (chatContainerEl && typeof MutationObserver !== 'undefined') {
+        const chatObserver = new MutationObserver((mutations) => {
+          if (sessionState.isExecuting) {
+            const hasAddedNodes = mutations.some(m => m.type === 'childList' && m.addedNodes.length > 0);
+            if (hasAddedNodes) {
+              scrollChatToBottom(true);
+            }
+          }
+        });
+        chatObserver.observe(chatContainerEl, { childList: true, subtree: true });
+      }
+
       // Inicialização
       updateKeyUI();
       validateExecution();
+      initGraphPositions(graphState.nodes);
+      updateGraphStats();
+      if (graphWrapper && typeof ResizeObserver !== 'undefined') {
+        const resizeObserver = new ResizeObserver(() => {
+          if (supercerebroModal && supercerebroModal.style.display !== 'none') {
+            renderCanvasGraph();
+          }
+        });
+        resizeObserver.observe(graphWrapper);
+      }
+      renderDocumentsList();
+      resetDocumentReader();
     })();
   </script>
 </body>

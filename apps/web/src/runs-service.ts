@@ -346,6 +346,50 @@ export function extractUserIntent(goal: string): ExtractedIntent {
     targetAsset = 'ad_omega3_alta_conc_02';
   }
 
+  const isSubmissionOrProposalAction =
+    q.includes('submeter proposta') ||
+    q.includes('submeta a proposta') ||
+    q.includes('submeter a proposta') ||
+    q.includes('gerar proposta') ||
+    q.includes('gerar a proposta') ||
+    q.includes('crie a proposta') ||
+    q.includes('elabore a proposta') ||
+    q.includes('formalize a proposta') ||
+    q.includes('formalizar proposta') ||
+    q.includes('despachar proposta') ||
+    q.includes('despache a proposta') ||
+    q.includes('enviar proposta') ||
+    q.includes('envie a proposta') ||
+    q.includes('pode enviar') ||
+    q.includes('pode mandar') ||
+    q.includes('confirmar envio') ||
+    q.includes('proposta executiva');
+
+  if (isDevolutiva) {
+    if (q.includes('aline')) {
+      targetPerson = 'Aline Rocha';
+      targetPersonId = 'p_aline';
+    } else if (q.includes('luiza')) {
+      targetPerson = 'Luiza Valente';
+      targetPersonId = 'p_luiza';
+    } else {
+      targetPerson = 'Carolina Mendes';
+      targetPersonId = 'p_carolina';
+    }
+  } else if (q.includes('aline')) {
+    targetPerson = 'Aline Rocha';
+    targetPersonId = 'p_aline';
+  } else if (q.includes('carolina') || q.includes('carol')) {
+    targetPerson = 'Carolina Mendes';
+    targetPersonId = 'p_carolina';
+  } else if (q.includes('luiza')) {
+    targetPerson = 'Luiza Valente';
+    targetPersonId = 'p_luiza';
+  } else if (q.includes('marcos') || q.includes('head ops') || isSubmissionOrProposalAction) {
+    targetPerson = 'Marcos Silva';
+    targetPersonId = 'p_marcos';
+  }
+
   const isQueryState =
     q.includes('quem') ||
     q.includes('qual') ||
@@ -358,16 +402,27 @@ export function extractUserIntent(goal: string): ExtractedIntent {
     q.includes('equipe') ||
     q.includes('time') ||
     q.includes('colaborad') ||
-    (q.includes('?') && !q.includes('delegar') && !q.includes('atribuir'));
+    (q.includes('?') && !q.includes('delegar') && !q.includes('atribuir') && !q.includes('enviar') && !q.includes('submeter') && !q.includes('aprovar'));
 
   const isDelegation =
     !isQueryState &&
     (isDevolutiva ||
+      isSubmissionOrProposalAction ||
       q.includes('deleg') ||
       q.includes('atribu') ||
       q.includes('escreva essa proposta') ||
       q.includes('escreva a proposta') ||
-      (q.includes('proposta') && (q.includes('escreva') || q.includes('crie') || q.includes('elabore') || q.includes('formalize') || q.includes('envie') || q.includes('mandar'))));
+      (q.includes('proposta') && (
+        q.includes('escreva') ||
+        q.includes('crie') ||
+        q.includes('elabore') ||
+        q.includes('formalize') ||
+        q.includes('envie') ||
+        q.includes('mandar') ||
+        q.includes('gerar') ||
+        q.includes('submeter') ||
+        q.includes('despachar')
+      )));
 
   const isReactivation = q.includes('reativar') || q.includes('religar') || q.includes('despausar') || q.includes('ativar');
   const isPause = q.includes('pause') || q.includes('pausar') || q.includes('desativar');
@@ -538,6 +593,29 @@ export function determineExecutionTrace(goal: string, _scenario?: string): Execu
       q.includes('despacho') ||
       (q.includes('aprova') && (q.includes('pausa') || q.includes('proposta')));
 
+    const isDirectDispatch =
+      q.includes('pode enviar') ||
+      q.includes('pode mandar') ||
+      q.includes('confirmar envio') ||
+      q.includes('despachar proposta') ||
+      (q.includes('enviar') && q.includes('proposta')) ||
+      (q.includes('submeter') && q.includes('proposta'));
+
+    if (isDirectDispatch) {
+      return {
+        step1: {
+          reasoningText: 'Validar integridade da proposta e autorizações de alçada no Capability Broker.',
+          tools: ['staging_writer:draft', 'capability_broker:check_approval'],
+          observation: 'Proposta executiva validada · Alçada de Carolina Mendes (SPOT) confirmada'
+        },
+        step2: {
+          reasoningText: 'Executar commit atômico no SQLite e despachar proposta para Marcos Silva no Supercérebro.',
+          tools: ['governed_pevc:eval', 'delegate_task'],
+          observation: 'Proposta despachada para Marcos Silva · Commit atômico gravado no Supercérebro'
+        }
+      };
+    }
+
     if (isDevolutiva) {
       return {
         step1: {
@@ -555,14 +633,14 @@ export function determineExecutionTrace(goal: string, _scenario?: string): Execu
 
     return {
       step1: {
-        reasoningText: 'Consultar hierarquia da empresa, governança e memórias da conta Housewhey.',
-        tools: ['read_memory_context', 'get_supercerebro_hierarchy'],
-        observation: `Hierarquia SPOT/Housewhey sincronizada · Marcos Silva (Head Ops) & ${intent.targetPerson} (Gestora SPOT)`
+        reasoningText: 'Inspecionar criativos saturados e métricas operacionais no Meta Ads.',
+        tools: ['meta_ads:inspect_creatives', 'get_cta_diagnostics'],
+        observation: 'Criativos saturados mapeados (ad_namorados_casal_03 e ad_whey_sabores_04) · Métricas de CPA auditadas'
       },
       step2: {
-        reasoningText: 'Orquestrar autorizações da hierarquia e formalizar proposta com delegação técnica.',
-        tools: ['governed_pevc:eval', 'delegate_task'],
-        observation: `Proposta formal gerada e vinculada à governança com solicitação de delegação para ${intent.targetPerson}`
+        reasoningText: 'Preparar proposta formal de governança e requisição de despacho para Marcos Silva.',
+        tools: ['capability_broker:check_approval', 'staging_writer:draft'],
+        observation: `Proposta executiva em rascunho aguardando confirmação de despacho para ${intent.targetPerson}`
       }
     };
   }
@@ -965,8 +1043,28 @@ Conforme registrado nas atas de reunião e mensagens do WhatsApp no Supercérebr
       q.includes('despacho') ||
       (q.includes('aprova') && (q.includes('pausa') || q.includes('proposta')));
 
+    const isDirectDispatch =
+      q.includes('pode enviar') ||
+      q.includes('pode mandar') ||
+      q.includes('confirmar envio') ||
+      q.includes('despachar proposta') ||
+      (q.includes('enviar') && q.includes('proposta')) ||
+      (q.includes('submeter') && q.includes('proposta'));
+
     const target = intent.targetPerson;
     const role = target === 'Carolina Mendes' ? 'Gerente de Contas SPOT' : target === 'Aline Rocha' ? 'Gestora de Tráfego SPOT' : target === 'Marcos Silva' ? 'Head de Marketing Housewhey' : 'Atendimento & Vendas Housewhey';
+
+    if (isDirectDispatch) {
+      return `Diagnóstico & Execução de Governança no Supercérebro (Commit Auditado no SQLite):
+
+✓ Proposta executiva formalmente despachada e commitada no Supercérebro.
+• Destinatário: Marcos Silva (Head de Marketing Housewhey)
+• Proponente: Carolina Mendes (Gerente de Contas SPOT)
+• Status de Governança: COMMITTED (Hash SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855)
+• Próxima Etapa: Aguardando validação formal de Marcos Silva para execução técnica no Meta Ads.
+
+O card de pendências da SPOT foi marcado como Concluído e a aprovação foi adicionada à fila de Marcos Silva no Supercérebro.`;
+    }
 
     if (isDevolutiva) {
       return `Compreendido. Segue o documento formal de devolutiva emitido por Marcos Silva (Head de Marketing da Housewhey), formalizando a aprovação expressa para a pausa dos anúncios solicitados e delegando a execução operacional de volta para ${target} (${role}):
@@ -989,6 +1087,28 @@ Na qualidade de Head de Marketing da Housewhey e responsável pela aprovação d
 Fica formalmente delegada à ${target} (${role}), em conjunto com a equipe técnica da SPOT, a execução das pausas no Gerenciador de Anúncios Meta Ads e o monitoramento contínuo das métricas de conversão no CRM HubSpot.
 
 Para confirmar a devolutiva e registrar o commit oficial da delegação de volta para ${target}, confirme no card de governança abaixo.`;
+    }
+
+    if (q.includes('proposta executiva') || q.includes('submeter proposta') || q.includes('gerar proposta') || target === 'Marcos Silva') {
+      return `Compreendido. Segue a proposta formal executiva para registro e aprovação de governança, solicitando a autorização de Marcos Silva (Head de Marketing) para a pausa operacional e remanejamento orçamentário:
+
+PROPOSTA EXECUTIVA DE REALOCAÇÃO DE VERBA E PAUSA OPERACIONAL
+PARA: Marcos Silva, Head de Marketing Housewhey
+DE: Carolina Mendes, Gerente de Contas SPOT
+DATA: 19 de Agosto de 2026
+ASSUNTO: Solicitação de Aprovação para Pausa de Criativos Saturados e Realocação de Verba
+
+1. Análise de Performance & Diagnóstico:
+- Criativo "ad_namorados_casal_03": Saturação severa de frequência (2.65x), CPA elevado a R$ 1.616,67 no CRM (R$ 112,00 no Meta) e CTR em queda (0.9%).
+- Criativo "ad_whey_sabores_04": Gargalo de conversão com score de CTA 4.0 e CPA de R$ 950,00.
+- Top Performers: "ad_whey_baunilha_01" (CPA saudável de R$ 42,10, ROAS 2.69x) e "ad_omega3_alta_conc_02" (CTR 2.38%, Selo IFOS 5★).
+
+2. Proposta de Ação Operacional:
+- Pausar: "ad_namorados_casal_03" e "ad_whey_sabores_04".
+- Realocar Verba: Escalar investimento diário em "ad_whey_baunilha_01" e direcionar verba de teste para variações de "ad_omega3_alta_conc_02".
+
+3. Governança & Próximos Passos:
+Para submeter formalmente esta proposta executiva para validação de Marcos Silva e atualizar os registros do Supercérebro, confirme no card de governança abaixo.`;
     }
 
     return `Compreendido. Segue a proposta formal para registro e aprovação de governança, vinculando a delegação da execução técnica à ${target} (${role}):
@@ -1016,19 +1136,21 @@ Para efetivar a proposta e confirmar a delegação oficial para ${target}, confi
 
   if (
     isReactivated &&
-    (q.includes('reativad') ||
+    (q.includes('quais criativos') ||
+      q.includes('quais anuncios') ||
+      q.includes('quais anúncios') ||
+      q.includes('religad') ||
+      q.includes('foram reativad') ||
+      q.includes('reativad') ||
       q.includes('reativar') ||
       q.includes('reativação') ||
-      q.includes('religad') ||
       q.includes('despausad') ||
       q.includes('quais foram') ||
       q.includes('o que foi') ||
       q.includes('quais sao') ||
       q.includes('quais são'))
   ) {
-    return `Diagnóstico & Resposta AdzHub AI — Registros do Supercérebro:
-
-Foram reativados e religados com sucesso no Meta Ads os seguintes ativos, mediante a aprovação formal de governança pelo operador (Commit auditado no SQLite):
+    return `Foram reativados e religados com sucesso no Meta Ads os seguintes ativos, mediante a aprovação formal de governança pelo operador (Commit auditado no SQLite):
 
 1. Campanha "Dia dos Namorados" (Sazonal)
    • Status: Ativo (Reativado).
@@ -1053,9 +1175,7 @@ Audit Trail no Supercérebro & SQLite:
       q.includes('quais') ||
       q.includes('tudo'))
   ) {
-    return `Diagnóstico & Resposta AdzHub AI:
-
-Não existem ativos pausados na conta Housewhey neste momento.
+    return `Não existem ativos pausados na conta Housewhey neste momento.
 
 Todas as campanhas e anúncios — incluindo a Campanha "Dia dos Namorados" (Sazonal) e os criativos "ad_namorados_casal_03" e "ad_whey_sabores_04" — foram reativados e religados com sucesso no Meta Ads após a sua aprovação formal de governança no painel (Commit auditado no SQLite).
 
@@ -1085,9 +1205,7 @@ Atualmente, 100% dos ativos da conta Housewhey estão Ativos no Gerenciador de A
       q.includes('algum') ||
       q.includes('existe'))
   ) {
-    return `Diagnóstico & Resposta AdzHub AI — Registros do Supercérebro (Estado Auditado no SQLite):
-
-Analisando o dataset canônico auditado e o estado de governança commitado no Supercérebro, informo o status atual de cada anúncio:
+    return `Analisando o dataset canônico auditado e o estado de governança commitado no Supercérebro, informo o status atual de cada anúncio:
 
 1. Anúncio "ad_namorados_casal_03" (Vídeo Namorados Casal Suplementação):
    • Status: Pausado no Meta Ads.
@@ -1108,9 +1226,7 @@ Audit Trail no Supercérebro & SQLite:
     (q.includes('existe') || q.includes('ainda')) &&
     q.includes('pausad')
   ) {
-    return `Diagnóstico & Resposta AdzHub AI:
-
-Sim, existem ativos pausados e com recomendação de pausa no Meta Ads.
+    return `Sim, existem ativos pausados e com recomendação de pausa no Meta Ads.
 
 Atualmente, a seguinte campanha está pausada:
 Campanha "Dia dos Namorados" (Sazonal): Status: Pausado.
@@ -1834,9 +1950,21 @@ export class RunsService {
           this.isReactivatedStore = true;
         }
 
-        if (contract.metadata?.['isDelegated']) {
+        const goalLower = (contract.goal || '').toLowerCase();
+        const isDirectDispatch =
+          goalLower.includes('pode enviar') ||
+          goalLower.includes('pode mandar') ||
+          goalLower.includes('confirmar envio') ||
+          goalLower.includes('despachar proposta') ||
+          (goalLower.includes('enviar') && goalLower.includes('proposta')) ||
+          (goalLower.includes('submeter') && goalLower.includes('proposta'));
+
+        if (contract.metadata?.['isDelegated'] || isDirectDispatch) {
+          const target = (contract.metadata?.['delegatedTo'] as string) || 'Marcos Silva';
           this.commitDelegation({
-            delegatedTo: (contract.metadata?.['delegatedTo'] as string) || 'Aline Rocha'
+            delegatedTo: target,
+            proposalTitle: 'Proposta de Realocação de Verba Meta Ads',
+            proposalDetails: 'Proposta formal de pausa de criativos e realocação orçamentária despachada para Marcos Silva.'
           });
         }
         const delegationState = this.getDelegationState();
