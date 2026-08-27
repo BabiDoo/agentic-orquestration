@@ -1,0 +1,70 @@
+{
+  "client_id": "cli_housewhey",
+  "tenant_id": "tenant_spot",
+  "version": "1.0.0",
+  "generated_at": "2026-08-23T06:00:00.000Z",
+  "events": [
+    {
+      "event_id": "evt_tl_01",
+      "occurred_at": "2026-08-01T10:00:00.000Z",
+      "title": "Onboarding da conta Housewhey na operação SPOT",
+      "summary": "Início oficial da gestão de mídia e performance pela equipe da SPOT. Aline Rocha assume o tráfego pago e Carolina Mendes a gerência executiva da conta.",
+      "actor_ids": ["p_aline", "p_carolina", "p_marcos"],
+      "related_node_ids": ["hub_spot", "cli_housewhey", "ch_meta", "ch_crm"]
+    },
+    {
+      "event_id": "evt_tl_02",
+      "occurred_at": "2026-08-03T14:30:00.000Z",
+      "title": "Aprovação do Briefing e Mapa da Solução Housewhey",
+      "summary": "Marcos Silva aprova diretrizes de comunicação, foco em pureza de matéria-prima e diferenciais competitivos da linha de Whey Isolado e Ômega 3 IFOS.",
+      "actor_ids": ["p_carolina", "p_marcos"],
+      "related_node_ids": ["cli_housewhey", "camp_whey_isolado", "camp_omega3"]
+    },
+    {
+      "event_id": "evt_tl_03",
+      "occurred_at": "2026-08-05T09:00:00.000Z",
+      "title": "Lançamento dos criativos de Whey Isolado e Ômega 3",
+      "summary": "Aline Rocha sobe no Meta Ads os anúncios de vídeo do Whey Baunilha (ad_whey_baunilha_01) e estático técnico do Ômega 3 (ad_omega3_alta_conc_02) com UTMs padronizadas.",
+      "actor_ids": ["p_aline"],
+      "related_node_ids": [
+        "camp_whey_isolado",
+        "camp_omega3",
+        "asset_ad_01",
+        "asset_ad_02",
+        "ch_meta"
+      ]
+    },
+    {
+      "event_id": "evt_tl_04",
+      "occurred_at": "2026-08-08T11:00:00.000Z",
+      "title": "Ativação da Campanha Promocional Namorados",
+      "summary": "Subida do criativo de combo de casal (ad_namorados_casal_03) e carrossel de sabores (ad_whey_sabores_04) para acelerar volume de conversão.",
+      "actor_ids": ["p_aline", "p_marcos"],
+      "related_node_ids": ["camp_namorados", "asset_ad_03", "asset_ad_04", "ch_meta"]
+    },
+    {
+      "event_id": "evt_tl_05",
+      "occurred_at": "2026-08-14T16:00:00.000Z",
+      "title": "Alinhamento semanal de conversão e feedback de vendas",
+      "summary": "Reunião de checagem: Luiza relata que o público no WhatsApp procura massivamente Whey Baunilha e dúvidas sobre dosagem do Ômega 3, com baixo interesse no combo Namorados.",
+      "actor_ids": ["p_luiza", "p_carolina", "p_aline"],
+      "related_node_ids": ["ch_whatsapp", "camp_whey_isolado", "camp_namorados"]
+    },
+    {
+      "event_id": "evt_tl_06",
+      "occurred_at": "2026-08-18T17:30:00.000Z",
+      "title": "Detecção de elevação no custo por aquisição (CPA) em Namorados",
+      "summary": "Aline Rocha constata aumento no custo por clique e queda na taxa de conversão final do anúncio ad_namorados_casal_03 e prepara recomendação técnica de realocação de verba.",
+      "actor_ids": ["p_aline", "p_carolina"],
+      "related_node_ids": ["camp_namorados", "asset_ad_03", "ch_meta", "ch_crm"]
+    },
+    {
+      "event_id": "evt_tl_07",
+      "occurred_at": "2026-08-20T18:00:00.000Z",
+      "title": "Proposta de pausa e redistribuição orçamentária encaminhada para aprovação",
+      "summary": "Carolina Mendes formaliza junto a Marcos Silva a proposta de pausar o anúncio ad_namorados_casal_03 e transferir orçamento diário para a escala do Whey Baunilha e Ômega 3.",
+      "actor_ids": ["p_carolina", "p_marcos"],
+      "related_node_ids": ["camp_namorados", "camp_whey_isolado", "camp_omega3", "asset_ad_03"]
+    }
+  ]
+}

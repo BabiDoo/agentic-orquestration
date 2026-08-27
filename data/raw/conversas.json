@@ -1,0 +1,75 @@
+{
+  "client_id": "cli_housewhey",
+  "tenant_id": "tenant_spot",
+  "version": "1.0.0",
+  "generated_at": "2026-08-23T06:00:00.000Z",
+  "whatsapp_threads": [
+    {
+      "thread_id": "wa_spot_hw_ops",
+      "title": "SPOT <> Housewhey Growth Team",
+      "participants": [
+        { "person_id": "p_aline", "name": "Aline Rocha", "role": "Gestora de Tráfego" },
+        { "person_id": "p_carolina", "name": "Carolina Mendes", "role": "Gerente de Contas" },
+        { "person_id": "p_marcos", "name": "Marcos Silva", "role": "Head de Marketing" },
+        { "person_id": "p_luiza", "name": "Luiza Valente", "role": "Atendimento e Vendas" }
+      ],
+      "messages": [
+        {
+          "message_id": "msg_wa_001",
+          "timestamp": "2026-08-10T14:20:00.000Z",
+          "sender_id": "p_aline",
+          "content": "Boa tarde time! Os anúncios de Whey Baunilha (ad_whey_baunilha_01) e Ômega 3 (ad_omega3_alta_conc_02) estão performando com CTR bem acima da média histórica. Vamos monitorar o fechamento de pedidos no CRM."
+        },
+        {
+          "message_id": "msg_wa_002",
+          "timestamp": "2026-08-10T14:35:10.000Z",
+          "sender_id": "p_luiza",
+          "content": "Oi Aline! Aqui no WhatsApp entraram vários clientes perguntando do sabor de baunilha. Todo mundo elogiando a dissolução. O time de vendas já converteu a maioria dos carrinhos pendentes."
+        },
+        {
+          "message_id": "msg_wa_003",
+          "timestamp": "2026-08-16T09:10:00.000Z",
+          "sender_id": "p_luiza",
+          "content": "Meninas, uma observação: sobre o combo de Namorados (ad_namorados_casal_03), quase ninguém perguntou nesses últimos dias. O pessoal que chega pelo anúncio acha que a promoção já encerrou ou vai direto pro Whey isolado."
+        },
+        {
+          "message_id": "msg_wa_004",
+          "timestamp": "2026-08-17T11:00:25.000Z",
+          "sender_id": "p_aline",
+          "content": "Perfeito pelo toque Luiza. Acabei de puxar a frequência no Meta e bateu 2.65x com CPC subindo para R$ 5,45. O criativo de Namorados saturou completamente."
+        },
+        {
+          "message_id": "msg_wa_005",
+          "timestamp": "2026-08-17T11:15:40.000Z",
+          "sender_id": "p_carolina",
+          "content": "Excelente diagnóstico. Aline, consolida os dados de spend vs receita de CRM pra gente apresentar pro Marcos na reunião de alinhamento."
+        },
+        {
+          "message_id": "msg_wa_006",
+          "timestamp": "2026-08-17T11:40:00.000Z",
+          "sender_id": "p_marcos",
+          "content": "Combinado. Qualquer recomendação de pausar anúncio ou remanejar verba diária precisa passar pelo fluxo formal de proposta e aprovação antes de mexer no gerenciador."
+        }
+      ]
+    }
+  ],
+  "meeting_transcripts": [
+    {
+      "meeting_id": "meet_sync_20260819",
+      "date": "2026-08-19T15:00:00.000Z",
+      "title": "Alinhamento Semanal de Performance e Criativos Housewhey",
+      "participants": [
+        { "person_id": "p_aline", "name": "Aline Rocha" },
+        { "person_id": "p_carolina", "name": "Carolina Mendes" },
+        { "person_id": "p_marcos", "name": "Marcos Silva" }
+      ],
+      "key_points": [
+        "Aline apresentou o cruzamento de Meta Ads com as vendas reais registradas no CRM.",
+        "O criativo ad_whey_baunilha_01 gerou mais de 50 pedidos com CPA saudável em torno de R$ 81,70 e ROAS de 2.69.",
+        "O criativo ad_namorados_casal_03 consumiu R$ 4.850,00 de verba com apenas 3 vendas atribuídas no CRM (CPA > R$ 1.600,00), configurando queima orçamentária.",
+        "Carolina propôs pausar o criativo saturado e redirecionar a verba diária para a escala do Whey Baunilha e teste de variação no Ômega 3.",
+        "Marcos aprovou a lógica em princípio e solicitou a emissão do briefing e proposta formal para registro e aprovação no sistema."
+      ]
+    }
+  ]
+}

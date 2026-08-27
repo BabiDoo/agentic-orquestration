@@ -1,0 +1,121 @@
+{
+  "client_id": "cli_housewhey",
+  "tenant_id": "tenant_spot",
+  "version": "1.0.0",
+  "generated_at": "2026-08-23T06:00:00.000Z",
+  "account_id": "act_housewhey_9921",
+  "currency": "BRL",
+  "timeframe": {
+    "since": "2026-08-01T00:00:00.000Z",
+    "until": "2026-08-20T23:59:59.000Z",
+    "timezone": "America/Sao_Paulo"
+  },
+  "summary": {
+    "total_spend_brl": 16000.0,
+    "total_impressions": 320600,
+    "total_clicks": 6460,
+    "average_ctr": 0.02014971,
+    "average_cpc_brl": 2.47678
+  },
+  "campaigns": [
+    {
+      "campaign_id": "camp_whey_isolado",
+      "campaign_name": "Campanha Whey Isolado Baunilha",
+      "objective": "OUTCOME_SALES",
+      "status": "ACTIVE",
+      "budget_daily_brl": 400.0,
+      "ads": [
+        {
+          "ad_id": "ad_whey_baunilha_01",
+          "ad_name": "Vídeo Hook Whey Baunilha 900g",
+          "adset_name": "Público Aberto - Saúde & Treino",
+          "spend_brl": 4250.0,
+          "impressions": 98400,
+          "clicks": 2150,
+          "ctr": 0.02184959,
+          "cpc_brl": 1.976744,
+          "cpm_brl": 43.191056,
+          "frequency": 1.42,
+          "hook_rate_3s": 0.385,
+          "utm_source": "meta_ads",
+          "utm_medium": "cpc",
+          "utm_campaign": "whey_isolado_baunilha",
+          "utm_content": "ad_whey_baunilha_01",
+          "status": "ACTIVE"
+        },
+        {
+          "ad_id": "ad_whey_sabores_04",
+          "ad_name": "Carrossel Whey Sabores Premium",
+          "adset_name": "Interesses - Nutrição e Academia",
+          "spend_brl": 3800.0,
+          "impressions": 84200,
+          "clicks": 1940,
+          "ctr": 0.02304038,
+          "cpc_brl": 1.958762,
+          "cpm_brl": 45.130641,
+          "frequency": 1.35,
+          "hook_rate_3s": 0.312,
+          "utm_source": "meta_ads",
+          "utm_medium": "cpc",
+          "utm_campaign": "whey_isolado_baunilha",
+          "utm_content": "ad_whey_sabores_04",
+          "status": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "campaign_id": "camp_omega3",
+      "campaign_name": "Campanha Lançamento Ômega 3 Ultra",
+      "objective": "OUTCOME_SALES",
+      "status": "ACTIVE",
+      "budget_daily_brl": 300.0,
+      "ads": [
+        {
+          "ad_id": "ad_omega3_alta_conc_02",
+          "ad_name": "Estático Ômega 3 Alta Pureza IFOS",
+          "adset_name": "Lookalike 1% Compradores",
+          "spend_brl": 3100.0,
+          "impressions": 62000,
+          "clicks": 1480,
+          "ctr": 0.02387096,
+          "cpc_brl": 2.094594,
+          "cpm_brl": 50.0,
+          "frequency": 1.28,
+          "hook_rate_3s": 0.295,
+          "utm_source": "meta_ads",
+          "utm_medium": "cpc",
+          "utm_campaign": "omega3_ultra",
+          "utm_content": "ad_omega3_alta_conc_02",
+          "status": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "campaign_id": "camp_namorados",
+      "campaign_name": "Campanha Dia dos Namorados",
+      "objective": "OUTCOME_SALES",
+      "status": "ACTIVE",
+      "budget_daily_brl": 350.0,
+      "ads": [
+        {
+          "ad_id": "ad_namorados_casal_03",
+          "ad_name": "Vídeo Namorados Casal Suplementação",
+          "adset_name": "Amplo - Relacionamento & Fitness",
+          "spend_brl": 4850.0,
+          "impressions": 76000,
+          "clicks": 890,
+          "ctr": 0.01171052,
+          "cpc_brl": 5.449438,
+          "cpm_brl": 63.815789,
+          "frequency": 2.65,
+          "hook_rate_3s": 0.162,
+          "utm_source": "meta_ads",
+          "utm_medium": "cpc",
+          "utm_campaign": "namorados_combo",
+          "utm_content": "ad_namorados_casal_03",
+          "status": "ACTIVE"
+        }
+      ]
+    }
+  ]
+}

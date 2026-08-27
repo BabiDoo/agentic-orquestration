@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "PASSED",
+  "generatedAt": "2026-08-23T10:01:49.030Z",
+  "hasBlockingErrors": false,
+  "blockingErrorsCount": 0,
+  "warningsCount": 0,
+  "infoCount": 1,
+  "counts": {
+    "graph_nodes_count": 16,
+    "graph_edges_count": 21,
+    "timeline_events_count": 7,
+    "campaigns_count": 3,
+    "ads_count": 4,
+    "deals_count": 20,
+    "sales_count": 19,
+    "creatives_count": 4,
+    "conversations_threads_count": 1,
+    "meeting_transcripts_count": 1
+  },
+  "coverage": {
+    "join_coverage": 1,
+    "join_coverage_level": "SUFFICIENT",
+    "join_coverage_percentage": "100.0%",
+    "evidence_coverage": 1,
+    "evidence_coverage_level": "SUFFICIENT",
+    "evidence_coverage_percentage": "100.0%"
+  },
+  "financials": {
+    "total_spend_brl": 16000,
+    "total_revenue_brl": 4040,
+    "formatted_spend_brl": "R$ 16.000,00",
+    "formatted_revenue_brl": "R$ 4.040,00",
+    "roas": 0.25,
+    "cpa_sale_brl": 842.11
+  },
+  "issues": [
+    {
+      "id": "attribution_divergences_detected",
+      "category": "BUSINESS_RULE",
+      "severity": "INFO",
+      "message": "Detectadas 2 transações com divergência entre canal de mídia e origem declarada"
+    }
+  ],
+  "textSummary": "=================================================================\n  DATASET QUALITY REPORT — STATUS: [PASSED]\n=================================================================\nData de Geração: 2026-08-23T10:01:49.030Z\nErros Bloqueantes: 0\nAvisos (Warnings): 0\nInformativos: 1\n\n--- CONTAGENS E ENTIDADES ---\n• Nós do Grafo: 16 | Arestas: 21\n• Eventos da Timeline: 7\n• Campanhas: 3 | Anúncios: 4\n• Deals no CRM: 20 (Vendas: 19)\n• Criativos Avaliados: 4\n• Conversas / Reuniões: 1 threads / 1 atas\n\n--- COBERTURAS E GOVERNANÇA ---\n• Join Coverage: 100.0% [SUFFICIENT]\n• Evidence Coverage: 100.0% [SUFFICIENT]\n\n--- FINANCEIRO E PERFORMANCE ---\n• Investimento Total (Spend): R$ 16.000,00\n• Receita Total: R$ 4.040,00\n• ROAS Global: 0.25\n• CPA Médio por Venda: R$ 842,11\n\n--- DIAGNÓSTICOS E APONTAMENTOS ---\n• [INFO] [BUSINESS_RULE] Detectadas 2 transações com divergência entre canal de mídia e origem declarada\n================================================================="
+}

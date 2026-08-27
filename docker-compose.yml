@@ -1,0 +1,18 @@
+services:
+  adzhub-harness:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adzhub-microkernel-harness
+    ports:
+      - "${HOST_PORT:-3030}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+    restart: unless-stopped
+
+

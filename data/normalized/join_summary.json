@@ -1,0 +1,19 @@
+{
+  "tenant_id": "tenant_spot",
+  "client_id": "cli_housewhey",
+  "timeframe": {
+    "since": "2026-08-01T00:00:00.000Z",
+    "until": "2026-08-20T23:59:59.000Z",
+    "timezone": "America/Sao_Paulo"
+  },
+  "total_ads": 4,
+  "total_spend_brl": 16000,
+  "total_deals": 20,
+  "total_sales": 19,
+  "total_revenue_brl": 4040,
+  "matched_deals_count": 20,
+  "orphan_deals_count": 0,
+  "orphan_ads_count": 0,
+  "divergent_deals_count": 2,
+  "join_coverage": 1
+}

@@ -1,0 +1,937 @@
+{
+  "currency": "BRL",
+  "timeframe": {
+    "since": "2026-08-01T00:00:00.000Z",
+    "until": "2026-08-20T23:59:59.000Z",
+    "timezone": "America/Sao_Paulo"
+  },
+  "summary": {
+    "total_leads": 165,
+    "total_sales": 139,
+    "total_revenue_brl": 29120
+  },
+  "deals": [
+    {
+      "deal_id": "deal_hw_1001",
+      "created_at": "2026-08-05T10:15:22.000Z",
+      "customer_name": "Rodrigo Ramos",
+      "customer_email": "rodrigo.ramos@gmail.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_baunilha_01",
+        "normalizedValue": "ad_whey_baunilha_01",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Ads",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1002",
+      "created_at": "2026-08-05T11:42:10.000Z",
+      "customer_name": "Fernanda Lima",
+      "customer_email": "fernanda.lima@outlook.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_baunilha_01",
+        "normalizedValue": "ad_whey_baunilha_01",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Feed",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1003",
+      "created_at": "2026-08-05T14:10:05.000Z",
+      "customer_name": "Gabriel Souza",
+      "customer_email": "gabriel.souza@yahoo.com.br",
+      "status": "venda",
+      "value_brl": 180,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "omega3_ultra",
+        "normalizedValue": "omega3_ultra",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_omega3_alta_conc_02",
+        "normalizedValue": "ad_omega3_alta_conc_02",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Anúncio do Ômega 3",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1004",
+      "created_at": "2026-08-06T09:20:18.000Z",
+      "customer_name": "Juliana Paes",
+      "customer_email": "juliana.paes@gmail.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_sabores_04",
+        "normalizedValue": "ad_whey_sabores_04",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1005",
+      "created_at": "2026-08-06T15:35:40.000Z",
+      "customer_name": "Thiago Martins",
+      "customer_email": "thiago.martins@uol.com.br",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_baunilha_01",
+        "normalizedValue": "ad_whey_baunilha_01",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Indicação de Amigo",
+      "has_origin_divergence": true,
+      "origin_divergence_details": "Cliente declarou indicação de amigo, mas o clique com conversão foi rastreado via Meta Ads (deal_hw_1005)"
+    },
+    {
+      "deal_id": "deal_hw_1006",
+      "created_at": "2026-08-07T08:50:12.000Z",
+      "customer_name": "Camila Queiroz",
+      "customer_email": "camila.queiroz@gmail.com",
+      "status": "venda",
+      "value_brl": 180,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "omega3_ultra",
+        "normalizedValue": "omega3_ultra",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_omega3_alta_conc_02",
+        "normalizedValue": "ad_omega3_alta_conc_02",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Ads",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1007",
+      "created_at": "2026-08-08T16:11:00.000Z",
+      "customer_name": "Bruno Gagliasso",
+      "customer_email": "bruno.g@gmail.com",
+      "status": "venda",
+      "value_brl": 240,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "namorados_combo",
+        "normalizedValue": "namorados_combo",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_namorados_casal_03",
+        "normalizedValue": "ad_namorados_casal_03",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Anúncio Namorados",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1008",
+      "created_at": "2026-08-09T10:04:33.000Z",
+      "customer_name": "Larissa Manoela",
+      "customer_email": "larissa.m@gmail.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_baunilha_01",
+        "normalizedValue": "ad_whey_baunilha_01",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Vídeo do Atleta",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1009",
+      "created_at": "2026-08-10T14:45:00.000Z",
+      "customer_name": "Renato Cariani",
+      "customer_email": "renato.c@ironberg.com.br",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_sabores_04",
+        "normalizedValue": "ad_whey_sabores_04",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Stories",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1010",
+      "created_at": "2026-08-11T17:20:19.000Z",
+      "customer_name": "Patricia Poeta",
+      "customer_email": "patricia.poeta@globo.com",
+      "status": "venda",
+      "value_brl": 180,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "omega3_ultra",
+        "normalizedValue": "omega3_ultra",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_omega3_alta_conc_02",
+        "normalizedValue": "ad_omega3_alta_conc_02",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Google / Pesquisa",
+      "has_origin_divergence": true,
+      "origin_divergence_details": "Cliente declarou busca no Google, mas o clique com conversão foi rastreado via Meta Ads (deal_hw_1010)"
+    },
+    {
+      "deal_id": "deal_hw_1011",
+      "created_at": "2026-08-12T12:00:00.000Z",
+      "customer_name": "Lucas Lucco",
+      "customer_email": "lucas.lucco@gmail.com",
+      "status": "venda",
+      "value_brl": 240,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "namorados_combo",
+        "normalizedValue": "namorados_combo",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_namorados_casal_03",
+        "normalizedValue": "ad_namorados_casal_03",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1012",
+      "created_at": "2026-08-13T19:30:10.000Z",
+      "customer_name": "Grazi Massafera",
+      "customer_email": "grazi.massafera@gmail.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_baunilha_01",
+        "normalizedValue": "ad_whey_baunilha_01",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Feed",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1013",
+      "created_at": "2026-08-14T11:15:00.000Z",
+      "customer_name": "Marcos Mion",
+      "customer_email": "marcos.mion@globo.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_sabores_04",
+        "normalizedValue": "ad_whey_sabores_04",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Ads",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1014",
+      "created_at": "2026-08-15T09:40:55.000Z",
+      "customer_name": "Sabrina Sato",
+      "customer_email": "sabrina.sato@uol.com.br",
+      "status": "venda",
+      "value_brl": 180,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "omega3_ultra",
+        "normalizedValue": "omega3_ultra",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_omega3_alta_conc_02",
+        "normalizedValue": "ad_omega3_alta_conc_02",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Feed",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1015",
+      "created_at": "2026-08-16T14:10:00.000Z",
+      "customer_name": "Caio Castro",
+      "customer_email": "caio.castro@gmail.com",
+      "status": "venda",
+      "value_brl": 240,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "namorados_combo",
+        "normalizedValue": "namorados_combo",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_namorados_casal_03",
+        "normalizedValue": "ad_namorados_casal_03",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Anúncio Namorados",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1016",
+      "created_at": "2026-08-17T16:05:30.000Z",
+      "customer_name": "Julio Balestrin",
+      "customer_email": "julio.b@ironberg.com.br",
+      "status": "lead",
+      "value_brl": 0,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "namorados_combo",
+        "normalizedValue": "namorados_combo",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_namorados_casal_03",
+        "normalizedValue": "ad_namorados_casal_03",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1017",
+      "created_at": "2026-08-18T10:12:00.000Z",
+      "customer_name": "Felipe Franco",
+      "customer_email": "felipe.franco@gmail.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_baunilha_01",
+        "normalizedValue": "ad_whey_baunilha_01",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1018",
+      "created_at": "2026-08-19T13:45:10.000Z",
+      "customer_name": "Roberta Zuniga",
+      "customer_email": "roberta.z@gmail.com",
+      "status": "venda",
+      "value_brl": 180,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "omega3_ultra",
+        "normalizedValue": "omega3_ultra",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_omega3_alta_conc_02",
+        "normalizedValue": "ad_omega3_alta_conc_02",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1019",
+      "created_at": "2026-08-20T11:00:00.000Z",
+      "customer_name": "Eduardo Correa",
+      "customer_email": "eduardo.correa@ifbb.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_sabores_04",
+        "normalizedValue": "ad_whey_sabores_04",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram Ads",
+      "has_origin_divergence": false
+    },
+    {
+      "deal_id": "deal_hw_1020",
+      "created_at": "2026-08-20T15:20:44.000Z",
+      "customer_name": "Aline Riscado",
+      "customer_email": "aline.riscado@gmail.com",
+      "status": "venda",
+      "value_brl": 220,
+      "utm_source": {
+        "rawValue": "meta_ads",
+        "normalizedValue": "meta_ads",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_medium": {
+        "rawValue": "cpc",
+        "normalizedValue": "cpc",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_campaign": {
+        "rawValue": "whey_isolado_baunilha",
+        "normalizedValue": "whey_isolado_baunilha",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "utm_content": {
+        "rawValue": "ad_whey_baunilha_01",
+        "normalizedValue": "ad_whey_baunilha_01",
+        "isValid": true,
+        "isMissing": false,
+        "isAlias": false,
+        "resolutionSource": "exact",
+        "includeInDenominator": true
+      },
+      "origem_declarada": "Instagram",
+      "has_origin_divergence": false
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "task_invalid_budget",
+  "clientId": "cli_housewhey",
+  "tenantId": "hub_spot",
+  "goal": "Teste com budget negativo",
+  "timeframe": {
+    "since": "2026-08-01T00:00:00.000Z",
+    "until": "2026-08-10T00:00:00.000Z",
+    "timezone": "America/Sao_Paulo"
+  },
+  "effects": {
+    "allowed": ["read:memory"]
+  },
+  "budgets": {
+    "maxSteps": -5,
+    "maxToolCalls": -1,
+    "maxTokens": -100,
+    "maxCostBrl": -2.0,
+    "timeoutMs": 50
+  },
+  "successCriteria": {
+    "minEvidenceCoverage": 0.5,
+    "requireVerifiedClaims": true
+  },
+  "approvalPolicy": {
+    "externalWritesRequireApproval": true,
+    "autoApproveReadOnly": true
+  }
+}

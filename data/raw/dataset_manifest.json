@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0.0",
+  "manifestId": "dsm_housewhey_s0_v1",
+  "datasetVersion": "1.0.0",
+  "globalHash": "759ecc0acb1cd46ef64c52d81e89b8a3309325e5885ee0908147839036c74a21",
+  "clientId": "cli_housewhey",
+  "origin": "synthetic_seed",
+  "synthetic": true,
+  "timeframe": {
+    "since": "2026-08-01T00:00:00.000Z",
+    "until": "2026-08-20T23:59:59.000Z",
+    "timezone": "America/Sao_Paulo"
+  },
+  "files": [
+    {
+      "filename": "supercerebro_graph.json",
+      "fileHash": "48fe2d8bbdbf295eb91cb1dba65a02cb926f9152c5a63c7567cfe52513848ab2",
+      "byteSize": 6728,
+      "purpose": "Grafo de conhecimento e entidades organizacionais"
+    },
+    {
+      "filename": "supercerebro_timeline.json",
+      "fileHash": "936570bdf0014aaf2dc02a3b57a99755a5cd71b765b225fb29f17fa59bbef576",
+      "byteSize": 4009,
+      "purpose": "Linha do tempo de eventos e interações"
+    },
+    {
+      "filename": "api_meta_ads.json",
+      "fileHash": "0ec40406f0d36a524d79ee9b83187e3d1353cb8bbed9d1c0b22266c2cc0313d6",
+      "byteSize": 3645,
+      "purpose": "Métricas e performance de campanhas Meta Ads"
+    },
+    {
+      "filename": "api_crm_leads.json",
+      "fileHash": "16e23c9c59ec255bcb122045c52d003447e03e5966fffbb87fbeb1d35c1c416f",
+      "byteSize": 8887,
+      "purpose": "Funil de vendas e transações CRM"
+    },
+    {
+      "filename": "app_analise_criativos.json",
+      "fileHash": "e52eeccef22b4994df5f1b7e9a825d0bcdacdbc0490c59e5c331d52511aa17e8",
+      "byteSize": 3530,
+      "purpose": "Metodologia e ranking de análise de criativos"
+    },
+    {
+      "filename": "app_mapa_solucao.json",
+      "fileHash": "9ce5e0d850129e8d68317a199499c50e5c34c2c2850576c5f374a28f62c42146",
+      "byteSize": 1925,
+      "purpose": "Mapa da solução e posicionamento de marca"
+    },
+    {
+      "filename": "conversas.json",
+      "fileHash": "2c7cd6823752c4a1f0ed5dbb4709778f39c9b9fc2e890593d6b00e062fbe96c9",
+      "byteSize": 4149,
+      "purpose": "Transcrição de reuniões e conversas de alinhamento WhatsApp"
+    }
+  ],
+  "generatedAt": "2026-08-23T06:00:00.000Z"
+}

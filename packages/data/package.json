@@ -1,0 +1,24 @@
+{
+  "name": "@adzhub/data",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "typecheck": "tsc --noEmit",
+    "quality:report": "node -e \"import('./dist/index.js').then(m => { const r = m.generateDatasetQualityReport(); console.log(r.textSummary); m.assertDatasetQuality(r); m.exportQualityReportToDisk(r, '../../data/normalized/dataset_quality_report.json'); })\""
+  },
+  "dependencies": {
+    "@adzhub/contracts": "*"
+  }
+}

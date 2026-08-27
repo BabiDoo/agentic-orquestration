@@ -1,0 +1,33 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Catálogo de Eventos e Erros do Microkernel PEV-C (M0-05) > deve serializar e deserializar erro diagnóstico mantendo conformidade com snapshot 1`] = `
+{
+  "code": "LOW_COVERAGE",
+  "details": {
+    "coverage": 0.42,
+    "minThreshold": 0.8,
+  },
+  "phase": "VERIFY",
+  "recoverability": "RECOVERABLE",
+  "safeMessage": "Cobertura de dados insuficiente para embasar conclusões definitivas.",
+  "schemaVersion": "1.0.0",
+  "timestamp": "2026-08-21T10:00:00.000Z",
+}
+`;
+
+exports[`Catálogo de Eventos e Erros do Microkernel PEV-C (M0-05) > deve serializar e deserializar eventos mantendo conformidade com snapshot 1`] = `
+{
+  "correlationId": "corr_test_001",
+  "eventId": "evt_test_001",
+  "eventType": "TASK_ACCEPTED",
+  "payload": {
+    "contractHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  },
+  "phase": "PLAN",
+  "runId": "run_101",
+  "schemaVersion": "1.0.0",
+  "seq": 1,
+  "taskId": "task_s0",
+  "timestamp": "2026-08-21T10:00:00.000Z",
+}
+`;

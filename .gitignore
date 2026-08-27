@@ -1,0 +1,58 @@
+# Dependências
+node_modules/
+**/node_modules/
+
+# Compilação, build e artefatos de monorepo
+dist/
+**/dist/
+build/
+**/build/
+out/
+.next/
+.turbo/
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Testes, cobertura e caches
+coverage/
+.nyc_output/
+.vitestcache/
+.cache/
+.eslintcache
+temp_*
+*.tmp
+
+# Segredos e variáveis de ambiente
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+!.env.example
+
+# Bancos de dados e arquivos locais (SQLite)
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+
+# Logs e sistema operacional
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDEs e Editores
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+
+# Documentação interna
+docs/

@@ -1,0 +1,37 @@
+{
+  "client_id": "cli_housewhey",
+  "tenant_id": "tenant_spot",
+  "version": "1.0.0",
+  "generated_at": "2026-08-23T06:00:00.000Z",
+  "brand_name": "Housewhey",
+  "market_segment": "Nutrição Esportiva Premium / Clean Label",
+  "core_offer": "Suplementação nutricional de alta pureza, com matéria-prima importada rastreável e sem corantes ou espessantes artificiais.",
+  "promise": "Proporcionar a máxima absorção muscular e digestibilidade sem desconforto gástrico ou sabor residual químico.",
+  "proof_elements": [
+    "Certificação internacional IFOS 5 estrelas para pureza e ausência de metais pesados no Ômega 3",
+    "100% da proteína isolada proveniente de vacas alimentadas a pasto (Grass-Fed Glanbia)",
+    "Laudo de pureza lote a lote disponibilizado publicamente no QR code da embalagem",
+    "Mais de 180.000 pedidos entregues com índice de recompra superior a 42%"
+  ],
+  "target_audiences": [
+    {
+      "persona": "Atleta & Praticante Dedicado",
+      "main_driver": "Performance máxima, digestão leve antes/pós treino e alta concentração proteica"
+    },
+    {
+      "persona": "Entusiasta de Longevidade & Saúde",
+      "main_driver": "Suplementação preventiva com segurança biológica, selos de pureza e procedência ética"
+    }
+  ],
+  "tone_of_voice": {
+    "style": "Especialista, transparente, direto e esportivo",
+    "reading_level": "Acessível porém técnico quando necessário",
+    "guidelines": "Focar em benefícios funcionais reais, respaldo científico e experiência sensorial superior"
+  },
+  "forbidden_claims": [
+    "Nunca prometer emagrecimento ou ganho de massa milagroso sem rotina de treino",
+    "Nunca fazer alegações terapêuticas ou de cura de doenças clínicas",
+    "Nunca utilizar nomes de marcas concorrentes de forma pejorativa ou difamatória",
+    "Nunca omitir que suplementos alimentares não substituem uma alimentação equilibrada"
+  ]
+}

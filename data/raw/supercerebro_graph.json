@@ -1,0 +1,190 @@
+{
+  "client_id": "cli_housewhey",
+  "tenant_id": "tenant_spot",
+  "version": "1.0.0",
+  "generated_at": "2026-08-23T06:00:00.000Z",
+  "nodes": [
+    {
+      "id": "hub_spot",
+      "type": "hub",
+      "label": "SPOT Operações de Marketing",
+      "props": {
+        "agency_tier": "Enterprise Partner",
+        "primary_contact": "carolina.mendes@spot.ag"
+      }
+    },
+    {
+      "id": "cli_housewhey",
+      "type": "hub",
+      "label": "Housewhey Suplementos",
+      "props": {
+        "segment": "E-commerce / Nutrição Esportiva",
+        "store_url": "https://housewhey.com.br",
+        "monthly_gmv_tier": "BRL 500k-1M"
+      }
+    },
+    {
+      "id": "p_aline",
+      "type": "person",
+      "label": "Aline Rocha",
+      "props": {
+        "role": "Gestora de Tráfego SPOT",
+        "email": "aline.rocha@spot.ag",
+        "focus_areas": ["Meta Ads", "Otimização de CPA", "Escala de Criativos"]
+      }
+    },
+    {
+      "id": "p_carolina",
+      "type": "person",
+      "label": "Carolina Mendes",
+      "props": {
+        "role": "Gerente de Contas SPOT",
+        "email": "carolina.mendes@spot.ag",
+        "focus_areas": ["Estratégia de Crescimento", "Alinhamento Executivo", "ROAS Global"]
+      }
+    },
+    {
+      "id": "p_luiza",
+      "type": "person",
+      "label": "Luiza Valente",
+      "props": {
+        "role": "Atendimento e Vendas Housewhey",
+        "email": "luiza@housewhey.com.br",
+        "focus_areas": ["WhatsApp Business", "Conversão de Boletos/PIX", "SAC Nutricional"]
+      }
+    },
+    {
+      "id": "p_marcos",
+      "type": "person",
+      "label": "Marcos Silva",
+      "props": {
+        "role": "Head de Marketing Housewhey",
+        "email": "marcos.silva@housewhey.com.br",
+        "focus_areas": ["Posicionamento de Marca", "Aprovação Orçamentária", "Novos Lançamentos"]
+      }
+    },
+    {
+      "id": "camp_whey_isolado",
+      "type": "campaign",
+      "label": "Campanha Whey Isolado Baunilha",
+      "props": {
+        "objective": "CONVERSIONS",
+        "budget_daily_brl": 400.0,
+        "target_cpa_brl": 80.0
+      }
+    },
+    {
+      "id": "camp_omega3",
+      "type": "campaign",
+      "label": "Campanha Lançamento Ômega 3 Ultra",
+      "props": {
+        "objective": "CONVERSIONS",
+        "budget_daily_brl": 300.0,
+        "target_cpa_brl": 65.0
+      }
+    },
+    {
+      "id": "camp_namorados",
+      "type": "campaign",
+      "label": "Campanha Dia dos Namorados",
+      "props": {
+        "objective": "CONVERSIONS",
+        "budget_daily_brl": 350.0,
+        "target_cpa_brl": 75.0
+      }
+    },
+    {
+      "id": "ch_meta",
+      "type": "channel",
+      "label": "Meta Ads",
+      "props": {
+        "platform": "facebook_instagram",
+        "ad_account_id": "act_housewhey_9921"
+      }
+    },
+    {
+      "id": "ch_crm",
+      "type": "channel",
+      "label": "HubSpot CRM",
+      "props": {
+        "platform": "crm_ecom",
+        "portal_id": "portal_housewhey_442"
+      }
+    },
+    {
+      "id": "ch_whatsapp",
+      "type": "channel",
+      "label": "WhatsApp Business Oficial",
+      "props": {
+        "phone_number": "+5511988887777"
+      }
+    },
+    {
+      "id": "asset_ad_01",
+      "type": "asset",
+      "label": "Vídeo Hook Whey Baunilha 900g",
+      "props": {
+        "ad_id": "ad_whey_baunilha_01",
+        "utm_content": "ad_whey_baunilha_01",
+        "format": "video_vertical_9x16",
+        "primary_hook": "Seu whey tem gosto de remédio? Conheça o sabor natural Housewhey."
+      }
+    },
+    {
+      "id": "asset_ad_02",
+      "type": "asset",
+      "label": "Estático Ômega 3 Alta Pureza IFOS",
+      "props": {
+        "ad_id": "ad_omega3_alta_conc_02",
+        "utm_content": "ad_omega3_alta_conc_02",
+        "format": "image_feed_4x5",
+        "primary_hook": "Selo IFOS de Pureza: sem metais pesados e sem retrogosto de peixe."
+      }
+    },
+    {
+      "id": "asset_ad_03",
+      "type": "asset",
+      "label": "Vídeo Namorados Casal Suplementação",
+      "props": {
+        "ad_id": "ad_namorados_casal_03",
+        "utm_content": "ad_namorados_casal_03",
+        "format": "video_vertical_9x16",
+        "primary_hook": "O presente perfeito para quem treina junto: Combo Namorados com 20% OFF."
+      }
+    },
+    {
+      "id": "asset_ad_04",
+      "type": "asset",
+      "label": "Carrossel Whey Sabores Premium",
+      "props": {
+        "ad_id": "ad_whey_sabores_04",
+        "utm_content": "ad_whey_sabores_04",
+        "format": "carousel_square_1x1",
+        "primary_hook": "Baunilha, Chocolate Belga ou Frutas Vermelhas? Escolha o seu sabor favorito."
+      }
+    }
+  ],
+  "edges": [
+    { "from": "p_aline", "to": "hub_spot", "rel": "MEMBER_OF" },
+    { "from": "p_carolina", "to": "hub_spot", "rel": "MEMBER_OF" },
+    { "from": "p_luiza", "to": "cli_housewhey", "rel": "MEMBER_OF" },
+    { "from": "p_marcos", "to": "cli_housewhey", "rel": "MEMBER_OF" },
+    { "from": "p_aline", "to": "ch_meta", "rel": "OPERATES" },
+    { "from": "p_carolina", "to": "cli_housewhey", "rel": "MANAGES" },
+    { "from": "p_marcos", "to": "camp_namorados", "rel": "APPROVES" },
+    { "from": "p_marcos", "to": "camp_omega3", "rel": "APPROVES" },
+    { "from": "p_marcos", "to": "camp_whey_isolado", "rel": "APPROVES" },
+    { "from": "p_aline", "to": "camp_whey_isolado", "rel": "EXECUTES" },
+    { "from": "p_aline", "to": "camp_omega3", "rel": "EXECUTES" },
+    { "from": "p_aline", "to": "camp_namorados", "rel": "EXECUTES" },
+    { "from": "camp_whey_isolado", "to": "ch_meta", "rel": "PUBLISHED_ON" },
+    { "from": "camp_omega3", "to": "ch_meta", "rel": "PUBLISHED_ON" },
+    { "from": "camp_namorados", "to": "ch_meta", "rel": "PUBLISHED_ON" },
+    { "from": "asset_ad_01", "to": "camp_whey_isolado", "rel": "PART_OF" },
+    { "from": "asset_ad_02", "to": "camp_omega3", "rel": "PART_OF" },
+    { "from": "asset_ad_03", "to": "camp_namorados", "rel": "PART_OF" },
+    { "from": "asset_ad_04", "to": "camp_whey_isolado", "rel": "PART_OF" },
+    { "from": "p_luiza", "to": "ch_whatsapp", "rel": "OPERATES" },
+    { "from": "cli_housewhey", "to": "ch_crm", "rel": "TRACKS" }
+  ]
+}

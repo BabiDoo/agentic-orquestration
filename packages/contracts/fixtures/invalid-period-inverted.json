@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "task_invalid_period",
+  "clientId": "cli_housewhey",
+  "tenantId": "hub_spot",
+  "goal": "Teste com período invertido",
+  "timeframe": {
+    "since": "2026-08-25T00:00:00.000Z",
+    "until": "2026-08-10T00:00:00.000Z",
+    "timezone": "America/Sao_Paulo"
+  },
+  "effects": {
+    "allowed": ["read:memory"]
+  },
+  "budgets": {
+    "maxSteps": 10,
+    "maxToolCalls": 5,
+    "maxTokens": 4000,
+    "maxCostBrl": 1.0,
+    "timeoutMs": 10000
+  },
+  "successCriteria": {
+    "minEvidenceCoverage": 0.5,
+    "requireVerifiedClaims": true
+  },
+  "approvalPolicy": {
+    "externalWritesRequireApproval": true,
+    "autoApproveReadOnly": true
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "client_id": "cli_housewhey",
+  "tenant_id": "tenant_spot",
+  "version": "1.0.0",
+  "evaluated_at": "2026-08-20T18:00:00.000Z",
+  "methodology": "SPOT Creative Performance Framework v2.4",
+  "summary": {
+    "total_creatives_analyzed": 4,
+    "recommendations_breakdown": {
+      "SEGUIR": 2,
+      "VARIAR": 1,
+      "PAUSAR": 1
+    }
+  },
+  "creatives": [
+    {
+      "ad_id": "ad_whey_baunilha_01",
+      "utm_content": "ad_whey_baunilha_01",
+      "ad_name": "Vídeo Hook Whey Baunilha 900g",
+      "campaign_id": "camp_whey_isolado",
+      "stage": "TOFU / Descoberta",
+      "hook_score": 8.5,
+      "retention_score": 8.0,
+      "cta_score": 8.2,
+      "overall_score": 8.23,
+      "recommendation": "SEGUIR",
+      "brief_sugerido": {
+        "publico": "Praticantes de musculação e crossfit",
+        "hook": "Quebra de padrão sobre o sabor artificial de suplementos convencionais",
+        "mensagem": "Pureza extrema e sabor natural sem adoçantes químicos agressivos",
+        "cta": "Experimente com garantia de satisfação e frete grátis",
+        "metrica_sucesso": "CPA < BRL 85,00"
+      }
+    },
+    {
+      "ad_id": "ad_whey_sabores_04",
+      "utm_content": "ad_whey_sabores_04",
+      "ad_name": "Carrossel Whey Sabores Premium",
+      "campaign_id": "camp_whey_isolado",
+      "stage": "MOFU / Consideração",
+      "hook_score": 7.8,
+      "retention_score": 7.5,
+      "cta_score": 8.4,
+      "overall_score": 7.9,
+      "recommendation": "SEGUIR",
+      "brief_sugerido": {
+        "publico": "Consumidores recorrentes de proteína e nutrição funcional",
+        "hook": "Dúvida clássica no carrinho: qual sabor combina mais com sua rotina?",
+        "mensagem": "Linha gourmet com alta concentração proteica por dose (27g por scoop)",
+        "cta": "Monte seu combo de sabores com desconto progressivo",
+        "metrica_sucesso": "ROAS > 2.50"
+      }
+    },
+    {
+      "ad_id": "ad_omega3_alta_conc_02",
+      "utm_content": "ad_omega3_alta_conc_02",
+      "ad_name": "Estático Ômega 3 Alta Pureza IFOS",
+      "campaign_id": "camp_omega3",
+      "stage": "BOFU / Decisão Técnica",
+      "hook_score": 7.5,
+      "retention_score": 7.0,
+      "cta_score": 7.2,
+      "overall_score": 7.23,
+      "recommendation": "VARIAR",
+      "brief_sugerido": {
+        "publico": "Público 30+ focado em longevidade, cognição e saúde cardiovascular",
+        "hook": "Seu ômega 3 tem cheiro forte? Teste de oxidação e pureza",
+        "mensagem": "Destaque visual da certificação internacional IFOS 5 estrelas",
+        "cta": "Garanta seu frasco com laudo técnico disponível no site",
+        "metrica_sucesso": "Taxa de conversão > 2.0%"
+      }
+    },
+    {
+      "ad_id": "ad_namorados_casal_03",
+      "utm_content": "ad_namorados_casal_03",
+      "ad_name": "Vídeo Namorados Casal Suplementação",
+      "campaign_id": "camp_namorados",
+      "stage": "Promoção Sazonal",
+      "hook_score": 4.2,
+      "retention_score": 3.8,
+      "cta_score": 4.0,
+      "overall_score": 4.0,
+      "recommendation": "PAUSAR",
+      "brief_sugerido": {
+        "publico": "Casais fitness e compradores de presentes",
+        "hook": "Ângulo sazonal desgastado com alta fadiga de frequência (2.65x)",
+        "mensagem": "Transição do tema comemorativo para benefício contínuo de treino em dupla",
+        "cta": "Pausar veiculação ativa e redirecionar budget para Whey Baunilha",
+        "metrica_sucesso": "Redução imediata de perda de verba com CPA estourado"
+      }
+    }
+  ]
+}
