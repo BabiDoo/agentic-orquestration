@@ -5,20 +5,13 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  // Suporte a Web Fetch Request (Edge / Standard Node.js Fetch)
   if (req instanceof Request || (req && typeof req.url === 'string' && !res)) {
     return handleFetchRequest(req);
   }
 
-  // Suporte a Node.js Serverless Function (req, res)
   const protocol = req.headers['x-forwarded-proto'] || 'https';
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost';
-  
-  // Extrai o caminho original da requisição no Vercel
-  const rawPath = (req.url && req.url !== '/api' && req.url !== '/api/index' && req.url !== '/api/index.js')
-    ? req.url
-    : '/';
-  const fullUrl = `${protocol}://${host}${rawPath}`;
+  const fullUrl = `${protocol}://${host}${req.url || '/'}`;
 
   let body = undefined;
   if (req.method !== 'GET' && req.method !== 'HEAD') {
