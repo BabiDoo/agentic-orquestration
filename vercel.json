@@ -1,9 +1,14 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
   "installCommand": "npm ci",
   "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.js"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -13,7 +18,7 @@
         { "key": "Referrer-Policy", "value": "no-referrer" },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://openrouter.ai; frame-ancestors 'none';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://openrouter.ai https://generativelanguage.googleapis.com; frame-ancestors 'none';"
         }
       ]
     }
