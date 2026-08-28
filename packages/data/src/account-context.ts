@@ -32,11 +32,190 @@ export interface GovernancePauseState {
 }
 
 export interface BuildAccountContextOptions {
+  isApproved?: boolean;
   isReactivated?: boolean;
-  delegationState?: GovernanceDelegationState | null;
   isPaused?: boolean;
   pausedAds?: string[];
-  pauseState?: GovernancePauseState | null;
+  pauseState?: GovernancePauseState;
+  delegationState?: GovernanceDelegationState;
+  compact?: boolean;
+  isInformational?: boolean;
+}
+
+export interface AccountDataset {
+  account: {
+    id: string;
+    name: string;
+    partnerOrganizations: string[];
+  };
+
+  people: Array<{
+    id: string;
+    name: string;
+    role: string;
+    organization: string;
+  }>;
+
+  governance: {
+    actionPolicies: Array<{
+      action: string;
+      effect: string;
+      authorizedExecutorIds: string[];
+      requiresApproval: boolean;
+      authorizedApproverIds: string[];
+      actionCard?: {
+        title: string;
+        buttonText: string;
+      };
+    }>;
+  };
+
+  campaigns: Array<{
+    id: string;
+    name: string;
+    status: string;
+  }>;
+
+  metrics: Record<string, number | string | null>;
+}
+
+export function getAccountDataset(options: BuildAccountContextOptions = {}): AccountDataset {
+  const brandName = RAW_MAPA_SOLUCAO_DATA.brand_name || 'Housewhey';
+  const persons = RAW_GRAPH_DATA.nodes.filter((n) => n.type === 'person');
+
+  const people = persons.map((p) => {
+    const props = p.props as Record<string, any>;
+    return {
+      id: p.id,
+      name: p.label,
+      role: props.role || 'Membro da Equipe',
+      organization: props.company || (props.role?.includes('SPOT') ? 'SPOT' : brandName)
+    };
+  });
+
+  const campaigns = RAW_META_ADS_DATA.campaigns.map((c) => ({
+    id: c.campaign_id,
+    name: c.campaign_name,
+    status: options.isReactivated ? 'ACTIVE' : c.status
+  }));
+
+  const totalSpend = RAW_META_ADS_DATA.campaigns.reduce(
+    (acc, camp) => acc + camp.ads.reduce((a, ad) => a + ad.spend_brl, 0),
+    0
+  );
+  const totalRevenue = RAW_CRM_LEADS_DATA.summary.total_revenue_brl;
+  const approvedDeals = RAW_CRM_LEADS_DATA.deals.filter((d) => d.status === 'venda').length;
+  const totalLeads = 165;
+
+  return {
+    account: {
+      id: 'cli_housewhey',
+      name: brandName,
+      partnerOrganizations: ['SPOT']
+    },
+    people,
+    governance: {
+      actionPolicies: [
+        {
+          action: 'EXTERNAL_WRITE_PAUSE',
+          effect: 'write:meta_ads',
+          authorizedExecutorIds: ['p_aline'],
+          requiresApproval: options.isApproved ? false : true,
+          authorizedApproverIds: ['p_marcos'],
+          actionCard: {
+            title: options.isApproved ? 'Confirmar Pausa no Meta Ads' : 'Submeter Proposta de Pausa no Meta Ads',
+            buttonText: options.isApproved ? 'Executar Pausa Auditada' : 'Enviar Proposta para Marcos Silva'
+          }
+        },
+        {
+          action: 'APPROVE_PROPOSAL',
+          effect: 'governance:approval',
+          authorizedExecutorIds: ['p_marcos', 'p_carolina'],
+          requiresApproval: false,
+          authorizedApproverIds: ['p_marcos', 'p_carolina'],
+          actionCard: {
+            title: 'Confirmar Devolutiva de Aprovação para Aline Rocha',
+            buttonText: 'Confirmar Devolutiva de Aprovação'
+          }
+        },
+        {
+          action: 'EXTERNAL_WRITE_REACTIVATE',
+          effect: 'write:meta_ads',
+          authorizedExecutorIds: ['p_aline'],
+          requiresApproval: options.isReactivated ? false : true,
+          authorizedApproverIds: ['p_marcos'],
+          actionCard: {
+            title: options.isReactivated ? 'Confirmar Reativação no Meta Ads' : 'Submeter Proposta de Reativação no Meta Ads',
+            buttonText: options.isReactivated ? 'Executar Reativação Auditada' : 'Enviar Proposta para Marcos Silva'
+          }
+        },
+        {
+          action: 'BUDGET_REALLOCATION',
+          effect: 'write:meta_ads_budget',
+          authorizedExecutorIds: ['p_carolina', 'p_aline', 'p_marcos'],
+          requiresApproval: options.isApproved ? false : true,
+          authorizedApproverIds: ['p_marcos'],
+          actionCard: {
+            title: options.isApproved ? 'Confirmar Remanejamento de Verba' : 'Submeter Proposta de Remanejamento',
+            buttonText: options.isApproved ? 'Executar Remanejamento Auditado' : 'Enviar Proposta para Marcos Silva'
+          }
+        },
+        {
+          action: 'UPDATE_BID_STRATEGY',
+          effect: 'write:meta_ads_bidding',
+          authorizedExecutorIds: ['p_aline', 'p_carolina'],
+          requiresApproval: options.isApproved ? false : true,
+          authorizedApproverIds: ['p_marcos'],
+          actionCard: {
+            title: options.isApproved ? 'Confirmar Ajuste de Estratégia de Lance' : 'Submeter Ajuste de Estratégia de Lance',
+            buttonText: options.isApproved ? 'Executar Ajuste Auditado' : 'Enviar para Aprovação de Marcos Silva'
+          }
+        },
+        {
+          action: 'APPLY_SAC_DISCOUNT',
+          effect: 'write:sac_discounts',
+          authorizedExecutorIds: ['p_luiza'],
+          requiresApproval: options.isApproved ? false : true,
+          authorizedApproverIds: ['p_marcos', 'p_carolina'],
+          actionCard: {
+            title: options.isApproved ? 'Confirmar Concessão de Cupom SAC' : 'Submeter Autorização de Cupom SAC',
+            buttonText: options.isApproved ? 'Conceder Cupom Auditado' : 'Enviar Autorização de Cupom'
+          }
+        },
+        {
+          action: 'SUBMIT_GOVERNANCE_RULE',
+          effect: 'write:governance_rules',
+          authorizedExecutorIds: ['p_carolina', 'p_aline'],
+          requiresApproval: true,
+          authorizedApproverIds: ['p_marcos'],
+          actionCard: {
+            title: 'Submeter Regra Formal de Governança',
+            buttonText: 'Enviar Proposta para Marcos Silva'
+          }
+        },
+        {
+          action: 'REALLOCATE_FUNDS',
+          effect: 'write:meta_ads_budget',
+          authorizedExecutorIds: ['p_marcos', 'p_carolina', 'p_aline'],
+          requiresApproval: true,
+          authorizedApproverIds: ['p_marcos'],
+          actionCard: {
+            title: 'Confirmar Remanejamento de Verba',
+            buttonText: 'Enviar para Aprovação'
+          }
+        }
+      ]
+    },
+    campaigns,
+    metrics: {
+      totalSpend,
+      totalRevenue,
+      roas: totalSpend > 0 ? Number((totalRevenue / totalSpend).toFixed(2)) : 3.48,
+      cpl: totalSpend > 0 ? Number((totalSpend / totalLeads).toFixed(2)) : 96.97,
+      cac: approvedDeals > 0 ? Number((totalSpend / approvedDeals).toFixed(2)) : 115.11,
+      reconciliationRate: 86.4
+    }
+  };
 }
 
 function formatCurrency(value: number): string {
@@ -110,14 +289,7 @@ export function buildAccountGroundingContext(options: BuildAccountContextOptions
   const overallRoas = totalSpend > 0 ? (totalRevenue / totalSpend).toFixed(2) + 'x' : '3.48x';
 
   const metaAdsHeader = `- Investimento Total: ${formatCurrency(totalSpend)} | ${totalImpressions.toLocaleString('pt-BR')} impressões | ${totalClicks.toLocaleString('pt-BR')} cliques | CTR médio: ${avgCtr} | CPC médio: ${avgCpc} | ROAS: ${overallRoas}`;
-  let governanceNote = '';
-  if (isReactivated) {
-    governanceNote = `\n=== NOTA DE ESTADO DE GOVERNANÇA ===\nO operador APROVOU e COMMITOU a REATIVAÇÃO de todos os ativos no SQLite. NÃO existem ativos pausados na conta Housewhey. 100% dos ativos estão atualmente Ativos. Se o usuário perguntar se existe algum ativo pausado, responda categoricamente que NÃO existem ativos pausados no momento.`;
-  } else if (isPaused) {
-    governanceNote = `\n=== NOTA DE ESTADO DE GOVERNANÇA & SUPERCÉREBRO ===\nO operador / Marcos Silva APROVOU e COMMITOU formalmente a PAUSA dos anúncios saturados ("ad_namorados_casal_03" e "ad_whey_sabores_04") no SQLite (Status: COMMITTED). A proposta de pausa técnica foi formalizada, aprovada expressamente e commitada com sucesso no sistema pelo operador humano. Se o usuário perguntar o status atual dos anúncios, responda categoricamente CONFIRMANDO que AMBOS os criativos estão com Status: Pausado no Meta Ads ("ad_namorados_casal_03" e "ad_whey_sabores_04") e que a decisão JÁ FOI formalmente aprovada e commitada no sistema de governança (COMMITTED). NUNCA diga que a proposta ainda não foi commitada ou que o anúncio "ad_whey_sabores_04" permanece Ativo sem aprovação.`;
-  }
-
-  const metaAdsSection = `${metaAdsHeader}\n${campaignSections.join('\n')}${governanceNote}`;
+  const metaAdsSection = `${metaAdsHeader}\n${campaignSections.join('\n')}`;
 
   // 2. CRM HubSpot - Resumo Dinâmico de Deals e Atribuição
   const deals = RAW_CRM_LEADS_DATA.deals;
@@ -125,9 +297,16 @@ export function buildAccountGroundingContext(options: BuildAccountContextOptions
   const approvedRev = approvedDeals.reduce((sum, d) => sum + d.value_brl, 0);
   const ticketMedio = approvedDeals.length > 0 ? formatCurrency(approvedRev / approvedDeals.length) : 'R$ 240,16';
 
-  const crmSection = `- Volume de Pedidos: ${deals.length} pedidos auditados | Faturamento: ${formatCurrency(totalRevenue)} | Ticket Médio: ${ticketMedio}
+  const crmSection = `- Período Analisado: 01/08/2026 a 20/08/2026 (Agosto/2026)
+- Volume de Pedidos Auditados: ${deals.length} pedidos no CRM HubSpot | Faturamento Total: ${formatCurrency(totalRevenue)} | Ticket Médio: ${ticketMedio}
 - Status dos Deals: ${approvedDeals.length} Vendas Aprovadas (${formatCurrency(approvedRev)}) | 8 Abandonos de Carrinho | 6 Boletos/PIX Pendentes
-- Cobertura de Rastreamento UTM: 86.4% de pedidos reconciliados com sucesso ponta a ponta.`;
+- Reconciliação Meta Ads × CRM: 142 pedidos vinculados por UTMs/HubSpot (86.4% de taxa de reconciliação) | 23 pedidos sem origem confirmada (13.6% não reconciliados)
+- Performance & Métricas Financeiras:
+  • Investimento Meta Ads: ${formatCurrency(totalSpend)} | Cliques: ${totalClicks.toLocaleString('pt-BR')} (CTR: ${avgCtr}) | Leads: 165 | Vendas Aprovadas: ${approvedDeals.length}
+  • CPL (Custo por Lead): ${formatCurrency(totalSpend / 165)} (Fórmula: Investimento ${formatCurrency(totalSpend)} ÷ 165 leads)
+  • CAC (Custo de Aquisição): ${formatCurrency(totalSpend / approvedDeals.length)} (Fórmula: Investimento ${formatCurrency(totalSpend)} ÷ ${approvedDeals.length} vendas)
+  • ROAS (Retorno em Mídia): ${(totalRevenue / totalSpend).toFixed(2)}x (Fórmula: Receita ${formatCurrency(totalRevenue)} ÷ Investimento ${formatCurrency(totalSpend)})
+  • Taxa de Reconciliação: 86.4% (Fórmula: 142 pedidos reconciliados ÷ 165 total de pedidos)`;
 
   // 3. Mapa da Solução e Produtos (RAW_MAPA_SOLUCAO_DATA)
   const mapData = RAW_MAPA_SOLUCAO_DATA;
@@ -141,33 +320,34 @@ export function buildAccountGroundingContext(options: BuildAccountContextOptions
 - Personas: ${targetAudiences}.
 - Diferencial: ${proofPoints}.`;
 
-  // 4. Supercérebro Equipe & Grafo (RAW_GRAPH_DATA)
+  // 4. Supercérebro Equipe & Governança (RAW_GRAPH_DATA)
   const persons = RAW_GRAPH_DATA.nodes.filter((n) => n.type === 'person');
   const teamLines = persons.map((p) => {
     const props = p.props as Record<string, any>;
     return `- ${p.label}: ${props.role} (${props.focus_areas ? props.focus_areas.join(', ') : 'Operação'}).`;
   });
 
-  let delegationSection = '- Registros de Governança: Nenhuma proposta de pausa foi formalmente commitada no sistema ainda.';
-  if (isPaused) {
-    delegationSection = `- Registros de Governança & Decisão de Pausa Commitada no SQLite:
-  • Decisão: Pausa dos Criativos Saturados ("ad_namorados_casal_03" e "ad_whey_sabores_04") e Realocação Orçamentária.
-  • Status: COMMITTED (Aprovada expressamente pelo operador/Marcos Silva e commitada formalmente no SQLite).
-  • Status Operacional no Meta Ads: "ad_namorados_casal_03" -> Pausado | "ad_whey_sabores_04" -> Pausado.
-  • Fato Auditado no Supercérebro: Marcos Silva aprovou expressamente a proposta formal de pausa e a decisão foi COMMITADA no SQLite pelo operador. Ambos os anúncios estão oficialmente Pausados no Meta Ads e a verba diária foi remanejada para os criativos campeões "ad_whey_baunilha_01" e "ad_omega3_alta_conc_02".
-  • Quando o usuário perguntar o status dos anúncios, se foram pausados ou se a proposta foi commitada, responda categoricamente CONFIRMANDO que a proposta formal foi aprovada e commitada (COMMITTED) e que ambos os criativos estão com Status: Pausado no Meta Ads.`;
+  const governanceRecords: string[] = [];
+  if (isReactivated) {
+    governanceRecords.push(
+      '- Registro de Governança: REATIVAÇÃO_GERAL (Status: COMMITTED no SQLite | 100% dos criativos ativos).'
+    );
+  } else if (isPaused) {
+    const pausedList = pausedAds.join(', ');
+    governanceRecords.push(
+      `- Registro de Governança: PAUSA_OPERACIONAL (Status: COMMITTED no SQLite | Criativo pausado: ${pausedList} | Executor: Aline Rocha | Aprovador: Marcos Silva).`
+    );
   } else if (delegation && delegation.isDelegated) {
-    delegationSection = `- Registros de Governança & Proposta Formal Commitada no SQLite:
-  • Título: "${delegation.proposalTitle || 'Proposta de Pausa Operacional e Realocação Orçamentária'}"
-  • Status: COMMITTED (Aprovada pelo operador e commitada com sucesso no SQLite em ${delegation.committedAt || 'agosto/2026'}, Hash: ${delegation.commitHash || 'a7f9b2c8e1d4...'})
-  • Responsável Oficial Designada: ${delegation.delegatedTo}
-  • Fato Auditado no Supercérebro: Marcos Silva (Head de Marketing da Housewhey) JÁ RECEBEU a proposta formal de pausa dos anúncios saturados ("ad_namorados_casal_03" e "ad_whey_sabores_04") e realocação de verba enviada por Carolina Mendes/SPOT, APROVOU expressamente e a decisão foi COMMITADA no SQLite pelo operador. A responsabilidade operacional pela execução técnica no Meta Ads e CRM está oficialmente delegada para ${delegation.delegatedTo}.
-  • Quando o usuário perguntar se Marcos recebeu a proposta formal da Carol/SPOT, se a proposta foi enviada/aprovada, quem ficou responsável ou qual o status atual, responda categoricamente CONFIRMANDO que a proposta formal já foi enviada, aprovada por Marcos Silva e commitada no sistema (COMMITTED), estando a execução delegada para ${delegation.delegatedTo}. NÃO diga que não há registro ou que a proposta está pendente de envio.`;
+    governanceRecords.push(
+      `- Registro de Governança: ${delegation.proposalTitle || 'Proposta de Realocação Orçamentária'} (Status: COMMITTED no SQLite | Delegado para: ${delegation.delegatedTo} | Aprovador: Marcos Silva).`
+    );
+  } else {
+    governanceRecords.push('- Registro de Governança: Nenhuma pendência de escrita externa em aberto no momento.');
   }
 
   const teamSection = `${teamLines.join('\n')}
-- Política de Governança: Escrita externa (ex: pausar campanhas no Meta Ads) requer aprovação formal expressa antes do commit.
-${delegationSection}`;
+- Matriz de Alçadas: Aline Rocha (Operação direta Meta Ads), Carolina Mendes (Gerência & Propostas), Marcos Silva (Aprovação Executiva), Luiza Valente (Atendimento WhatsApp).
+${governanceRecords.join('\n')}`;
 
   // 5. Supercérebro Conversas & WhatsApp (RAW_CONVERSAS_DATA)
   const threads = RAW_CONVERSAS_DATA.whatsapp_threads;
@@ -195,21 +375,38 @@ ${msgLines.join('\n')}
 ${meetPoints}`;
 
   // 6. Supercérebro Linha do Tempo & Grafo (RAW_TIMELINE_DATA)
-  const timelineTitles = RAW_TIMELINE_DATA.events.map((e) => e.title).join(' -> ');
-  const timelineSection = `- Timeline: ${isReactivated ? `${timelineTitles} -> Commit de Reativação Operacional (evt_tl_08 - COMMITTED no SQLite pelo operador).` : isPaused ? `${timelineTitles} -> Commit de Pausa Operacional (evt_tl_09 - COMMITTED no SQLite pelo operador).` : `${timelineTitles} -> Aprovações Pendentes.`}
+  const timelineTitles = RAW_TIMELINE_DATA.events.map((e) => `${e.occurred_at.slice(8, 10)}/08: ${e.title}`).join('\n  • ');
+  const timelineSection = `- Linha do Tempo Canônica:\n  • ${timelineTitles}
 - Grafo: Aline (OPERATES Meta Ads), Carolina (MEMBER_OF SPOT), Marcos (APPROVES Propostas), Luiza (MEMBER_OF Vendas/WhatsApp).`;
 
   // 7. App Análise de Criativos (RAW_ANALISE_CRIATIVOS_DATA)
   const creatives = RAW_ANALISE_CRIATIVOS_DATA.creatives;
-  const topCreative = (creatives && creatives.length > 0)
-    ? (creatives.find((c) => c.overall_score >= 8.0) || creatives[0])
-    : null;
-  const creativeSection = topCreative
-    ? `- Top Performer: ${topCreative.ad_id} (Hook ${topCreative.hook_score}, Retenção ${topCreative.retention_score}, CTA ${topCreative.cta_score}) -> Recomendação: ${topCreative.recommendation}.
-- Gargalo/Saturação: ${isPaused ? 'ad_whey_sabores_04 e ad_namorados_casal_03 -> Status: PAUSADOS (Commit de pausa auditado no SQLite).' : 'ad_whey_sabores_04 (CTA 4.0) e ad_namorados_casal_03 (Frequência 2.65x, Hook 4.2) -> Recomendação: PAUSAR e substituir.'}`
-    : `- Top Performer: ad_whey_baunilha_01 -> Recomendação: SEGUIR.`;
+  const creativeLines = creatives.map((c) => {
+    const isPausedCreative = !isReactivated && (isPaused ? pausedAds.includes(c.ad_id) : c.ad_id === 'ad_namorados_casal_03');
+    const statusLabel = isPausedCreative ? 'Pausado' : 'Ativo';
+    return `- Criativo "${c.ad_id}": Hook ${c.hook_score.toFixed(1)} | Retenção ${c.retention_score.toFixed(1)} | CTA ${c.cta_score.toFixed(1)} | Recomendação: ${c.recommendation} | Status: ${statusLabel}`;
+  });
+  const creativeSection = creativeLines.join('\n');
 
-  return `=== 1. META ADS (Campanhas, Criativos e Métricas) ===
+  const dataset = getAccountDataset(options);
+  const accountContextStr = `=== ACCOUNT_CONTEXT (Contexto Canônico da Conta Ativa & Governança) ===\n${JSON.stringify(dataset, null, 2)}`;
+
+  if (options.compact || options.isInformational) {
+    return `${accountContextStr}
+
+=== 1. META ADS (Resumo) ===
+${metaAdsSection}
+
+=== 2. CRM HUBSPOT (Resumo) ===
+${crmSection}
+
+=== 4. SUPERCÉREBRO (Equipe & Governança) ===
+${teamSection}`;
+  }
+
+  return `${accountContextStr}
+
+=== 1. META ADS (Campanhas, Criativos e Métricas) ===
 ${metaAdsSection}
 
 === 2. CRM HUBSPOT (Vendas, Leads & Atribuição) ===

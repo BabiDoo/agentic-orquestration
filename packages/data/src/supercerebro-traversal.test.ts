@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { SupercerebroTraversalEngine } from './supercerebro-traversal.js';
+import { SupercerebroTraversalEngine, getSupercerebroOperatorProfiles } from './supercerebro-traversal.js';
 import { AdzHubDatabase, createDatabase } from './sqlite-database.js';
 
 describe('@adzhub/data - M5-08 Traversal limitado do Supercérebro', () => {
@@ -88,5 +88,45 @@ describe('@adzhub/data - M5-08 Traversal limitado do Supercérebro', () => {
 
     expect(limited.nodes.length).toBeLessThanOrEqual(3);
     expect(limited.isTruncated).toBe(true);
+  });
+
+  describe('getSupercerebroOperatorProfiles - Governança e Pendências por Política', () => {
+    it('não exibe pendências para o aprovador (Marcos) antes de uma proposta ser delegada', () => {
+      const profiles = getSupercerebroOperatorProfiles({});
+      const marcos = profiles.find((p) => p.id === 'p_marcos')!;
+      expect(marcos.pendencies).toEqual([]);
+    });
+
+    it('mantém outras tarefas ativas ao delegar uma proposta específica e atribui aprovação a Marcos Silva', () => {
+      const options = {
+        delegationState: {
+          isDelegated: true,
+          delegatedTo: 'Marcos Silva',
+          proposalTitle: 'Submeter Proposta de Pausa no Meta Ads',
+          actionType: 'EXTERNAL_WRITE_PAUSE'
+        }
+      };
+
+      const profiles = getSupercerebroOperatorProfiles(options);
+      const aline = profiles.find((p) => p.id === 'p_aline')!;
+      const luiza = profiles.find((p) => p.id === 'p_luiza')!;
+      const marcos = profiles.find((p) => p.id === 'p_marcos')!;
+
+      // Aline: Tarefa 1 (Pausa) fica "Aguardando Aprovação", Tarefa 2 (Lance) fica "Pendente" (disponível)
+      expect(aline.pendencies[0]!.status).toBe('Aguardando Aprovação');
+      expect(aline.pendencies[0]!.btnText).toBe('Aguardando Aprovação de Marcos Silva');
+      expect(aline.pendencies[1]!.status).toBe('Pendente');
+      expect(aline.pendencies[1]!.btnText).toBe('Enviar para Aprovação de Marcos Silva');
+
+      // Luiza: Tarefas permanecem ativas ("Pendente")
+      expect(luiza.pendencies[0]!.status).toBe('Pendente');
+      expect(luiza.pendencies[1]!.status).toBe('Pendente');
+
+      // Marcos: Recebe o card de aprovação para a proposta de pausa da Aline
+      const marcosPauseAppr = marcos.pendencies.find((p) => p.title.includes('Pausa'));
+      expect(marcosPauseAppr).toBeDefined();
+      expect(marcosPauseAppr?.status).toBe('Pendente');
+      expect(marcosPauseAppr?.btnText).toBe('Aprovar Proposta →');
+    });
   });
 });

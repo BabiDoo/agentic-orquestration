@@ -3,7 +3,7 @@
  * Definições canônicas de contratos, schemas Zod, eventos e invariantes do Microkernel PEV-C.
  */
 
-export const CONTRACTS_VERSION = '1.0.0';
+export const CONTRACTS_VERSION = '1.1';
 
 export interface BaseEntity {
   id: string;

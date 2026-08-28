@@ -81,7 +81,7 @@ export class BasicReactEngine {
     const startTime = performance.now();
     const runId = `run_react_${randomUUID().slice(0, 8)}`;
     const { taskContract, modelAdapter } = options;
-    const model = options.model ?? 'openai/gpt-4o-mini';
+    const model = options.model ?? 'google/gemini-2.0-flash';
 
     // 1. Filtragem estrita de ferramentas autorizadas pelo TaskContract
     const allowedEffectsSet = new Set(taskContract.effects.allowed);

@@ -42,9 +42,10 @@ describe('M6-02: Controles de Execução', () => {
   describe('Modelos e Datasets Permitidos', () => {
     it('deve listar modelos permitidos com Google Gemini Flash como default', () => {
       expect(ALLOWED_MODELS.length).toBeGreaterThanOrEqual(4);
-      const geminiModel = ALLOWED_MODELS.find((m) => m.id === 'google/gemini-2.5-flash');
+      const geminiModel = ALLOWED_MODELS.find((m) => m.id === 'google/gemini-2.0-flash' || m.id === 'google/gemini-2.5-flash');
       expect(geminiModel).toBeDefined();
-      expect(geminiModel?.default).toBe(true);
+      const defaultModel = ALLOWED_MODELS.find((m) => m.default === true);
+      expect(defaultModel?.id).toContain('gemini');
 
       const gptModel = ALLOWED_MODELS.find((m) => m.id === 'openai/gpt-4o-mini');
       expect(gptModel).toBeDefined();

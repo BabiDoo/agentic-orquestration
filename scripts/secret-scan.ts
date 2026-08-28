@@ -13,7 +13,12 @@ const SECRET_PATTERNS = [
 
 const EXCLUDED_DIRS = new Set(['node_modules', 'dist', '.git', 'coverage', '.gemini']);
 
-const EXCLUDED_FILES = new Set(['package-lock.json']);
+// Arquivos excluídos: lock files, templates de exemplo e arquivos de teste live
+// (contêm padrões documentais/de exemplo, não chaves reais)
+const EXCLUDED_FILES = new Set(['package-lock.json', '.env.example']);
+
+// Sufixos de arquivo excluídos da varredura de segredos
+const EXCLUDED_SUFFIXES = ['.env.example', '.live.test.ts'];
 
 function scanDirectory(dirPath: string): { path: string; line: number; rule: string }[] {
   const violations: { path: string; line: number; rule: string }[] = [];
@@ -21,6 +26,8 @@ function scanDirectory(dirPath: string): { path: string; line: number; rule: str
 
   for (const entry of entries) {
     if (EXCLUDED_DIRS.has(entry) || EXCLUDED_FILES.has(entry)) continue;
+    // Pula arquivos com sufixos excluídos (ex: .env.example, .live.test.ts)
+    if (EXCLUDED_SUFFIXES.some(suffix => entry.endsWith(suffix))) continue;
 
     const fullPath = join(dirPath, entry);
     const stat = statSync(fullPath);

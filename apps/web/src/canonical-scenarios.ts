@@ -324,8 +324,8 @@ export interface ModelOption {
 }
 
 export const ALLOWED_MODELS: readonly ModelOption[] = [
-  { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash (Direct / AI Studio)', default: true },
-  { id: 'google/gemini-2.0-flash', name: 'Google Gemini 2.0 Flash (Direct / AI Studio)' },
+  { id: 'google/gemini-2.0-flash', name: 'Google Gemini 2.0 Flash (Direct / AI Studio)', default: true },
+  { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash (Direct / AI Studio)' },
   { id: 'google/gemini-1.5-flash', name: 'Google Gemini 1.5 Flash (Direct / AI Studio)' },
   { id: 'google/gemini-2.5-pro', name: 'Google Gemini 2.5 Pro (Direct / AI Studio)' },
   { id: 'google/gemini-1.5-pro', name: 'Google Gemini 1.5 Pro (Direct / AI Studio)' },

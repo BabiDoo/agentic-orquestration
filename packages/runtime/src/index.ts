@@ -21,6 +21,7 @@ export * from './event-log.js';
 export * from './checkpoint-replay.js';
 export * from './circuit-breaker.js';
 export * from './attribute-replan.js';
+export * from './dynamic-intent-registry.js';
 
 export interface RuntimeConfig {
   mode: ExecutionMode;

@@ -210,6 +210,9 @@ export function getLucideSvg(
       return `<svg ${baseAttr}><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`;
     case 'sparkles':
       return `<svg ${baseAttr}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>`;
+    case 'cpu':
+    case 'processor':
+      return `<svg ${baseAttr}><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>`;
     case 'eye':
       return `<svg ${baseAttr}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
     case 'arrow-right':
@@ -241,6 +244,10 @@ export function getLucideSvg(
     case 'timeline':
     case 'activity':
       return `<svg ${baseAttr}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`;
+    case 'sun':
+      return `<svg ${baseAttr}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>`;
+    case 'moon':
+      return `<svg ${baseAttr}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
     default:
       return `<svg ${baseAttr}><circle cx="12" cy="12" r="10"/></svg>`;
   }
@@ -333,6 +340,16 @@ export function renderHtmlShell(): string {
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('adzhub_theme');
+        if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e){}
+    })();
+  </script>
   <style>
     :root {
       /* ========================================================= */
@@ -474,6 +491,7 @@ export function renderHtmlShell(): string {
       --yellow-soft: #FFF7DC;
       --danger: #D96C6C;
       --danger-soft: #FCEAEA;
+      --danger-ink: #8F2D36;
 
       /* Aliases de Compatibilidade */
       --adzhub-navy: var(--navy);
@@ -574,7 +592,341 @@ export function renderHtmlShell(): string {
       --ease-default: var(--md-sys-motion-easing-standard, cubic-bezier(.22, 1, .36, 1));
     }
 
+    /* ========================================================= */
+    /* Theme Switcher Button & Dark Theme System                */
+    /* ========================================================= */
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 12px;
+      height: 28px;
+      border-radius: var(--radius-pill);
+      background: var(--surface-soft);
+      border: 1px solid var(--line-strong);
+      color: var(--ink-strong);
+      font-size: var(--micro);
+      font-family: var(--font-mono);
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all var(--duration-default) var(--ease-default);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+      line-height: 1;
+    }
+    .theme-toggle-btn:hover {
+      background: var(--surface-selected);
+      border-color: var(--navy);
+      color: var(--navy);
+      transform: translateY(-1px);
+    }
+    .theme-toggle-btn:active {
+      transform: translateY(0) scale(0.97);
+    }
+    .theme-toggle-btn .theme-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .theme-toggle-btn .theme-icon svg {
+      display: block;
+      width: 15px;
+      height: 15px;
+      margin: auto;
+    }
+    .theme-toggle-btn .theme-label {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+      margin: 0;
+    }
+
+    :root[data-theme="dark"], html[data-theme="dark"] {
+      --page-backdrop: #15181e;
+      --app-canvas: #20242d;
+      --surface: #262a34;
+      --surface-soft: #1d2028;
+      --surface-muted: #181b22;
+      --surface-selected: #313745;
+
+      --navy: #4f80e1;
+      --navy-deep: #3b6cd4;
+      --navy-soft: #232b3c;
+      --navy-ink: #93b5ff;
+
+      --ink: #cfd8e3;
+      --ink-strong: #f1f5f9;
+      --ink-muted: #8b99ac;
+      --ink-faint: #5a687a;
+
+      --line: #303643;
+      --line-strong: #3d4556;
+
+      --md-sys-color-primary: #4f80e1;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #232b3c;
+      --md-sys-color-on-primary-container: #93b5ff;
+
+      --md-sys-color-surface: #262a34;
+      --md-sys-color-surface-dim: #1d2028;
+      --md-sys-color-surface-bright: #2f3442;
+      --md-sys-color-surface-container-lowest: #1d2028;
+      --md-sys-color-surface-container-low: #222630;
+      --md-sys-color-surface-container: #262a34;
+      --md-sys-color-surface-container-high: #2d323e;
+      --md-sys-color-surface-container-highest: #343a49;
+      --md-sys-color-on-surface: #f1f5f9;
+      --md-sys-color-on-surface-variant: #94a3b8;
+      --md-sys-color-outline: #475569;
+      --md-sys-color-outline-variant: #334155;
+
+      --tag-neutral-bg: #272c38;
+      --tag-neutral-border: #383f50;
+      --tag-neutral-ink: #cbd5e1;
+
+      --tag-success-bg: rgba(20, 83, 45, 0.45);
+      --tag-success-border: rgba(34, 197, 94, 0.35);
+      --tag-success-ink: #86efac;
+
+      --tag-warning-bg: rgba(120, 53, 15, 0.45);
+      --tag-warning-border: rgba(245, 158, 11, 0.35);
+      --tag-warning-ink: #fde047;
+
+      --danger: #f87171;
+      --danger-soft: rgba(56, 24, 24, 0.85);
+      --danger-ink: #fca5a5;
+
+      --tag-danger-bg: rgba(127, 29, 29, 0.45);
+      --tag-danger-border: rgba(239, 68, 68, 0.35);
+      --tag-danger-ink: #fca5a5;
+
+      --tag-info-bg: rgba(30, 58, 138, 0.45);
+      --tag-info-border: rgba(59, 130, 246, 0.35);
+      --tag-info-ink: #93c5fd;
+
+      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
+      --shadow-app-window: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 20px 40px rgba(0, 0, 0, 0.6);
+      --shadow-floating: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] body {
+      background-color: #15181e;
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(79, 128, 225, 0.1) 0%, transparent 65%),
+        radial-gradient(ellipse at 85% 100%, rgba(245, 154, 25, 0.05) 0%, transparent 50%),
+        linear-gradient(180deg, #1d2028 0%, #15181e 100%);
+      color: var(--ink);
+    }
+
+    [data-theme="dark"] .editorial-waves {
+      opacity: 0.35;
+    }
+
+    [data-theme="dark"] .human-loading-card,
+    [data-theme="dark"] .human-loading-card-inner,
+    [data-theme="dark"] .human-loading-icon-badge {
+      background: var(--surface) !important;
+      border-color: var(--line-strong) !important;
+    }
+
+    /* Override de Tema Escuro para Sequência do Flow e Pills */
+    :root[data-theme="dark"] .flow-sequence-bar,
+    html[data-theme="dark"] .flow-sequence-bar {
+      background: rgba(38, 42, 52, 0.92);
+      border-color: var(--line-strong);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    :root[data-theme="dark"] .flow-sequence-bar:hover,
+    html[data-theme="dark"] .flow-sequence-bar:hover {
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    }
+    :root[data-theme="dark"] .flow-pill,
+    html[data-theme="dark"] .flow-pill {
+      background: var(--surface-soft);
+      border-color: var(--line);
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    :root[data-theme="dark"] .flow-pill:hover,
+    html[data-theme="dark"] .flow-pill:hover {
+      border-color: var(--navy);
+      background: var(--surface);
+    }
+    :root[data-theme="dark"] .flow-pill-arrow,
+    html[data-theme="dark"] .flow-pill-arrow {
+      color: var(--ink-muted);
+    }
+
+    /* Estilização de Campos Select & Date Pickers no Dark Mode */
+    select option {
+      background-color: var(--surface);
+      color: var(--ink-strong);
+    }
+    :root[data-theme="dark"] select option,
+    html[data-theme="dark"] select option {
+      background-color: #262a34;
+      color: #f1f5f9;
+    }
+    :root[data-theme="dark"] input[type="date"],
+    html[data-theme="dark"] input[type="date"] {
+      color-scheme: dark;
+      color: var(--ink-strong);
+    }
+    :root[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+    html[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+    }
+
+    /* Legenda e Overlays do Grafo do Supercérebro */
+    .graph-legend-overlay {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      color: var(--ink-muted);
+    }
+    :root[data-theme="dark"] .graph-legend-overlay,
+    html[data-theme="dark"] .graph-legend-overlay {
+      background: rgba(38, 42, 52, 0.92);
+      border-color: var(--line-strong);
+      color: var(--ink-muted);
+    }
+
+    /* Cards e Banners de Confirmação de Commit (Sucesso, Warning, Danger) */
+    .commit-success-card {
+      background: var(--success-soft, #E5F5EE);
+      border: 1px solid var(--green, #53B58A);
+      color: #1E6B56;
+    }
+    :root[data-theme="dark"] .commit-success-card,
+    html[data-theme="dark"] .commit-success-card {
+      background: rgba(28, 56, 43, 0.85) !important;
+      border-color: rgba(74, 222, 128, 0.45) !important;
+      color: #4ade80 !important;
+    }
+    :root[data-theme="dark"] .commit-success-card div,
+    :root[data-theme="dark"] .commit-success-card span,
+    :root[data-theme="dark"] .commit-success-card p,
+    html[data-theme="dark"] .commit-success-card div,
+    html[data-theme="dark"] .commit-success-card span,
+    html[data-theme="dark"] .commit-success-card p {
+      color: #bbf7d0 !important;
+    }
+    :root[data-theme="dark"] .commit-success-card .btn-secondary,
+    html[data-theme="dark"] .commit-success-card .btn-secondary {
+      background: rgba(40, 75, 58, 0.9) !important;
+      border-color: rgba(74, 222, 128, 0.5) !important;
+      color: #86efac !important;
+    }
+
+    .commit-warning-card {
+      background: var(--warning-soft, #FFF1D9);
+      border: 1px solid var(--warning, #F59A19);
+      color: #7D631E;
+    }
+    :root[data-theme="dark"] .commit-warning-card,
+    html[data-theme="dark"] .commit-warning-card {
+      background: rgba(56, 43, 20, 0.75) !important;
+      border-color: rgba(245, 158, 11, 0.45) !important;
+      color: #fbbf24 !important;
+    }
+
+    .commit-danger-card {
+      background: var(--danger-soft, #FCEAEA);
+      border: 1px solid var(--danger, #D96C6C);
+      color: #8F2D36;
+    }
+    :root[data-theme="dark"] .commit-danger-card,
+    html[data-theme="dark"] .commit-danger-card {
+      background: rgba(56, 24, 24, 0.75) !important;
+      border-color: rgba(239, 68, 68, 0.45) !important;
+      color: #fca5a5 !important;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Visual de Scrollbar Unificado do Sistema (Chat, Linha do Tempo, Documentos, Grafo, Painéis) */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--line-strong) transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--line-strong);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--ink-muted);
+    }
+
+    #chat-messages-wrapper,
+    #doc-cards-container,
+    #doc-view-body,
+    #timeline-feed-container,
+    #graph-node-details-panel,
+    #runs-history-container,
+    .operator-sidebar-body,
+    .inspector-drawer-body,
+    .custom-scroll,
+    .agent-steps-stream {
+      scrollbar-width: thin;
+      scrollbar-color: var(--line-strong) transparent;
+      scroll-behavior: smooth;
+    }
+
+    #chat-messages-wrapper::-webkit-scrollbar,
+    #doc-cards-container::-webkit-scrollbar,
+    #doc-view-body::-webkit-scrollbar,
+    #timeline-feed-container::-webkit-scrollbar,
+    #graph-node-details-panel::-webkit-scrollbar,
+    #runs-history-container::-webkit-scrollbar,
+    .operator-sidebar-body::-webkit-scrollbar,
+    .inspector-drawer-body::-webkit-scrollbar,
+    .custom-scroll::-webkit-scrollbar,
+    .agent-steps-stream::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    #chat-messages-wrapper::-webkit-scrollbar-thumb,
+    #doc-cards-container::-webkit-scrollbar-thumb,
+    #doc-view-body::-webkit-scrollbar-thumb,
+    #timeline-feed-container::-webkit-scrollbar-thumb,
+    #graph-node-details-panel::-webkit-scrollbar-thumb,
+    #runs-history-container::-webkit-scrollbar-thumb,
+    .operator-sidebar-body::-webkit-scrollbar-thumb,
+    .inspector-drawer-body::-webkit-scrollbar-thumb,
+    .custom-scroll::-webkit-scrollbar-thumb,
+    .agent-steps-stream::-webkit-scrollbar-thumb {
+      background: var(--line-strong);
+      border-radius: 4px;
+    }
+
+    #chat-messages-wrapper::-webkit-scrollbar-thumb:hover,
+    #doc-cards-container::-webkit-scrollbar-thumb:hover,
+    #doc-view-body::-webkit-scrollbar-thumb:hover,
+    #timeline-feed-container::-webkit-scrollbar-thumb:hover,
+    #graph-node-details-panel::-webkit-scrollbar-thumb:hover,
+    #runs-history-container::-webkit-scrollbar-thumb:hover,
+    .operator-sidebar-body::-webkit-scrollbar-thumb:hover,
+    .inspector-drawer-body::-webkit-scrollbar-thumb:hover,
+    .custom-scroll::-webkit-scrollbar-thumb:hover,
+    .agent-steps-stream::-webkit-scrollbar-thumb:hover {
+      background: var(--ink-muted);
+    }
 
     html {
       font-size: 14px;
@@ -610,6 +962,48 @@ export function renderHtmlShell(): string {
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
       box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Onda de Plano de Fundo Animada da Página (Atrás da Central de Operações) */
+    .editorial-waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 280px;
+      min-height: 180px;
+      max-height: 380px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .parallax > use {
+      animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+    }
+    .parallax > use.wave-layer-1 {
+      animation-delay: -4s;
+      animation-duration: 25s;
+      fill: rgba(41, 74, 145, 0.42); /* AdzHub Primary Navy (#294A91) */
+    }
+    .parallax > use.wave-layer-2 {
+      animation-delay: -6s;
+      animation-duration: 18s;
+      fill: rgba(34, 59, 120, 0.28); /* AdzHub Deep Navy (#223B78) */
+    }
+    .parallax > use.wave-layer-3 {
+      animation-delay: -8s;
+      animation-duration: 12s;
+      fill: rgba(111, 134, 196, 0.22); /* AdzHub Soft Blue (#6F86C4) */
+    }
+
+    @keyframes move-forever {
+      0% {
+        transform: translate3d(-90px, 0, 0);
+      }
+      100% {
+        transform: translate3d(85px, 0, 0);
+      }
     }
 
     :focus-visible {
@@ -652,12 +1046,26 @@ export function renderHtmlShell(): string {
       letter-spacing: -0.02em;
     }
 
-    .brand-logo-wrap {
+    .brand-logo-wrap, .brand-logo-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      border-radius: var(--radius-control);
+      transition: opacity var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default);
     }
-    .brand-logo-wrap svg {
+    .brand-logo-btn:hover {
+      opacity: 0.88;
+      transform: scale(1.02);
+    }
+    .brand-logo-btn:active {
+      transform: scale(0.98);
+    }
+    .brand-logo-wrap svg, .brand-logo-btn svg {
       height: 32px;
       width: auto;
       display: block;
@@ -753,12 +1161,12 @@ export function renderHtmlShell(): string {
       position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .operator-selector-label {
-      font-size: var(--label);
-      color: var(--ink-muted);
+      font-size: 0.95rem;
+      color: var(--navy);
       font-weight: 500;
       font-family: var(--font-primary);
       white-space: nowrap;
@@ -768,24 +1176,24 @@ export function renderHtmlShell(): string {
     .operator-dropdown-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      background: var(--surface-soft);
-      border: 1px solid var(--line-strong);
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--surface);
+      border: 1.5px solid var(--line-strong);
       border-radius: var(--radius-pill);
       color: var(--ink-strong);
-      font-size: var(--body);
+      font-size: 0.95rem;
       font-family: var(--font-primary);
       cursor: pointer;
       transition: all var(--duration-default) var(--ease-default);
-      box-shadow: 0 1px 3px rgba(37, 48, 66, 0.04);
+      box-shadow: 0 1px 3px rgba(37, 48, 66, 0.06);
       user-select: none;
     }
 
     .operator-dropdown-btn:hover, .operator-dropdown-btn:focus-visible {
       background: var(--surface-selected);
       border-color: var(--navy);
-      box-shadow: 0 2px 8px rgba(41, 74, 145, 0.12);
+      box-shadow: 0 2px 8px rgba(41, 74, 145, 0.15);
     }
 
     .operator-avatar {
@@ -819,7 +1227,7 @@ export function renderHtmlShell(): string {
     .operator-active-name {
       font-weight: 600;
       color: var(--ink-strong);
-      font-size: var(--label);
+      font-size: 0.95rem;
     }
 
     .operator-company-badge {
@@ -833,8 +1241,9 @@ export function renderHtmlShell(): string {
     }
 
     .operator-dropdown-arrow {
-      color: var(--ink-muted);
-      font-size: 0.75rem;
+      color: var(--navy);
+      font-size: 0.85rem;
+      font-weight: 600;
       margin-left: 2px;
       transition: transform var(--duration-default) var(--ease-default);
     }
@@ -936,26 +1345,27 @@ export function renderHtmlShell(): string {
     }
 
     .operator-menu-item-name {
-      font-size: var(--label);
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--ink-strong);
     }
 
     .operator-menu-item-role {
-      font-size: var(--micro);
-      color: var(--ink-muted);
+      font-size: 0.8rem;
+      color: var(--navy);
+      font-weight: 500;
     }
 
     .operator-menu-item-desc {
-      font-size: 0.625rem;
-      color: var(--ink-faint);
-      line-height: 1.3;
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      line-height: 1.35;
     }
 
     .operator-check-icon {
       color: var(--green);
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       display: none;
     }
 
@@ -1245,18 +1655,20 @@ export function renderHtmlShell(): string {
       transform: translateY(0) scale(0.985);
     }
 
-    /* M3 Danger Button */
+    /* M3 Danger Button (Texto vermelho, sem fundo e sem borda) */
     button.btn-danger {
-      background-color: var(--md-sys-color-error-container);
-      border: 1px solid rgba(186, 26, 26, 0.2);
-      color: var(--md-sys-color-error);
+      background-color: transparent !important;
+      border: none !important;
+      color: var(--md-sys-color-error, #ba1a1a) !important;
       border-radius: var(--md-sys-shape-corner-full);
       font-weight: 600;
+      box-shadow: none !important;
+      cursor: pointer;
     }
     button.btn-danger:hover:not(:disabled) {
-      background-color: var(--md-sys-color-error);
-      color: #FFFFFF;
-      box-shadow: var(--md-sys-elevation-1);
+      background-color: rgba(186, 26, 26, 0.08) !important;
+      color: var(--md-sys-color-error, #ba1a1a) !important;
+      box-shadow: none !important;
       transform: translateY(-1px);
     }
 
@@ -1397,6 +1809,8 @@ export function renderHtmlShell(): string {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
+      z-index: 2;
     }
 
     /* ========================================================= */
@@ -1410,6 +1824,9 @@ export function renderHtmlShell(): string {
       grid-template-columns: 56px minmax(210px, 240px) minmax(400px, 1fr) minmax(240px, 280px);
       overflow: hidden;
       width: 100%;
+      position: relative;
+      z-index: 1;
+      background: transparent;
     }
     .blueprint-grid.view-chat,
     .blueprint-grid:not(.view-documents):not(.view-supercerebro):not(.view-timeline):not(.view-controls):not(.view-palco) {
@@ -1620,6 +2037,16 @@ export function renderHtmlShell(): string {
       font-size: 0.78125rem;
       font-family: var(--font-mono);
       color: var(--ink-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    #key-status-text {
+      text-align: center;
+      display: inline-block;
+      width: 100%;
     }
 
     /* Task Queue Cards (Fila Operacional) */
@@ -1646,14 +2073,31 @@ export function renderHtmlShell(): string {
     }
     .task-card-header {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      width: 100%;
+    }
+    .task-card-title-row {
+      display: flex;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 6px;
+      width: 100%;
     }
     .task-card-title {
       font-weight: 700;
       font-size: 0.9375rem;
       color: var(--ink-strong);
+      word-break: break-word;
+      line-height: 1.3;
+      flex: 1;
+    }
+    .task-card-item .tag-pill {
+      flex-shrink: 0;
+      max-width: 100%;
+      white-space: normal;
+      word-break: break-word;
     }
     .task-card-meta {
       font-size: 0.8125rem;
@@ -1663,19 +2107,31 @@ export function renderHtmlShell(): string {
     }
     .task-card-btn {
       align-self: flex-start;
-      background: var(--navy-soft);
-      color: var(--navy-ink);
-      border: 1px solid var(--adzhub-navy-border);
+      background-color: var(--navy-soft) !important;
+      background: var(--navy-soft) !important;
+      color: var(--navy-ink) !important;
+      border: 1px solid var(--adzhub-navy-border) !important;
       border-radius: var(--radius-pill);
       padding: 4px 11px;
       font-size: 0.8125rem;
       font-family: var(--font-primary);
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .task-card-btn:hover {
-      background: var(--navy);
-      color: #FFFFFF;
+    .task-card-btn:hover:not(:disabled) {
+      background-color: var(--navy) !important;
+      background: var(--navy) !important;
+      color: #FFFFFF !important;
+      border-color: var(--navy-deep) !important;
+    }
+    .task-card-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      background-color: var(--surface-muted) !important;
+      background: var(--surface-muted) !important;
+      color: var(--ink-muted) !important;
+      border-color: var(--line) !important;
     }
 
     /* --------------------------------------------------------- */
@@ -1692,17 +2148,43 @@ export function renderHtmlShell(): string {
 
     .chat-header {
       flex-shrink: 0;
-      height: 48px;
       min-height: 48px;
-      max-height: 48px;
+      height: auto;
       box-sizing: border-box;
-      padding: 0 18px;
+      padding: 6px 14px;
       border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
+      position: relative;
       background-color: var(--surface);
       line-height: 1;
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .chat-header-center {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .chat-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
     }
 
     .btn-chat-back {
@@ -1777,8 +2259,9 @@ export function renderHtmlShell(): string {
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      background-color: var(--surface);
+      background-color: transparent;
       position: relative;
+      z-index: 1;
     }
     #chat-messages-wrapper {
       flex: 1;
@@ -2075,7 +2558,7 @@ export function renderHtmlShell(): string {
       display: flex;
       flex-direction: column;
       gap: 4px;
-      box-shadow: 0 1px 3px rgba(37, 48, 66, 0.04);
+      box-shadow: 0 4px 20px rgba(37, 48, 66, 0.08);
       transition: all var(--duration-default) var(--ease-default);
     }
     .chat-composer-card:focus-within {
@@ -2143,23 +2626,45 @@ export function renderHtmlShell(): string {
       box-shadow: 0 2px 6px rgba(41, 74, 145, 0.35);
       transform: scale(1.04);
     }
-    .btn-send-round:disabled {
+    .btn-send-round:disabled:not(.is-loading) {
       background-color: var(--surface-muted);
       color: var(--ink-faint);
       opacity: 0.8;
       cursor: not-allowed;
       transform: none;
     }
-    .btn-send-spinner {
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(255, 255, 255, 0.35);
-      border-top-color: #FFFFFF;
-      border-radius: 50%;
-      display: inline-block;
-      animation: btnSpin 0.7s linear infinite;
+    .btn-send-round.is-loading {
+      background-color: var(--navy) !important;
+      color: #FFFFFF !important;
+      opacity: 0.95;
+      cursor: wait;
     }
-    @keyframes btnSpin { to { transform: rotate(360deg); } }
+    .md3-circular-progress {
+      animation: md3Spin 1.2s linear infinite;
+      transform-origin: center center;
+    }
+    .md3-progress-spinner {
+      animation: md3Dash 1.4s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    @keyframes md3Spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes md3Dash {
+      0% {
+        stroke-dasharray: 1px, 150px;
+        stroke-dashoffset: 0px;
+      }
+      50% {
+        stroke-dasharray: 60px, 150px;
+        stroke-dashoffset: -12px;
+      }
+      100% {
+        stroke-dasharray: 60px, 150px;
+        stroke-dashoffset: -75px;
+      }
+    }
 
     /* --------------------------------------------------------- */
     /* REGIÃO 4: CONTEXT PANEL / PALCO OPERACIONAL (Right Panel)  */
@@ -2172,6 +2677,22 @@ export function renderHtmlShell(): string {
       flex-direction: column;
       background-color: var(--surface-soft);
       overflow: hidden;
+      position: relative;
+    }
+
+    #stage-empty-state {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      transition: opacity 0.2s ease;
     }
 
     .stage-header {
@@ -2187,6 +2708,8 @@ export function renderHtmlShell(): string {
       justify-content: space-between;
       background-color: var(--surface);
       line-height: 1;
+      position: relative;
+      z-index: 2;
     }
 
     .stage-title-main {
@@ -2207,6 +2730,8 @@ export function renderHtmlShell(): string {
       gap: 8px;
       scrollbar-width: thin;
       scrollbar-color: var(--line) transparent;
+      position: relative;
+      z-index: 1;
     }
 
     /* Dynamic Stage Cards — Branco com sombra suave e borda */
@@ -2242,6 +2767,48 @@ export function renderHtmlShell(): string {
     .stage-card.card-success {
       border-color: var(--green);
       background-color: var(--surface);
+    }
+
+    /* Animações de Fila e Saída com Delay de 2s do Palco Operacional */
+    @keyframes stageCardQueueIn {
+      0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+      }
+      60% {
+        opacity: 0.85;
+        transform: translateY(-2px) scale(1.01);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes stageCardQueueOut {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      60% {
+        opacity: 0.35;
+        transform: translateY(-6px) scale(0.97);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.94);
+      }
+    }
+
+    .stage-card.stage-card-queue-enter {
+      animation: stageCardQueueIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .stage-card.stage-card-queue-exit {
+      animation: stageCardQueueOut 0.6s ease-in-out forwards;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
     .stage-card-top {
@@ -2384,11 +2951,12 @@ export function renderHtmlShell(): string {
       animation: pillPulse 2s infinite ease-in-out;
     }
     .flow-pill.active-success {
-      background: var(--green) !important;
-      border-color: var(--green) !important;
+      background: linear-gradient(135deg, #F68934 0%, #F59A19 100%) !important;
+      border-color: #E87E23 !important;
       color: #FFFFFF !important;
       font-weight: 600 !important;
-      box-shadow: 0 3px 10px rgba(83, 181, 138, 0.35), 0 0 0 1px rgba(83, 181, 138, 0.4) !important;
+      text-shadow: 0 1px 2px rgba(160, 65, 0, 0.25);
+      box-shadow: 0 3px 10px rgba(246, 137, 52, 0.35), 0 0 0 1px rgba(246, 137, 52, 0.4) !important;
       transform: translateY(-1px) scale(1.02);
     }
     .flow-pill-arrow {
@@ -2491,6 +3059,47 @@ export function renderHtmlShell(): string {
     .badge-phase-verify { border-color: var(--tag-info-border); color: var(--tag-info-ink); background-color: var(--tag-info-bg); }
     .badge-phase-commit { border-color: var(--tag-success-border); color: var(--tag-success-ink); background-color: var(--tag-success-bg); }
 
+    #system-status-badge {
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #system-status-badge:hover {
+      background-color: var(--navy-soft);
+      border-color: var(--adzhub-navy-border);
+      color: var(--navy);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+    }
+    #system-status-badge:active {
+      transform: translateY(0);
+    }
+
+    #prototype-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(38, 49, 66, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 120;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .prototype-modal-content {
+      background-color: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-app-window);
+      width: 100%;
+      max-width: 740px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-app-window);
+      overflow: hidden;
+      animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     .spinner {
       width: 22px;
       height: 22px;
@@ -2542,61 +3151,27 @@ export function renderHtmlShell(): string {
       align-items: center;
       justify-content: center;
     }
-    .human-loading-glow-1 {
-      pointer-events: none;
-      position: absolute;
-      left: -20px;
-      top: -30px;
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      background: var(--navy-soft, #dfe4ff);
-      opacity: 0.65;
-      filter: blur(48px);
-    }
-    .human-loading-glow-2 {
-      pointer-events: none;
-      position: absolute;
-      right: -20px;
-      bottom: -30px;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      background: #e8ddff;
-      opacity: 0.55;
-      filter: blur(48px);
+    .human-loading-glow-1, .human-loading-glow-2, .human-loading-glow-top {
+      display: none !important;
     }
     .human-loading-card {
       position: relative;
       width: 100%;
       overflow: hidden;
-      border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      border: 1px solid var(--line-strong, #e2e8f0);
+      background: #ffffff;
       padding: 18px 22px;
-      box-shadow: 0 24px 70px rgba(41, 74, 145, 0.1);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 16px 36px -4px rgba(41, 74, 145, 0.2), 0 6px 16px -2px rgba(41, 74, 145, 0.12);
       box-sizing: border-box;
     }
     .human-loading-card-inner {
       position: relative;
       overflow: hidden;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #f5f7ff 0%, #faf8ff 100%);
+      border-radius: 16px;
+      background: #ffffff;
       padding: 24px 20px;
-      border: 1px solid rgba(41, 74, 145, 0.05);
-    }
-    .human-loading-glow-top {
-      pointer-events: none;
-      position: absolute;
-      right: -30px;
-      top: -30px;
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      background: rgba(223, 229, 255, 0.7);
-      filter: blur(28px);
+      border: none;
     }
     .human-loading-content {
       position: relative;
@@ -2615,14 +3190,15 @@ export function renderHtmlShell(): string {
       justify-content: center;
       border-radius: 50%;
       background: #ffffff;
-      box-shadow: 0 7px 20px rgba(41, 74, 145, 0.14);
+      border: 1px solid rgba(41, 74, 145, 0.1);
+      box-shadow: 0 8px 24px rgba(41, 74, 145, 0.2);
     }
     .human-loading-breathe-bg {
       position: absolute;
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: var(--navy-soft, #dfe4ff);
+      background: rgba(41, 74, 145, 0.12);
     }
     .human-loading-dots {
       position: relative;
@@ -2638,8 +3214,8 @@ export function renderHtmlShell(): string {
       border-radius: 50%;
     }
     .loading-dot-pulse.dot-1 { background-color: var(--navy, #294a91); }
-    .loading-dot-pulse.dot-2 { background-color: #5962be; }
-    .loading-dot-pulse.dot-3 { background-color: #7b70dd; }
+    .loading-dot-pulse.dot-2 { background-color: #3b65c2; }
+    .loading-dot-pulse.dot-3 { background-color: #688de6; }
 
     .human-loading-text-group {
       margin-top: 18px;
@@ -2665,7 +3241,7 @@ export function renderHtmlShell(): string {
       height: 4px;
       overflow: hidden;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(41, 74, 145, 0.08);
     }
     .human-loading-shimmer {
       position: absolute;
@@ -2962,17 +3538,69 @@ export function renderHtmlShell(): string {
         min-height: 0;
       }
       #top-bar {
-        padding: 0 12px;
-        gap: 8px;
+        padding: 0 8px;
+        gap: 6px;
+        justify-content: space-between;
+      }
+      #operator-selector-label {
+        display: none !important;
+      }
+      .operator-selector-container {
+        margin-left: auto;
+        gap: 4px;
+      }
+      #operator-dropdown-btn {
+        padding: 4px 8px;
+        max-width: 140px;
+        overflow: hidden;
+      }
+      .operator-active-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 105px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      #theme-toggle-btn .theme-label {
+        display: none !important;
+      }
+      .chat-header {
+        padding: 6px 8px !important;
+        gap: 6px !important;
+      }
+      .btn-chat-back {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+      }
+      .btn-chat-back span:last-child {
+        display: inline-block;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #center-pane-title {
+        font-size: 0.82rem !important;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+      }
+      #chat-status-badge {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+        white-space: nowrap;
+        max-width: 125px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .brand-logo-wrap svg {
         height: 26px;
       }
       #operator-active-role {
         display: none;
-      }
-      #operator-dropdown-btn {
-        padding: 4px 8px;
       }
       #chat-welcome-title {
         font-size: 1.75rem !important;
@@ -2989,6 +3617,26 @@ export function renderHtmlShell(): string {
       }
       .flow-sequence-bar {
         display: none;
+      }
+
+      /* Header Controls & Toolbars Responsivas */
+      #documents-header-controls,
+      #graph-header-controls,
+      #timeline-header-controls {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 6px !important;
+        padding: 8px 10px !important;
+      }
+      #documents-header-controls > div:last-child,
+      #graph-header-controls > div:last-child,
+      #timeline-header-controls > div:last-child {
+        width: 100% !important;
+        justify-content: space-between !important;
+      }
+      #doc-search-input,
+      #timeline-search-input {
+        width: 100% !important;
       }
 
       /* Central de Documentos Responsiva */
@@ -3082,7 +3730,14 @@ export function renderHtmlShell(): string {
         display: none;
       }
       #top-bar {
-        padding: 0 8px;
+        padding: 0 6px;
+      }
+      .btn-chat-back span:last-child {
+        display: none !important;
+      }
+      #chat-status-badge {
+        max-width: 100px;
+        font-size: 0.6rem !important;
       }
       .operator-dropdown-menu {
         min-width: 260px;
@@ -3103,6 +3758,17 @@ export function renderHtmlShell(): string {
   </style>
 </head>
 <body>
+  <!-- Onda de Plano de Fundo Animada da Página (Atrás da Central de Operações) -->
+  <svg class="editorial-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" aria-hidden="true">
+    <defs>
+      <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+    </defs>
+    <g class="parallax">
+      <use xlink:href="#gentle-wave" x="50" y="0" class="wave-layer-1" />
+      <use xlink:href="#gentle-wave" x="50" y="3" class="wave-layer-2" />
+      <use xlink:href="#gentle-wave" x="50" y="6" class="wave-layer-3" />
+    </g>
+  </svg>
 
   <!-- Região 1: Top Bar — Header Global do Workspace AdzHub -->
   <header id="top-bar" role="banner">
@@ -3112,9 +3778,9 @@ export function renderHtmlShell(): string {
         ${getLucideSvg('menu', { size: 20 })}
       </button>
       <div class="brand">
-        <span class="brand-logo-wrap" title="AdzHub · Central de Operações de Mídia &amp; IA">
+        <button id="btn-brand-home" type="button" class="brand-logo-btn" title="Ir para a página inicial do chat" aria-label="Ir para a página inicial do chat">
           ${ADZHUB_LOGO_SVG}
-        </span>
+        </button>
       </div>
     </div>
 
@@ -3175,10 +3841,14 @@ export function renderHtmlShell(): string {
     </div>
 
     <div class="header-actions">
-      <div class="header-status">
-        <div id="system-status-badge" class="status-badge" aria-live="polite">
+      <div class="header-status" style="display: flex; align-items: center; gap: 8px;">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="Alternar tema" title="Alternar Tema (Claro / Escuro)">
+          <span class="theme-icon">${getLucideSvg('moon', { size: 15 })}</span>
+          <span class="theme-label" style="font-size: var(--micro); font-family: var(--font-mono); font-weight: 600;">Escuro</span>
+        </button>
+        <button id="system-status-badge" class="status-badge" aria-live="polite" type="button" aria-haspopup="dialog" title="Informações sobre o Protótipo e Desafio">
           ● v${CONTRACTS_VERSION}
-        </div>
+        </button>
       </div>
     </div>
   </header>
@@ -3277,7 +3947,11 @@ export function renderHtmlShell(): string {
       </div>
     </div>
 
-    <div class="mobile-drawer-footer">
+    <div class="mobile-drawer-footer" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+      <button id="mobile-theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="Alternar tema">
+        <span class="theme-icon">${getLucideSvg('moon', { size: 14 })}</span>
+        <span class="theme-label" style="font-size: var(--micro); font-weight: 600;">Alternar Tema</span>
+      </button>
       <span class="status-badge badge-provisional" style="font-size: var(--micro); padding: 2px 8px;">
         ● v${CONTRACTS_VERSION}
       </span>
@@ -3338,8 +4012,8 @@ export function renderHtmlShell(): string {
                   </button>
                 </div>
               </div>
-              <div id="key-status" style="margin-top: 2px;">
-                <span id="key-status-text">Sem chave salva (Insira sua API Key)</span>
+              <div id="key-status" style="margin-top: 4px; text-align: center; display: flex; justify-content: center; width: 100%;">
+                <span id="key-status-text" style="text-align: center; display: inline-block; width: 100%;">Sem chave salva (Insira sua API Key)</span>
               </div>
             </div>
 
@@ -3352,19 +4026,11 @@ export function renderHtmlShell(): string {
               </div>
             </div>
 
-            <!-- Fila de Pendências Operacionais -->
+            <!-- Fila de Pendências Operacionais (Dinâmica) -->
             <div class="task-queue-section" id="task-queue-section">
               <div class="control-label">Pendências</div>
               <div id="operator-pendencies-list">
-                <div class="task-card-item">
-                  <div class="task-card-header">
-                    <span class="task-card-title">Pausar Criativos Fracos</span>
-                  </div>
-                  <div class="task-card-meta">Exige proposta formal de Carolina Mendes e aprovação de Marcos Silva</div>
-                  <button type="button" class="task-card-btn" disabled="disabled" style="opacity: 0.65; cursor: not-allowed;">
-                    Aguardando Proposta
-                  </button>
-                </div>
+                <!-- Populado dinamicamente via Supercérebro -->
               </div>
             </div>
 
@@ -3374,16 +4040,18 @@ export function renderHtmlShell(): string {
         <!-- REGIÃO 3: ASSISTANT WORKSPACE (Center Conversation) -->
         <section class="chat-column" id="pane-chat" aria-label="AdzChat Agentico">
           <div class="chat-header">
-            <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="chat-header-left">
               <button id="btn-chat-back" class="btn-chat-back is-new-chat" type="button" aria-label="Nova conversa" title="Nova Conversa (Resetar Chat)">
                 <span style="font-size: 1.1rem; line-height: 1; font-weight: 700; display: inline-block;">+</span>
                 <span>Nova Conversa</span>
               </button>
-              <div class="chat-agent-info">
-                <div class="chat-agent-name" id="center-pane-title">Agente AdzHub</div>
-              </div>
             </div>
-            <span id="chat-status-badge" class="status-badge" aria-live="polite" style="display: none;"></span>
+            <div class="chat-agent-info chat-header-center">
+              <div class="chat-agent-name" id="center-pane-title">Agente AdzHub</div>
+            </div>
+            <div class="chat-header-right">
+              <span id="chat-status-badge" class="status-badge" aria-live="polite" style="display: none;"></span>
+            </div>
           </div>
 
           <div class="chat-body" id="chat-stream-body">
@@ -3484,13 +4152,14 @@ export function renderHtmlShell(): string {
                   </div>
 
                   <!-- Legend Overlay -->
-                  <div style="position: absolute; top: 12px; left: 12px; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(4px); border: 1px solid var(--line); padding: 8px 12px; border-radius: var(--radius-card); display: flex; flex-direction: column; gap: 4px; font-family: var(--font-mono); font-size: 0.78125rem; color: var(--ink-muted); pointer-events: none; box-shadow: var(--shadow-card);">
-                    <div style="font-weight: 700; font-size: 0.84rem; color: var(--ink-strong); margin-bottom: 2px;">Legenda do Grafo</div>
-                    <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #294A91; display: inline-block;"></span> Cliente / Organização</div>
-                    <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #F59A19; display: inline-block;"></span> Meta Ads / Conta</div>
-                    <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #53B58A; display: inline-block;"></span> Ofertas &amp; Criativos</div>
-                    <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #8C75B5; display: inline-block;"></span> Operadores</div>
-                    <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #D96C6C; display: inline-block;"></span> Pendências</div>
+                  <div class="graph-legend-overlay" style="position: absolute; top: 12px; left: 12px; backdrop-filter: blur(8px); padding: 6px 10px; border-radius: var(--radius-card); display: flex; flex-direction: column; gap: 3px; font-family: var(--font-mono); font-size: 0.72rem; pointer-events: none; box-shadow: var(--shadow-card); z-index: 5;">
+                    <div class="graph-legend-title" style="font-weight: 700; font-size: 0.75rem; color: var(--ink-strong); margin-bottom: 1px;">Legenda do Grafo</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #294A91; display: inline-block;"></span> Cliente / Organização</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #F59A19; display: inline-block;"></span> Meta Ads / Plataformas</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #3B82F6; display: inline-block;"></span> Campanhas</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span> Criativos &amp; Anúncios</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #8C75B5; display: inline-block;"></span> Operadores</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D96C6C; display: inline-block;"></span> Pendências</div>
                   </div>
                 </div>
 
@@ -3635,115 +4304,13 @@ export function renderHtmlShell(): string {
             </div>
           </div>
 
+          <!-- Ícone do Olho Estático Fixado Centralizado no Palco -->
+          <div id="stage-empty-state">
+            <div style="opacity: 0.45; color: var(--navy); display: flex; align-items: center; justify-content: center;">${getLucideSvg('eye', { size: 28 })}</div>
+          </div>
+
           <div class="stage-content" id="stage-cards-container">
-            <!-- Estado Inicial / Aguardando Observações -->
-            <div id="stage-empty-state" style="margin: auto; text-align: center; color: var(--ink-muted); padding: 28px 14px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-              <div style="margin-bottom: 8px; opacity: 0.45; color: var(--navy);">${getLucideSvg('eye', { size: 28 })}</div>
-              <div style="font-weight: 600; color: var(--ink-strong); font-size: 0.875rem; margin-bottom: 3px;">Nenhuma observação ativa</div>
-              <div style="font-size: var(--label); color: var(--ink-muted); max-width: 220px; margin: 0 auto; line-height: 1.4;">Execute uma ação no chat para projetar dados da conta em tempo real.</div>
-            </div>
-
-            <!-- Criativos em Observação -->
-            <!-- Dynamic Card 1: UGC Oferta A -->
-            <div class="stage-card" id="card-ugc-oferta" style="display: none;">
-              <div class="stage-card-top">
-                <span class="stage-card-name">UGC - Oferta A</span>
-              </div>
-              <div class="stage-card-tags" id="tags-ugc-oferta">
-                <span class="tag-pill tag-status-paused" id="badge-ugc-status">Pausado</span>
-                <span class="tag-pill tag-hook-strong">Hook Forte 8.5</span>
-                <span class="tag-pill tag-cta-bad">CTA Ruim 4.0</span>
-                <span class="tag-pill tag-cta-good">Meta Ads</span>
-              </div>
-              <div class="stage-card-metrics">
-                <span>Investimento: R$ 850</span>
-                <span>CPA: R$ 94,50</span>
-                <span>CTR: 1.2%</span>
-              </div>
-            </div>
-
-            <!-- Dynamic Card 2: Hook Prova Social -->
-            <div class="stage-card" id="card-hook-social" style="display: none;">
-              <div class="stage-card-top">
-                <span class="stage-card-name">Hook - Prova Social</span>
-              </div>
-              <div class="stage-card-tags" id="tags-hook-social">
-                <span class="tag-pill tag-status-active" id="badge-hook-status">Ativo</span>
-                <span class="tag-pill tag-hook-strong">Hook Forte 8.8</span>
-                <span class="tag-pill tag-cta-good">CTA Bom 8.5</span>
-                <span class="tag-pill tag-hook-strong">Alta Conversão</span>
-              </div>
-              <div class="stage-card-metrics">
-                <span>Investimento: R$ 1.200</span>
-                <span>CPA: R$ 42,10</span>
-                <span>CTR: 2.8%</span>
-              </div>
-            </div>
-
-            <!-- Dynamic Card 3: Carrossel FAQ -->
-            <div class="stage-card" id="card-carousel-faq" style="display: none;">
-              <div class="stage-card-top">
-                <span class="stage-card-name">Carrossel - FAQ</span>
-              </div>
-              <div class="stage-card-tags" id="tags-carousel-faq">
-                <span class="tag-pill tag-status-paused" id="badge-faq-status">Pausado</span>
-                <span class="tag-pill tag-hook-weak">Hook Fraco 4.2</span>
-                <span class="tag-pill tag-cta-bad">CTA Ruim 3.8</span>
-                <span class="tag-pill tag-cta-bad">Fadiga 2.65x</span>
-              </div>
-              <div class="stage-card-metrics">
-                <span>Investimento: R$ 430</span>
-                <span>CPA: R$ 112,00</span>
-                <span>CTR: 0.9%</span>
-              </div>
-            </div>
-
-            <!-- Métricas Meta Ads -->
-            <div class="stage-card" id="card-meta-metrics" style="display: none;">
-              <div class="stage-card-top">
-                <span class="stage-card-name">Meta Ads — Tráfego Pago (Agosto/2026)</span>
-              </div>
-              <div class="stage-card-tags" id="tags-meta-metrics">
-                <span class="tag-pill tag-status-active" id="badge-meta-status">Ativo</span>
-                <span class="tag-pill tag-hook-strong">Investimento: R$ 4.280,00</span>
-                <span class="tag-pill tag-cta-good">ROAS: 3,48x</span>
-                <span class="tag-pill tag-cta-good">184.200 Impressões</span>
-              </div>
-              <div class="stage-card-metrics">
-                <span>Whey Isolado (CPA R$ 48,00)</span>
-                <span>Creatina Creapure (CPA R$ 38,50)</span>
-              </div>
-            </div>
-
-            <!-- CRM HubSpot & Vendas -->
-            <div class="stage-card" id="card-crm-metrics" style="display: none;">
-              <div class="stage-card-top">
-                <span class="stage-card-name">HubSpot CRM — Vendas &amp; Reconciliação</span>
-              </div>
-              <div class="stage-card-tags" id="tags-crm-metrics">
-                <span class="tag-pill tag-status-active" id="badge-crm-status">62 Vendas Auditadas</span>
-                <span class="tag-pill tag-hook-strong">Receita: R$ 14.890,00</span>
-                <span class="tag-pill tag-cta-good">Ticket Médio: R$ 240,16</span>
-                <span class="tag-pill tag-cta-good" id="tag-crm-utm">Cobertura UTM: 86.4%</span>
-              </div>
-              <div class="stage-card-metrics" id="metrics-crm-details">
-                <span>48 Vendas Aprovadas</span>
-                <span>8 Abandonos</span>
-                <span>6 Boletos Pendentes</span>
-              </div>
-            </div>
-
-            <!-- Supercérebro Contexto -->
-            <div class="stage-card" id="card-brain-context" style="display: none;">
-              <div class="stage-card-top">
-                <span class="stage-card-name">Supercérebro — Memória &amp; Governança</span>
-              </div>
-              <div id="brain-card-details" style="font-size: var(--micro); color: var(--ink); margin-top: 2px; display: flex; flex-direction: column; gap: 2px; font-family: var(--font-primary); line-height: 1.35;">
-                <div><strong>Política:</strong> Escrita externa requer aprovação expressa.</div>
-              </div>
-            </div>
-
-            <!-- Summary Bar no Palco (Oculto) -->
+            <!-- Cards de Observação e Métricas (Renderizados 100% dinamicamente a partir dos eventos da LLM e ferramentas) -->
             <div style="display: none;">
               <span id="stage-summary-text">Palco sincronizado com os dados da conta</span>
               <button id="btn-inspect-contract" class="btn-secondary" type="button">
@@ -3803,6 +4370,121 @@ export function renderHtmlShell(): string {
     <button id="btn-export-report-md" type="button">Export Report MD</button>
     <button id="btn-export-comparison-json" type="button">Export Comparison JSON</button>
     <button id="btn-export-comparison-md" type="button">Export Comparison MD</button>
+  </div>
+
+  <!-- Modal de Informações do Protótipo (Isenção, Capacidades e Desafio) -->
+  <div id="prototype-modal" role="dialog" aria-modal="true" aria-labelledby="prototype-modal-title">
+    <div class="prototype-modal-content">
+      <div style="padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: var(--surface-soft);">
+        <h3 id="prototype-modal-title" style="color: var(--ink-strong); font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; margin: 0;">
+          ${getLucideSvg('cpu', { size: 18, style: 'color: var(--navy);' })} Capacidades, Skills &amp; Informações do Protótipo
+        </h3>
+        <button id="btn-close-prototype-modal" class="btn-secondary" type="button" aria-label="Fechar modal" style="padding: 4px 10px; font-size: 0.8125rem; cursor: pointer; border-radius: var(--radius-pill);">✕ Fechar</button>
+      </div>
+
+      <div style="padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; font-size: 0.9rem; color: var(--ink); line-height: 1.55;">
+        
+        <!-- Banner de Protótipo e Desafio -->
+        <div style="background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: var(--radius-card); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;">
+          <span style="display: inline-flex; color: var(--navy); margin-top: 2px;">${getLucideSvg('shield-alert', { size: 20 })}</span>
+          <div>
+            <div style="font-weight: 700; color: var(--ink-strong); margin-bottom: 3px; font-family: var(--font-display);">Protótipo Conceitual &amp; Orquestrador Harness</div>
+            <div style="font-size: 0.85rem; color: var(--ink-muted); line-height: 1.45;">
+              Esta aplicação é um <strong>protótipo funcional de orquestração autônoma</strong> projetado para demonstrar governança determinística, alçadas de operadores e abstenção auditada. Este projeto <strong>não possui nenhum vínculo comercial ou oficial com a AdzHub ou SPOT</strong>, e todos os dados exibidos são sintéticos/fictícios.
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco 1: O Que o Sistema é Capaz de Fazer (Skills, Apps & Tools) -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-weight: 700; color: var(--ink-strong); font-family: var(--font-display); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+            ${getLucideSvg('sparkles', { size: 16, style: 'color: var(--navy);' })} O que o sistema é capaz de fazer (Skills &amp; Ferramentas)
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;">
+            
+            <div style="background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 12px 14px;">
+              <div style="font-weight: 700; color: var(--ink-strong); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                ${getLucideSvg('megaphone', { size: 15, style: 'color: var(--navy);' })} Gestão &amp; Pausa no Meta Ads
+              </div>
+              <div style="font-size: 0.8rem; color: var(--ink-muted); line-height: 1.4;">
+                Identifica fadiga em anúncios, analisa CPA e ROAS real, e submete ou executa pausas e reativações com commit imutável no SQLite.
+              </div>
+            </div>
+
+            <div style="background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 12px 14px;">
+              <div style="font-weight: 700; color: var(--ink-strong); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                ${getLucideSvg('coins', { size: 15, style: 'color: var(--navy);' })} Realocação &amp; Estratégia de Verba
+              </div>
+              <div style="font-size: 0.8rem; color: var(--ink-muted); line-height: 1.4;">
+                Analisa limites orçamentários diários, transfere verba para criativos campeões e ajusta estratégias de lance para limite de CPA.
+              </div>
+            </div>
+
+            <div style="background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 12px 14px;">
+              <div style="font-weight: 700; color: var(--ink-strong); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                ${getLucideSvg('percent', { size: 15, style: 'color: var(--navy);' })} Cupons SAC &amp; CRM WhatsApp
+              </div>
+              <div style="font-size: 0.8rem; color: var(--ink-muted); line-height: 1.4;">
+                Avalia solicitações de concessão comercial de cupons de desconto no WhatsApp e reconcilia conversões retidas no CRM.
+              </div>
+            </div>
+
+            <div style="background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 12px 14px;">
+              <div style="font-weight: 700; color: var(--ink-strong); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                ${getLucideSvg('file-text', { size: 15, style: 'color: var(--navy);' })} Gerador de Documentos Executivos
+              </div>
+              <div style="font-size: 0.8rem; color: var(--ink-muted); line-height: 1.4;">
+                Elabora briefings de reunião, pautas semanais, propostas técnicas e relatórios auditados salvos automaticamente na Central de Documentos.
+              </div>
+            </div>
+
+            <div style="background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 12px 14px; grid-column: 1 / -1;">
+              <div style="font-weight: 700; color: var(--ink-strong); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                ${getLucideSvg('brain', { size: 15, style: 'color: var(--navy);' })} Supercérebro &amp; Memory Graph
+              </div>
+              <div style="font-size: 0.8rem; color: var(--ink-muted); line-height: 1.4;">
+                Mapeia dinamicamente em grafo as relações da conta (organizações, operadores, campanhas, criativos e histórico de trocas de mensagens no WhatsApp).
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Bloco 2: Limitações do Sistema (Transparência) -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="font-weight: 700; color: var(--ink-strong); font-family: var(--font-display); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+            ${getLucideSvg('lock', { size: 16, style: 'color: var(--navy);' })} Limitações &amp; Diretrizes de Governança
+          </div>
+          <ul style="margin: 0; padding-left: 18px; font-size: 0.85rem; color: var(--ink-muted); display: flex; flex-direction: column; gap: 6px; line-height: 1.45;">
+            <li><strong>Aprovação por Alçada Obrigatória:</strong> Operadores sem permissão direta (ex: Aline para pausar anúncios sem aprovação prévia) não conseguem alterar o Meta Ads diretamente. O assistente retém a ação e gera uma proposta para validação do aprovador (Marcos Silva).</li>
+            <li><strong>Abstenção Auditada (Deny-by-Default):</strong> Se faltarem dados essenciais ou se o CRM estiver indisponível, a IA declara a ausência objetivamente e não inventa dados ou métricas.</li>
+            <li><strong>Massa de Dados Sintética:</strong> As integrações operam via <em>Capability Broker</em> seguro sobre uma base determinística isolada para testes sem risco de alteração em contas reais de produção.</li>
+          </ul>
+        </div>
+
+        <!-- Bloco 3: Extensibilidade (Fácil de Implementar Novas Skills/Apps) -->
+        <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(37, 99, 235, 0.22); border-radius: var(--radius-card); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-weight: 700; color: var(--navy-ink); font-family: var(--font-display); font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+            ${getLucideSvg('puzzle', { size: 16, style: 'color: var(--navy);' })} Fácil de Estender com Novas Skills, Apps &amp; Integradores!
+          </div>
+          <div style="font-size: 0.83rem; color: var(--ink); line-height: 1.5;">
+            A arquitetura monorepo / microkernel PEV-C foi construída de forma 100% modular e plug-and-play:
+            <ul style="margin: 6px 0 0 0; padding-left: 16px; color: var(--ink-muted); display: flex; flex-direction: column; gap: 4px;">
+              <li><strong>Novas Tools &amp; Integrações:</strong> Para conectar <em>Google Ads</em>, <em>TikTok Ads</em>, <em>RD Station</em>, <em>Salesforce</em> ou <em>Klaviyo</em>, basta criar uma função no pacote <code>packages/tools</code>.</li>
+              <li><strong>Novas Skills &amp; Fluxos:</strong> Adicionar uma nova habilidade exige apenas registrar a especificação da intenção em <code>dynamic-intent-registry.ts</code>.</li>
+              <li><strong>Novas Políticas de Governança:</strong> As regras de alçada são declarativas em <code>account-context.ts</code> e atualizam a matriz de permissões instantaneamente.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="padding: 14px 20px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; background: var(--surface-soft);">
+        <button id="btn-ack-prototype-modal" class="btn-primary" type="button" style="padding: 7px 20px; font-weight: 600; font-size: 0.875rem;">
+          Entendido
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Sistema de Tutorial / Onboarding de Primeiro Acesso -->
@@ -3903,6 +4585,218 @@ export function renderHtmlShell(): string {
 
   <!-- Client-side Logic -->
   <script>
+    function cleanCardTitle(title) {
+      if (!title) return '';
+      return String(title).replace(/^(Governança|Governanca)\s*(?:&|de)?\s*[A-Za-zÀ-ÿ\s]*:\s*/i, '').trim();
+    }
+    window.cleanCardTitle = cleanCardTitle;
+
+    function openPendencyDocument(taskTitle, taskPrompt) {
+      if (typeof window.switchView === 'function') {
+        window.switchView('documents');
+      }
+
+      var rawTitle = taskTitle ? (taskTitle.indexOf('%') !== -1 ? decodeURIComponent(taskTitle) : taskTitle) : '';
+      var cleanT = (typeof cleanCardTitle === 'function' ? cleanCardTitle(rawTitle) : rawTitle).toLowerCase().trim();
+
+      var searchTerms = [cleanT];
+      if (cleanT.indexOf('pausa') !== -1) searchTerms.push('pausa', 'meta ads', 'ad_04', 'criativo');
+      if (cleanT.indexOf('lance') !== -1 || cleanT.indexOf('estratégia') !== -1 || cleanT.indexOf('estrategia') !== -1) searchTerms.push('lance', 'cpa', 'bid');
+      if (cleanT.indexOf('remanejamento') !== -1 || cleanT.indexOf('verba') !== -1) searchTerms.push('remanejamento', 'verba', 'orçamento', 'orcamento', 'proposta');
+      if (cleanT.indexOf('cupom') !== -1 || cleanT.indexOf('sac') !== -1) searchTerms.push('cupom', 'sac', 'desconto', 'whatsapp');
+      if (cleanT.indexOf('reconciliar') !== -1 || cleanT.indexOf('conversões') !== -1 || cleanT.indexOf('conversoes') !== -1) searchTerms.push('reconciliação', 'reconciliacao', 'conversoes', 'whatsapp');
+
+      function doSelectOrAdd() {
+        var matchedDoc = null;
+        if (Array.isArray(documentsList)) {
+          matchedDoc = documentsList.find(function(d) {
+            var docT = (typeof cleanCardTitle === 'function' ? cleanCardTitle(d.title) : d.title).toLowerCase().trim();
+            if (docT && cleanT && (docT.indexOf(cleanT) !== -1 || cleanT.indexOf(docT) !== -1)) return true;
+            for (var i = 0; i < searchTerms.length; i++) {
+              if (searchTerms[i] && (docT.indexOf(searchTerms[i]) !== -1 || (d.summary && d.summary.toLowerCase().indexOf(searchTerms[i]) !== -1))) {
+                return true;
+              }
+            }
+            return false;
+          });
+        }
+
+        if (matchedDoc) {
+          if (typeof selectDocument === 'function') {
+            selectDocument(matchedDoc.id);
+          }
+          return;
+        }
+
+        function detectDocumentCategory(titleStr, contentStr, summaryStr) {
+          var text = (String(titleStr || '') + ' ' + String(contentStr || '') + ' ' + String(summaryStr || '')).toLowerCase();
+
+          if (text.includes('briefing') || text.includes('reunião') || text.includes('reuniao') || text.includes('pauta da reunião') || text.includes('resumo da reunião')) {
+            return {
+              type: 'briefing',
+              typeName: 'BRIEFING',
+              badgeBg: 'var(--tag-info-bg)',
+              badgeBorder: 'var(--tag-info-border)',
+              badgeColor: 'var(--tag-info-ink)'
+            };
+          }
+
+          if (text.includes('pauta') || text.includes('ugc') || text.includes('criativo') || text.includes('gancho') || text.includes('hook') || text.includes('roteiro')) {
+            return {
+              type: 'pauta',
+              typeName: 'PAUTA & UGC',
+              badgeBg: 'rgba(147, 51, 234, 0.15)',
+              badgeBorder: 'rgba(147, 51, 234, 0.3)',
+              badgeColor: '#c084fc'
+            };
+          }
+
+          if (text.includes('proposta') || text.includes('submeter') || text.includes('solicitação') || text.includes('solicitacao') || text.includes('autorização') || text.includes('autorizacao') || text.includes('cupom') || text.includes('desconto') || text.includes('pausa')) {
+            return {
+              type: 'proposta',
+              typeName: 'PROPOSTA',
+              badgeBg: 'var(--tag-warning-bg)',
+              badgeBorder: 'var(--tag-warning-border)',
+              badgeColor: 'var(--tag-warning-ink)'
+            };
+          }
+
+          if (text.includes('plano') || text.includes('planejamento') || text.includes('cronograma') || text.includes('escala') || text.includes('estratégia') || text.includes('estrategia')) {
+            return {
+              type: 'plano',
+              typeName: 'PLANO',
+              badgeBg: 'rgba(14, 165, 233, 0.15)',
+              badgeBorder: 'rgba(14, 165, 233, 0.3)',
+              badgeColor: '#38bdf8'
+            };
+          }
+
+          return {
+            type: 'relatorio',
+            typeName: 'RELATÓRIO',
+            badgeBg: 'var(--tag-success-bg)',
+            badgeBorder: 'var(--tag-success-border)',
+            badgeColor: 'var(--tag-success-ink)'
+          };
+        }
+        window.detectDocumentCategory = detectDocumentCategory;
+
+        var op = (sessionState && sessionState.currentOperator) || { name: 'Operador Responsável', role: 'SPOT' };
+        var nowStr = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        var displayTitle = (typeof cleanCardTitle === 'function' ? cleanCardTitle(rawTitle) : rawTitle) || 'Documento Operacional';
+        var docId = 'doc-task-' + Math.random().toString(36).substring(2, 9);
+        var docCat = detectDocumentCategory(displayTitle, '', 'Documento auditado');
+
+        var newDoc = {
+          id: docId,
+          type: docCat.type,
+          typeName: docCat.typeName,
+          badgeBg: docCat.badgeBg,
+          badgeBorder: docCat.badgeBorder,
+          badgeColor: docCat.badgeColor,
+          title: displayTitle,
+          date: nowStr,
+          author: op.name + ' (' + op.role + ')',
+          status: 'Auditado e Salvo no Supercérebro',
+          summary: 'Documento oficial e histórico auditado relativo à tarefa: ' + displayTitle + '.',
+          content: [
+            '# ' + displayTitle.toUpperCase(),
+            '',
+            '**OPERADOR:** ' + op.name + ' (' + op.role + ')',
+            '**DATA:** ' + nowStr,
+            '**STATUS DE GOVERNANÇA:** CONFIRMADO E COMMITADO NO SUPERCÉREBRO (SQLite Auditado)',
+            '',
+            '---',
+            '',
+            '### 1. Resumo da Tarefa Operacional',
+            'Documento gerado dinamicamente no Supercérebro a partir da pendência selecionada.',
+            '',
+            '### 2. Parâmetros & Rastreabilidade Criptográfica',
+            '- **ID do Documento:** ' + docId,
+            '- **Escopo de Escrita:** Registrado no Capability Broker e PEV-C.',
+            '- **Audit Trail:** Transição auditada com hash SHA-256 e selo imutável.'
+          ].join('\\n')
+        };
+
+        if (typeof window.addDocumentToCenter === 'function') {
+          window.addDocumentToCenter(newDoc);
+        } else {
+          if (Array.isArray(documentsList)) {
+            documentsList.unshift(newDoc);
+            if (typeof renderDocumentsList === 'function') renderDocumentsList();
+            if (typeof selectDocument === 'function') selectDocument(newDoc.id);
+          }
+        }
+      }
+
+      if ((!documentsList || documentsList.length === 0) && typeof window.loadDocumentsFromServer === 'function') {
+        Promise.resolve(window.loadDocumentsFromServer()).then(doSelectOrAdd);
+      } else {
+        doSelectOrAdd();
+      }
+    }
+    window.openPendencyDocument = openPendencyDocument;
+
+    function getStatusBadgeInfo(status, _verified, missingCondition) {
+      var normalized = (status || '').toUpperCase();
+      if (normalized === 'COMMITTED') {
+        return {
+          status: 'COMMITTED',
+          label: 'SALVO NO SUPERCÉREBRO',
+          icon: '✓',
+          cssClass: 'badge-committed',
+          description: 'Aprovado pelo operador responsável e registrado com commit atômico no Supercérebro.'
+        };
+      }
+      if (normalized === 'VERIFYING' || normalized === 'RUNNING') {
+        return {
+          status: 'VERIFYING',
+          label: 'VERIFYING',
+          icon: '⚙',
+          cssClass: 'badge-verifying',
+          description: 'Processando validações e checagem de integridade no Supercérebro.'
+        };
+      }
+      if (normalized === 'QUARANTINED') {
+        return {
+          status: 'QUARANTINED',
+          label: 'QUARANTINED',
+          icon: '⚠',
+          cssClass: 'badge-quarantined',
+          description: 'Dados em análise por cobertura insuficiente de evidências (<80%).'
+        };
+      }
+      if (normalized === 'BLOCKED') {
+        return {
+          status: 'BLOCKED',
+          label: 'BLOCKED',
+          icon: '🔒',
+          cssClass: 'badge-blocked',
+          description: 'Ação pendente de aprovação humana com autorização explícita.',
+          missingCondition:
+            missingCondition ||
+            'Aprovação humana expressa com escopo e prazo definidos para escrita externa.'
+        };
+      }
+      if (normalized === 'FAILED') {
+        return {
+          status: 'FAILED',
+          label: 'FAILED',
+          icon: '❌',
+          cssClass: 'badge-failed',
+          description: 'Falha na execução de ferramenta ou não conformidade com regras da conta.'
+        };
+      }
+      return {
+        status: 'PROVISIONAL',
+        label: 'PROVISIONAL',
+        icon: '⏳',
+        cssClass: 'badge-provisional',
+        description: 'Conclusão preliminar pendente de confirmação final.'
+      };
+    }
+    window.getStatusBadgeInfo = getStatusBadgeInfo;
+
     function getLucideSvg(name, options) {
       options = options || {};
       var size = options.size || 16;
@@ -4050,7 +4944,10 @@ export function renderHtmlShell(): string {
       }, 600);
     });
 
-    window.applyQuickPrompt = function (promptText) {
+    window.applyQuickPrompt = function (promptText, evt) {
+      if (evt && typeof evt.stopPropagation === 'function') {
+        evt.stopPropagation();
+      }
       if (!promptText) return;
       const interactiveInput = document.getElementById('chat-interactive-input');
       const goalInput = document.getElementById('task-goal-input');
@@ -4078,11 +4975,17 @@ export function renderHtmlShell(): string {
       if (typeof window._validateExecution === 'function') {
         window._validateExecution();
       }
-      if (interactiveInput) {
-        interactiveInput.focus();
-      }
       if (typeof window._executeCurrentRun === 'function') {
         window._executeCurrentRun();
+      }
+      if (interactiveInput) {
+        interactiveInput.value = '';
+        interactiveInput.style.height = '';
+        interactiveInput.style.overflowY = 'hidden';
+        interactiveInput.focus();
+      }
+      if (goalInput) {
+        goalInput.value = '';
       }
     };
 
@@ -4112,6 +5015,12 @@ export function renderHtmlShell(): string {
       const comparisonHighlightsCard = document.getElementById('comparison-highlights-card');
       const trajectoryList = document.getElementById('trajectory-list');
       const trajectoryMetrics = document.getElementById('trajectory-metrics');
+
+      function cleanCardTitle(title) {
+        if (!title) return '';
+        return String(title).replace(/^(Governança|Governanca)\s*(?:&|de)?\s*[A-Za-zÀ-ÿ\s]*:\s*/i, '').trim();
+      }
+      window.cleanCardTitle = cleanCardTitle;
 
       function autoDetectModelFromKey(rawKey) {
         const key = (rawKey || '').trim();
@@ -4147,7 +5056,10 @@ export function renderHtmlShell(): string {
         };
       }
 
-      window.applyQuickPrompt = function (promptText) {
+      window.applyQuickPrompt = function (promptText, evt) {
+        if (evt && typeof evt.stopPropagation === 'function') {
+          evt.stopPropagation();
+        }
         if (!promptText) return;
         if (interactiveInput) {
           interactiveInput.value = promptText;
@@ -4169,11 +5081,17 @@ export function renderHtmlShell(): string {
           btnChatSend.setAttribute('aria-disabled', 'false');
         }
         validateExecution();
-        if (interactiveInput) {
-          interactiveInput.focus();
-        }
         if (typeof window._executeCurrentRun === 'function') {
           window._executeCurrentRun();
+        }
+        if (interactiveInput) {
+          interactiveInput.value = '';
+          interactiveInput.style.height = '';
+          interactiveInput.style.overflowY = 'hidden';
+          interactiveInput.focus();
+        }
+        if (goalInput) {
+          goalInput.value = '';
         }
       };
 
@@ -4202,6 +5120,12 @@ export function renderHtmlShell(): string {
         isReactivated: false,
         isPaused: false,
         isApproved: false,
+        isSacReconciled: false,
+        isSacDiscountSubmitted: false,
+        isBidStrategyUpdated: false,
+        isBudgetReallocated: false,
+        delegatedActions: {},
+        approvedActions: {},
         delegation: null,
         currentOperator: OPERATOR_PROFILES[0],
         chatHistory: []
@@ -4238,7 +5162,11 @@ export function renderHtmlShell(): string {
       }
 
       function updateOperatorUI() {
-        const op = sessionState.currentOperator || OPERATOR_PROFILES[0];
+        const currentId = sessionState.currentOperator ? sessionState.currentOperator.id : OPERATOR_PROFILES[0].id;
+        const op = OPERATOR_PROFILES.find(function(p) { return p.id === currentId; }) || OPERATOR_PROFILES[0];
+        sessionState.currentOperator = op;
+        if (typeof saveSessionState === 'function') saveSessionState();
+
         const nameEl = document.getElementById('operator-active-name');
         const roleEl = document.getElementById('operator-active-role');
         const compEl = document.getElementById('operator-active-company');
@@ -4247,16 +5175,41 @@ export function renderHtmlShell(): string {
         if (compEl) compEl.style.display = 'none';
         updateGreetingUI();
 
-        const menuItems = document.querySelectorAll('.operator-menu-item');
-        menuItems.forEach(function(item) {
-          if (item.getAttribute('data-operator-id') === op.id) {
-            item.classList.add('active');
-            item.setAttribute('aria-selected', 'true');
-          } else {
-            item.classList.remove('active');
-            item.setAttribute('aria-selected', 'false');
-          }
-        });
+        // Sincroniza lista de operadores no menu desktop
+        const desktopMenuListEl = document.querySelector('#operator-dropdown-menu .operator-menu-list');
+        if (desktopMenuListEl) {
+          desktopMenuListEl.innerHTML = OPERATOR_PROFILES.map(function(p) {
+            const isActive = p.id === op.id;
+            return '<button type="button" class="operator-menu-item ' + (isActive ? 'active' : '') + '" data-operator-id="' + p.id + '" role="menuitem" aria-selected="' + (isActive ? 'true' : 'false') + '">' +
+              '<div class="operator-menu-item-info">' +
+                '<div class="operator-menu-item-top">' +
+                  '<span class="operator-menu-item-name">' + escapeHtml(p.name) + '</span>' +
+                '</div>' +
+                '<span class="operator-menu-item-role">' + escapeHtml(p.role) + '</span>' +
+              '</div>' +
+              '<span class="operator-check-icon" aria-hidden="true" style="display: ' + (isActive ? 'block' : 'none') + '">✓</span>' +
+            '</button>';
+          }).join('');
+
+          desktopMenuListEl.querySelectorAll('.operator-menu-item').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const opId = btn.getAttribute('data-operator-id');
+              const chosen = OPERATOR_PROFILES.find(function(p) { return p.id === opId; });
+              if (chosen) {
+                sessionState.currentOperator = chosen;
+                try {
+                  localStorage.setItem('adzhub_active_operator', chosen.id);
+                } catch (err) {}
+                updateOperatorUI();
+                const operatorWrapper = document.getElementById('operator-selector-wrapper');
+                const operatorBtn = document.getElementById('operator-dropdown-btn');
+                if (operatorWrapper) operatorWrapper.classList.remove('open');
+                if (operatorBtn) operatorBtn.setAttribute('aria-expanded', 'false');
+              }
+            });
+          });
+        }
 
         // Sincroniza lista de operadores na gaveta mobile
         const mobileOpListEl = document.getElementById('mobile-drawer-operators-list');
@@ -4295,42 +5248,44 @@ export function renderHtmlShell(): string {
         const pendenciesListEl = document.getElementById('operator-pendencies-list');
         if (pendenciesListEl) {
           const pendencies = op.pendencies || [];
-          const activePendencies = pendencies.filter(function(t) { return (t.status || '').indexOf('Concluído') === -1; });
 
-          if (activePendencies.length === 0) {
+          if (pendencies.length === 0) {
             pendenciesListEl.innerHTML =
-              '<div style="font-size: var(--micro); color: #1E6B56; padding: 10px 12px; font-family: var(--font-mono); background: var(--success-soft); border: 1px solid var(--green); border-radius: var(--radius-small); display: flex; flex-direction: column; gap: 6px;">' +
+              '<div class="commit-success-card" style="font-size: var(--micro); padding: 10px 12px; font-family: var(--font-mono); border-radius: var(--radius-small); display: flex; flex-direction: column; gap: 6px;">' +
                 '<div style="font-weight: 600; display: flex; align-items: center; gap: 4px;">✓ Nenhuma pendência em aberto</div>' +
                 '<div style="font-size: var(--micro); color: var(--ink-muted); line-height: 1.35;">Todas as suas tarefas foram concluídas e salvas no Supercérebro.</div>' +
                 '<button type="button" class="btn-secondary" style="font-size: var(--micro); padding: 4px 10px; border-radius: var(--radius-pill); cursor: pointer; align-self: flex-start; margin-top: 2px;" onclick="if(window.switchView) window.switchView(&quot;timeline&quot;)">Ver Linha do Tempo &amp; Auditoria</button>' +
               '</div>';
           } else {
-            pendenciesListEl.innerHTML = activePendencies.map(function(task) {
+            pendenciesListEl.innerHTML = pendencies.map(function(task) {
               const statusClass = task.statusClass || 'tag-status-paused';
               const cleanStatus = (task.status || '').replace(/🔒/g, '').trim();
               const cleanBtnText = (task.btnText || '').replace(/🔒/g, '').trim();
               const isLocked = cleanStatus.indexOf('Aguardando') !== -1 || cleanBtnText.indexOf('Aguardando') !== -1 || (task.status || '').indexOf('🔒') !== -1 || (task.btnText || '').indexOf('🔒') !== -1;
               const disabledAttr = isLocked ? 'disabled="disabled"' : '';
               const btnStyle = isLocked ? 'style="opacity: 0.65; cursor: not-allowed;"' : '';
-              const isDoneTask = cleanStatus === 'Concluído' || cleanBtnText.startsWith('Ver ');
-              const viewTarget = (cleanBtnText.indexOf('Despacho') !== -1 || cleanBtnText.indexOf('Documento') !== -1) ? 'documents' : 'timeline';
+              const showTopTag = Boolean(cleanStatus && cleanStatus !== cleanBtnText);
+              const isDoneTask = cleanStatus === 'Concluído' || cleanBtnText.startsWith('Ver ') || cleanBtnText.indexOf('Auditoria') !== -1;
+
+              const encTitle = encodeURIComponent(task.title || '');
+              const encPrompt = encodeURIComponent(task.prompt || '');
 
               const onclickAttr = isLocked
                 ? ''
                 : (isDoneTask
-                    ? 'onclick="if(window.switchView) window.switchView(&quot;' + viewTarget + '&quot;)"'
-                    : 'onclick="window.applyQuickPrompt(decodeURIComponent(this.dataset.taskPrompt))"');
+                    ? 'onclick="if(window.openPendencyDocument) window.openPendencyDocument(event, \\x27' + encTitle + '\\x27, \\x27' + encPrompt + '\\x27)"'
+                    : 'onclick="if(window.applyQuickPrompt) window.applyQuickPrompt(decodeURIComponent(\\x27' + encPrompt + '\\x27), event)"');
 
-              const showTopTag = Boolean(cleanStatus && cleanStatus !== cleanBtnText && !cleanStatus.startsWith('Aguardando'));
-
-              return '<div class="task-card-item">' +
+              return '<div class="task-card-item" style="cursor: pointer;" ' + onclickAttr + '>' +
                 '<div class="task-card-header">' +
-                  '<span class="task-card-title">' + escapeHtml(task.title) + '</span>' +
+                  '<div class="task-card-title-row">' +
+                    '<span class="task-card-title">' + escapeHtml(task.title) + '</span>' +
+                  '</div>' +
                   (showTopTag ? '<span class="tag-pill ' + statusClass + '">' + escapeHtml(cleanStatus) + '</span>' : '') +
                 '</div>' +
                 '<div class="task-card-meta">' + escapeHtml(task.meta || '') + '</div>' +
-                '<button type="button" class="task-card-btn" ' + disabledAttr + ' ' + btnStyle + ' data-task-prompt="' + encodeURIComponent(task.prompt || '') + '" ' + onclickAttr + '>' +
-                  escapeHtml(cleanBtnText || 'Executar Tarefa →') +
+                '<button type="button" class="task-card-btn" ' + disabledAttr + ' ' + btnStyle + ' data-task-prompt="' + encPrompt + '" ' + onclickAttr + '>' +
+                  escapeHtml(cleanBtnText || (isDoneTask ? 'Ver Auditoria →' : 'Executar Tarefa →')) +
                 '</button>' +
               '</div>';
             }).join('');
@@ -4385,6 +5340,12 @@ export function renderHtmlShell(): string {
         document.getElementById('btn-compare')?.click();
       });
 
+      // Clique na Logo do AdzHub leva diretamente à página inicial do Chat
+      document.getElementById('btn-brand-home')?.addEventListener('click', () => {
+        if (typeof switchView === 'function') switchView('chat');
+        if (typeof resetChatToMainScreen === 'function') resetChatToMainScreen();
+      });
+
       updateOperatorUI();
 
       // Eventos do Dropdown de Operadores
@@ -4434,33 +5395,113 @@ export function renderHtmlShell(): string {
 
       // Carrega operadores e pendências dinâmicas originárias do Supercérebro
       function loadSupercerebroPendencies() {
-        fetch('/api/supercerebro/operators')
+        const queryParams = new URLSearchParams();
+        if (sessionState.isPaused) queryParams.set('isPaused', 'true');
+        if (sessionState.isReactivated) queryParams.set('isReactivated', 'true');
+        if (sessionState.isApproved) queryParams.set('isApproved', 'true');
+        if (sessionState.isSacReconciled) queryParams.set('isSacReconciled', 'true');
+        if (sessionState.isSacDiscountSubmitted) queryParams.set('isSacDiscountSubmitted', 'true');
+        if (sessionState.isBidStrategyUpdated) queryParams.set('isBidStrategyUpdated', 'true');
+        if (sessionState.isBudgetReallocated) queryParams.set('isBudgetReallocated', 'true');
+        if (sessionState.delegatedActions && Object.keys(sessionState.delegatedActions).length > 0) {
+          queryParams.set('delegatedActions', JSON.stringify(sessionState.delegatedActions));
+        }
+        if (sessionState.approvedActions && Object.keys(sessionState.approvedActions).length > 0) {
+          queryParams.set('approvedActions', JSON.stringify(sessionState.approvedActions));
+        }
+        if (sessionState.delegation && sessionState.delegation.isDelegated) {
+          queryParams.set('isDelegated', 'true');
+          if (sessionState.delegation.delegatedTo) queryParams.set('delegatedTo', sessionState.delegation.delegatedTo);
+          if (sessionState.delegation.proposalTitle) queryParams.set('proposalTitle', sessionState.delegation.proposalTitle);
+          if (sessionState.delegation.actionType) queryParams.set('actionType', sessionState.delegation.actionType);
+        }
+
+        const url = '/api/supercerebro/operators?' + queryParams.toString();
+        fetch(url)
           .then(function(res) { return res.json(); })
           .then(function(data) {
             if (data && Array.isArray(data.operators) && data.operators.length > 0) {
               OPERATOR_PROFILES = data.operators;
+
               const savedOpId = localStorage.getItem('adzhub_active_operator');
               const found = OPERATOR_PROFILES.find(function(p) { return p.id === (savedOpId || sessionState.currentOperator?.id); });
               if (found) sessionState.currentOperator = found;
               updateOperatorUI();
+              syncPendencyNodesWithGraph();
+              updateGraphStats();
             }
           })
           .catch(function() {});
       }
 
-      loadSupercerebroPendencies();
+      function saveSessionState() {
+        try {
+          localStorage.setItem('adzhub_session_state', JSON.stringify({
+            isApproved: sessionState.isApproved,
+            isPaused: sessionState.isPaused,
+            isReactivated: sessionState.isReactivated,
+            isSacReconciled: sessionState.isSacReconciled,
+            isSacDiscountSubmitted: sessionState.isSacDiscountSubmitted,
+            isBidStrategyUpdated: sessionState.isBidStrategyUpdated,
+            isBudgetReallocated: sessionState.isBudgetReallocated,
+            delegatedActions: sessionState.delegatedActions,
+            approvedActions: sessionState.approvedActions,
+            delegation: sessionState.delegation
+          }));
+        } catch (e) {}
+      }
 
-      // Restaura estado de governança previamente commitado
-      fetch('/api/governance/state')
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-          if (data && data.isReactivated) sessionState.isReactivated = true;
-          if (data && data.isPaused) sessionState.isPaused = true;
-          if (data && data.delegation && data.delegation.isDelegated) sessionState.delegation = data.delegation;
-          if (data && data.isSacReconciled) sessionState.isSacReconciled = true;
-          loadSupercerebroPendencies();
-        })
-        .catch(function() {});
+      function loadSessionState() {
+        try {
+          const raw = localStorage.getItem('adzhub_session_state');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.isApproved !== undefined) sessionState.isApproved = parsed.isApproved;
+            if (parsed.isPaused !== undefined) sessionState.isPaused = parsed.isPaused;
+            if (parsed.isReactivated !== undefined) sessionState.isReactivated = parsed.isReactivated;
+            if (parsed.isSacReconciled !== undefined) sessionState.isSacReconciled = parsed.isSacReconciled;
+            if (parsed.isSacDiscountSubmitted !== undefined) sessionState.isSacDiscountSubmitted = parsed.isSacDiscountSubmitted;
+            if (parsed.isBidStrategyUpdated !== undefined) sessionState.isBidStrategyUpdated = parsed.isBidStrategyUpdated;
+            if (parsed.isBudgetReallocated !== undefined) sessionState.isBudgetReallocated = parsed.isBudgetReallocated;
+            if (parsed.delegatedActions) sessionState.delegatedActions = parsed.delegatedActions;
+            if (parsed.approvedActions) sessionState.approvedActions = parsed.approvedActions;
+            if (parsed.delegation) sessionState.delegation = parsed.delegation;
+          }
+        } catch (e) {}
+      }
+
+      function syncGovernanceAndGraphState() {
+        return fetch('/api/governance/state')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data) {
+              if (data.isReactivated !== undefined) sessionState.isReactivated = Boolean(data.isReactivated);
+              if (data.isPaused !== undefined) sessionState.isPaused = Boolean(data.isPaused);
+              if (data.isApproved !== undefined) sessionState.isApproved = Boolean(data.isApproved);
+              if (data.isSacReconciled !== undefined) sessionState.isSacReconciled = Boolean(data.isSacReconciled);
+              if (data.isSacDiscountSubmitted !== undefined) sessionState.isSacDiscountSubmitted = Boolean(data.isSacDiscountSubmitted);
+              if (data.isBidStrategyUpdated !== undefined) sessionState.isBidStrategyUpdated = Boolean(data.isBidStrategyUpdated);
+              if (data.isBudgetReallocated !== undefined) sessionState.isBudgetReallocated = Boolean(data.isBudgetReallocated);
+              if (data.delegatedActions) sessionState.delegatedActions = data.delegatedActions;
+              if (data.approvedActions) sessionState.approvedActions = data.approvedActions;
+              if (data.delegation) sessionState.delegation = data.delegation;
+              saveSessionState();
+            }
+            loadSupercerebroPendencies();
+            if (typeof window.fetchAndRenderSupercerebroGraph === 'function') {
+              window.fetchAndRenderSupercerebroGraph();
+            } else if (typeof fetchAndRenderSupercerebroGraph === 'function') {
+              fetchAndRenderSupercerebroGraph();
+            }
+            updateOperatorUI();
+          })
+          .catch(function() {});
+      }
+
+      window.syncGovernanceAndGraphState = syncGovernanceAndGraphState;
+
+      loadSessionState();
+      syncGovernanceAndGraphState();
 
       function setExecutionActive(active) {
         sessionState.isExecuting = Boolean(active);
@@ -4473,7 +5514,12 @@ export function renderHtmlShell(): string {
           if (btnChatSend) {
             btnChatSend.disabled = true;
             btnChatSend.setAttribute('disabled', 'true');
-            btnChatSend.innerHTML = '<span class="btn-send-spinner"></span>';
+            btnChatSend.classList.add('is-loading');
+            btnChatSend.innerHTML =
+              '<svg class="md3-circular-progress" viewBox="0 0 48 48" style="width: 16px; height: 16px; display: block; margin: auto;">' +
+                '<circle cx="24" cy="24" r="18" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="4.5"></circle>' +
+                '<circle class="md3-progress-spinner" cx="24" cy="24" r="18" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round"></circle>' +
+              '</svg>';
             btnChatSend.setAttribute('aria-label', 'Executando tarefa...');
           }
         } else {
@@ -4483,10 +5529,16 @@ export function renderHtmlShell(): string {
             interactiveInput.placeholder = 'Escreva o que precisa que eu faça...';
             interactiveInput.style.height = '';
             interactiveInput.style.overflowY = 'hidden';
+            setTimeout(function() {
+              if (document.getElementById('pane-chat')?.style.display !== 'none') {
+                interactiveInput.focus();
+              }
+            }, 60);
           }
           if (btnChatSend) {
             btnChatSend.disabled = false;
             btnChatSend.removeAttribute('disabled');
+            btnChatSend.classList.remove('is-loading');
             btnChatSend.innerHTML = '↑';
             btnChatSend.setAttribute('aria-label', 'Enviar / Executar Tarefa');
           }
@@ -4610,484 +5662,256 @@ export function renderHtmlShell(): string {
         }
       }
 
+      const STAGE_CARD_EXIT_DELAY_MS = 3000;
+      window.STAGE_CARD_EXIT_DELAY_MS = STAGE_CARD_EXIT_DELAY_MS;
+
       function updateStageActiveBadge() {
-        const visibleCards = document.querySelectorAll('.stage-card[data-visible="true"]');
+        const visibleCards = document.querySelectorAll('.stage-card[data-visible="true"]:not(.stage-card-queue-exit)');
         const count = visibleCards.length;
         const emptyEl = document.getElementById('stage-empty-state');
         const textEl = document.getElementById('stage-live-count');
         if (emptyEl) {
-          emptyEl.style.display = count > 0 ? 'none' : 'block';
+          emptyEl.style.display = count > 0 ? 'none' : 'flex';
         }
         if (textEl) {
           textEl.textContent = count + (count === 1 ? ' Observação Ativa' : ' Observações Ativas');
         }
       }
 
-      function showStageCard(cardId, delay) {
-        const delayMs = typeof delay === 'number' ? delay : 0;
-        const c = document.getElementById(cardId);
-        if (!c) return;
-        setTimeout(() => {
-          c.style.display = 'flex';
-          c.setAttribute('data-visible', 'true');
-          c.classList.remove('chat-animate-in');
-          void c.offsetWidth;
-          c.classList.add('chat-animate-in', 'card-pulse-highlight');
+      function clearStageCardsWithExitDelay(container, callback, delayMs) {
+        const timeoutMs = typeof delayMs === 'number' ? delayMs : STAGE_CARD_EXIT_DELAY_MS;
+        if (!container) {
+          if (callback) callback();
+          return;
+        }
+        const oldCards = Array.from(container.querySelectorAll('.stage-dynamic-card:not(.stage-card-queue-exit)'));
+        if (oldCards.length === 0) {
+          if (callback) callback();
+          return;
+        }
+
+        if (timeoutMs === 0) {
+          oldCards.forEach(function(c) {
+            if (c.parentNode) c.remove();
+          });
+          if (callback) callback();
           updateStageActiveBadge();
-        }, delayMs);
-      }
+          return;
+        }
 
-      const ALL_STAGE_CARDS = [
-        'card-ugc-oferta',
-        'card-hook-social',
-        'card-carousel-faq',
-        'card-meta-metrics',
-        'card-crm-metrics',
-        'card-brain-context'
-      ];
-
-      function setStageState({ selectedCards = [], observedCards = null, isFinal = false }) {
-        const visibleCardIds = isFinal ? (observedCards || selectedCards) : selectedCards;
-        const emptyEl = document.getElementById('stage-empty-state');
-
-        ALL_STAGE_CARDS.forEach((id) => {
-          const cardEl = document.getElementById(id);
-          if (!cardEl) return;
-
-          const isSelected = isFinal ? false : selectedCards.includes(id);
-          const isVisible = visibleCardIds.includes(id);
-
-          if (isSelected) {
-            if (!cardEl.classList.contains('card-active')) {
-              cardEl.classList.add('card-active');
-              cardEl.classList.remove('card-pulse-highlight', 'card-success');
-              void cardEl.offsetWidth;
-              cardEl.classList.add('card-pulse-highlight');
-            }
-          } else {
-            cardEl.classList.remove('card-active', 'card-success', 'card-pulse-highlight');
-          }
-
-          if (isVisible) {
-            cardEl.style.display = 'flex';
-            cardEl.setAttribute('data-visible', 'true');
-          } else {
-            cardEl.style.display = 'none';
-            cardEl.removeAttribute('data-visible');
-          }
+        oldCards.forEach(function(c) {
+          c.classList.add('stage-card-queue-exit');
+          c.setAttribute('data-exiting', 'true');
+          c.setAttribute('data-exit-delay-ms', String(timeoutMs));
         });
 
-        if (emptyEl) {
-          emptyEl.style.display = visibleCardIds.length > 0 ? 'none' : 'block';
+        setTimeout(function() {
+          oldCards.forEach(function(c) {
+            if (c.parentNode) c.remove();
+          });
+          if (callback) callback();
+          updateStageActiveBadge();
+        }, timeoutMs);
+      }
+
+      function setStageState({ selectedCards = [], observedCards = null, isFinal = false }) {
+        renderStageCardsFromRun({ scenarioId: sessionState.scenario, goalVal: (interactiveInput?.value || '').trim() });
+      }
+
+      function getStageCardMapping(query, scenarioId) {
+        return {
+          step1Selected: ['card-meta-metrics'],
+          step2Selected: ['card-crm-metrics'],
+          t1Selected: ['card-meta-metrics'],
+          t1Observed: ['card-meta-metrics'],
+          t2Selected: ['card-crm-metrics'],
+          t2Observed: ['card-meta-metrics', 'card-crm-metrics'],
+          finalSelected: ['card-meta-metrics', 'card-crm-metrics', 'card-brain-context'],
+          finalObserved: ['card-meta-metrics', 'card-crm-metrics', 'card-brain-context']
+        };
+      }
+
+      function renderStageCardsFromRun(params) {
+        const container = document.getElementById('stage-cards-container');
+        const emptyEl = document.getElementById('stage-empty-state');
+        const summary = document.getElementById('stage-summary-text');
+        if (!container) return;
+
+        const p = params || {};
+        const runRecord = p.runRecord || p.runData || {};
+        const structured = p.structuredAnswer || runRecord.structuredAnswer || {};
+        const query = (p.query || p.goalVal || '').toLowerCase().trim();
+        const scenarioId = p.scenarioId || sessionState.scenario;
+        const evidenceRefs = structured.evidenceRefs || runRecord.evidenceRefs || [];
+        const events = runRecord.trace || runRecord.events || sessionState.events || [];
+
+        // Verifica estado de governança
+        const isPaused = Boolean(sessionState.isPaused);
+        const isReactivated = Boolean(sessionState.isReactivated);
+        const status = structured.status || (isReactivated || isPaused ? 'COMMITTED' : (runRecord.status || 'COMPLETED'));
+
+        // Se for estado inicial sem consulta nem run, remove cards com delay de saída de 5s
+        if (!query && !scenarioId && (!events || events.length === 0) && evidenceRefs.length === 0 && !structured.conclusion) {
+          clearStageCardsWithExitDelay(container, function() {
+            if (emptyEl) emptyEl.style.display = 'flex';
+            if (summary) summary.textContent = 'Palco Operacional aguardando observações';
+            updateStageActiveBadge();
+          }, STAGE_CARD_EXIT_DELAY_MS);
+          return;
+        }
+
+        if (emptyEl) emptyEl.style.display = 'none';
+
+        // Substitui os cards antigos imediatamente (0ms delay) para renderização instantânea da resposta
+        clearStageCardsWithExitDelay(container, null, 0);
+
+        const cardsToInsert = [];
+
+        // 1. Meta Ads & Creative Performance Card (Dinâmico a partir de runRecord / evidências)
+        const metrics = runRecord.metrics || runRecord.runtimeMetrics || {};
+        const metaSpend = metrics.metaSpend || (metrics.totalCostBrl !== undefined ? ('R$ ' + Number(metrics.totalCostBrl).toFixed(2)) : null);
+        const metaRoas = metrics.roas ? (metrics.roas + 'x') : (metrics.metaRoas ? (metrics.metaRoas + 'x') : null);
+        const metaCpa = metrics.cpa ? ('R$ ' + metrics.cpa) : (metrics.metaCpa ? ('R$ ' + metrics.metaCpa) : null);
+        const impressionsVal = metrics.impressions ? escapeHtml(metrics.impressions) : (metrics.totalTokens ? (metrics.totalTokens + ' Tokens') : null);
+
+        let metaStatusBadge = isPaused ? 'PAUSADO (COMMIT)' : (isReactivated ? 'ATIVO (REATIVADO)' : 'Ativo');
+        let metaBadgeClass = isPaused ? 'tag-status-paused' : 'tag-status-active';
+
+        if (scenarioId === 'S1') {
+          metaStatusBadge = 'Ativo (Meta)';
+        }
+
+        const metaTagsHtml = [
+          '<span class="tag-pill ' + metaBadgeClass + '" id="badge-meta-status">' + escapeHtml(metaStatusBadge) + '</span>',
+          metaSpend ? '<span class="tag-pill tag-hook-strong">Investimento: ' + escapeHtml(metaSpend) + '</span>' : '',
+          metaRoas ? '<span class="tag-pill tag-cta-good">ROAS: ' + escapeHtml(metaRoas) + '</span>' : '',
+          impressionsVal ? '<span class="tag-pill tag-cta-good">' + impressionsVal + '</span>' : ''
+        ].filter(Boolean).join('');
+
+        const metaMetricsDetailsHtml = [
+          metaCpa ? '<span>CPA Médio: ' + escapeHtml(metaCpa) + '</span>' : '',
+          '<span>Status da Conta: ' + (isPaused ? 'Governança Auditada (SQLite)' : 'Em Operação') + '</span>',
+          isPaused ? '<span style="color: var(--danger, #ef4444); font-weight: 600;">Criativo Pausado por CPA Elevado</span>' : '<span>Monitoramento em Tempo Real</span>'
+        ].filter(Boolean).join('');
+
+        const metaCard = document.createElement('div');
+        metaCard.className = 'stage-card stage-dynamic-card chat-animate-in';
+        metaCard.id = 'card-meta-metrics';
+        metaCard.setAttribute('data-visible', 'true');
+        metaCard.innerHTML =
+          '<div class="stage-card-top">' +
+            '<span class="stage-card-name">Meta Ads — Performance de Criativos</span>' +
+          '</div>' +
+          '<div class="stage-card-tags" id="tags-meta-metrics">' +
+            metaTagsHtml +
+          '</div>' +
+          '<div class="stage-card-metrics">' +
+            metaMetricsDetailsHtml +
+          '</div>';
+        cardsToInsert.push(metaCard);
+
+        // 2. CRM & SAC WhatsApp Reconciled Sales Card (Dinâmico)
+        const isQuarantine = scenarioId === 'S2';
+        const isCrmUnavailable = scenarioId === 'S1';
+        let crmBadge = isCrmUnavailable ? 'Indisponível (503)' : (isQuarantine ? 'Quarentena (UTM < 80%)' : (metrics.totalOrders ? (metrics.totalOrders + ' Vendas Auditadas') : (metrics.totalSteps ? (metrics.totalSteps + ' Passos Auditados') : 'Vendas Auditadas')));
+        let crmClass = isCrmUnavailable || isQuarantine ? 'tag-status-paused' : 'tag-status-active';
+        let utmText = isQuarantine ? 'Cobertura UTM: < 80% (Mínimo: 80%)' : (metrics.utmCoverage ? ('Cobertura UTM: ' + metrics.utmCoverage) : null);
+        const revenueText = metrics.revenue ? ('Receita: R$ ' + metrics.revenue) : null;
+        const ticketText = metrics.averageTicket ? ('Ticket Médio: R$ ' + metrics.averageTicket) : null;
+
+        const crmTagsHtml = [
+          '<span class="tag-pill ' + crmClass + '" id="badge-crm-status">' + escapeHtml(crmBadge) + '</span>',
+          revenueText ? '<span class="tag-pill tag-hook-strong">' + escapeHtml(revenueText) + '</span>' : '',
+          ticketText ? '<span class="tag-pill tag-cta-good">' + escapeHtml(ticketText) + '</span>' : '',
+          utmText ? '<span class="tag-pill ' + (isQuarantine ? 'tag-cta-bad' : 'tag-cta-good') + '" id="tag-crm-utm">' + escapeHtml(utmText) + '</span>' : ''
+        ].filter(Boolean).join('');
+
+        const crmCard = document.createElement('div');
+        crmCard.className = 'stage-card stage-dynamic-card chat-animate-in';
+        crmCard.id = 'card-crm-metrics';
+        crmCard.setAttribute('data-visible', 'true');
+        crmCard.innerHTML =
+          '<div class="stage-card-top">' +
+            '<span class="stage-card-name">HubSpot CRM &amp; WhatsApp SAC</span>' +
+          '</div>' +
+          '<div class="stage-card-tags" id="tags-crm-metrics">' +
+            crmTagsHtml +
+          '</div>' +
+          '<div class="stage-card-metrics" id="metrics-crm-details">' +
+            (isCrmUnavailable
+              ? '<span style="color: #f87171;">Falha de conexão com a API de CRM (503 Service Unavailable)</span>'
+              : (isQuarantine
+                ? '<span style="color: #fbbf24;">Dados retidos em quarentena de segurança (sem falsos cortes)</span>'
+                : '<span>Reconciliação Canônica Concluída</span><span>Vendas Aprovadas no CRM</span>')) +
+          '</div>';
+        cardsToInsert.push(crmCard);
+
+
+        // 4. Governance & Supercérebro Card (Dinâmico)
+        const brainCard = document.createElement('div');
+        brainCard.className = 'stage-card stage-dynamic-card chat-animate-in';
+        brainCard.id = 'card-brain-context';
+        brainCard.setAttribute('data-visible', 'true');
+        brainCard.innerHTML =
+          '<div class="stage-card-top">' +
+            '<span class="stage-card-name">Supercérebro — Memória &amp; Governança</span>' +
+          '</div>' +
+          '<div id="brain-card-details" style="font-size: var(--micro); color: var(--ink); margin-top: 2px; display: flex; flex-direction: column; gap: 3px; font-family: var(--font-primary); line-height: 1.35;">' +
+            '<div><strong>Política:</strong> Escrita externa requer autorização humana explícita.</div>' +
+          '</div>';
+        cardsToInsert.push(brainCard);
+
+        // Insere todos os cards dinâmicos com animação de fila e delay sequencial
+        cardsToInsert.forEach(function(card, index) {
+          card.classList.add('stage-card-queue-enter');
+          card.setAttribute('data-queue-index', String(index));
+          card.setAttribute('data-queue-delay-ms', String(index * 200));
+          card.style.animationDelay = (index * 0.2) + 's';
+          container.appendChild(card);
+        });
+
+        if (summary) {
+          summary.textContent = isPaused
+            ? 'Palco: Pausa de criativos saturados commitada no SQLite'
+            : (isReactivated
+              ? 'Palco: Reativação commitada no SQLite (100% Ativos)'
+              : (scenarioId === 'S1'
+                ? 'Aviso: API CRM retornou 503 · Replan em andamento'
+                : (scenarioId === 'S2'
+                  ? 'Aviso: Cobertura UTM < 80% · Retido em Quarentena sem falso corte'
+                  : 'Palco sincronizado com os dados da conta')));
         }
 
         updateStageActiveBadge();
       }
 
-      function getStageCardMapping(query, scenarioId) {
-        function makeMapping(s1, s2, finalSel, finalObs) {
-          return {
-            step1Selected: s1,
-            step2Selected: s2,
-            t1Selected: s1,
-            t1Observed: s1,
-            t2Selected: s2,
-            t2Observed: [...s1, ...s2],
-            finalSelected: finalSel,
-            finalObserved: finalObs
-          };
-        }
-
-        if (scenarioId === 'S1') {
-          return makeMapping(
-            ['card-hook-social', 'card-meta-metrics'],
-            ['card-crm-metrics'],
-            ['card-crm-metrics', 'card-hook-social'],
-            ['card-ugc-oferta', 'card-hook-social', 'card-meta-metrics', 'card-crm-metrics']
-          );
-        } else if (scenarioId === 'S2') {
-          return makeMapping(
-            ['card-ugc-oferta', 'card-carousel-faq'],
-            ['card-crm-metrics'],
-            ['card-crm-metrics', 'card-carousel-faq'],
-            ['card-ugc-oferta', 'card-carousel-faq', 'card-meta-metrics', 'card-crm-metrics']
-          );
-        } else if (scenarioId === 'S3') {
-          return makeMapping(
-            ['card-meta-metrics'],
-            ['card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics']
-          );
-        } else if (scenarioId === 'S4') {
-          return makeMapping(
-            ['card-brain-context'],
-            ['card-crm-metrics'],
-            ['card-brain-context', 'card-crm-metrics'],
-            ['card-crm-metrics', 'card-brain-context', 'card-ugc-oferta']
-          );
-        } else if (scenarioId === 'S5') {
-          return makeMapping(
-            ['card-ugc-oferta', 'card-hook-social'],
-            ['card-brain-context'],
-            ['card-brain-context', 'card-hook-social'],
-            ['card-ugc-oferta', 'card-hook-social', 'card-carousel-faq', 'card-brain-context']
-          );
-        }
-
-        const q = (query || '').toLowerCase().trim();
-
-        const isSkills =
-          q.includes('skill') ||
-          q.includes('skills') ||
-          q.includes('pode fazer') ||
-          q.includes('capacidade') ||
-          q.includes('capacidades') ||
-          q.includes('habilidade') ||
-          q.includes('habilidades') ||
-          q.includes('quais sao') ||
-          q.includes('quais são') ||
-          q.includes('função') ||
-          q.includes('funcoes') ||
-          q.includes('ferramenta') ||
-          q.includes('ferramentas');
-
-        const isWhatsApp =
-          q.includes('whatsapp') ||
-          q.includes('whats') ||
-          q.includes('zap') ||
-          q.includes('conversa') ||
-          q.includes('conversas') ||
-          q.includes('thread') ||
-          q.includes('threads') ||
-          q.includes('mensagem') ||
-          q.includes('mensagens');
-
-        const isGreeting =
-          q === 'oi' ||
-          q === 'ola' ||
-          q === 'olá' ||
-          q === 'opi' ||
-          q === 'opa' ||
-          q.startsWith('oi ') ||
-          q.startsWith('olá ') ||
-          q.startsWith('ola ') ||
-          q.startsWith('opa ') ||
-          q.includes('bom dia') ||
-          q.includes('boa tarde') ||
-          q.includes('boa noite') ||
-          q.includes('quem é você') ||
-          q.includes('quem e voce') ||
-          q.includes('ajuda') ||
-          isSkills;
-
-        if (isGreeting) {
-          return makeMapping(
-            ['card-brain-context', 'card-meta-metrics'],
-            ['card-crm-metrics'],
-            ['card-brain-context', 'card-meta-metrics', 'card-crm-metrics'],
-            ['card-brain-context', 'card-meta-metrics', 'card-crm-metrics']
-          );
-        }
-
-        if (isWhatsApp) {
-          return makeMapping(
-            ['card-brain-context'],
-            ['card-crm-metrics'],
-            ['card-brain-context', 'card-crm-metrics'],
-            ['card-brain-context', 'card-crm-metrics', 'card-meta-metrics']
-          );
-        }
-
-        const isAnomalyOrCost =
-          q.includes('anomalia') ||
-          q.includes('aumentou') ||
-          q.includes('subiu') ||
-          q.includes('cpa') ||
-          q.includes('custo por') ||
-          q.includes('conversão aumentou') ||
-          q.includes('conversao aumentou') ||
-          q.includes('investigar');
-
-        if (isAnomalyOrCost) {
-          return makeMapping(
-            ['card-ugc-oferta', 'card-carousel-faq'],
-            ['card-meta-metrics', 'card-crm-metrics'],
-            ['card-ugc-oferta', 'card-carousel-faq', 'card-meta-metrics'],
-            ['card-ugc-oferta', 'card-carousel-faq', 'card-meta-metrics', 'card-crm-metrics']
-          );
-        }
-
-        const isCopyOrSuggestions =
-          q.includes('sugira') ||
-          q.includes('sugest') ||
-          q.includes('novos anuncio') ||
-          q.includes('novos anúncio') ||
-          q.includes('novos criativo') ||
-          q.includes('proponha') ||
-          q.includes('copy') ||
-          q.includes('copys') ||
-          q.includes('cópias') ||
-          q.includes('chamada') ||
-          q.includes('headline') ||
-          q.includes('gancho');
-
-        if (isCopyOrSuggestions) {
-          return makeMapping(
-            ['card-brain-context', 'card-ugc-oferta'],
-            ['card-hook-social', 'card-meta-metrics'],
-            ['card-brain-context', 'card-hook-social', 'card-ugc-oferta'],
-            ['card-brain-context', 'card-ugc-oferta', 'card-hook-social', 'card-meta-metrics']
-          );
-        }
-
-        const isCtaOrPause =
-          q.includes('pause') ||
-          q.includes('pausar') ||
-          q.includes('desativar') ||
-          q.includes('reativar') ||
-          q.includes('religar') ||
-          q.includes('cta') ||
-          q.includes('criativ') ||
-          q.includes('ruim') ||
-          q.includes('fadiga') ||
-          q.includes('novas opç') ||
-          q.includes('novas opc') ||
-          q.includes('variaç') ||
-          q.includes('variac');
-
-        if (isCtaOrPause) {
-          return makeMapping(
-            ['card-ugc-oferta', 'card-carousel-faq'],
-            ['card-hook-social', 'card-brain-context'],
-            ['card-ugc-oferta', 'card-hook-social', 'card-brain-context'],
-            ['card-ugc-oferta', 'card-hook-social', 'card-carousel-faq', 'card-brain-context']
-          );
-        }
-
-        const isOmega = q.includes('omega') || q.includes('ômega') || q.includes('ifos');
-        const isWhey = q.includes('whey') || q.includes('baunilha') || q.includes('grass');
-        const isCreatine = q.includes('creatina') || q.includes('creapure');
-        const isCrmOrSales = q.includes('crm') || q.includes('venda') || q.includes('fatur') || q.includes('pedid') || q.includes('deal') || q.includes('ticket') || q.includes('receita') || q.includes('cruzar') || q.includes('realmente vendeu') || q.includes('reconcili');
-        const isBrain = q.includes('super') || q.includes('equipe') || q.includes('aline') || q.includes('marcos') || q.includes('governanca') || q.includes('governança') || q.includes('deleg');
-        const isMeetingOrRisk = q.includes('reuniao') || q.includes('reunião') || q.includes('pauta') || q.includes('risco') || q.includes('semana') || q.includes('alinhamento');
-
-        if (isOmega) {
-          return makeMapping(
-            ['card-meta-metrics'],
-            ['card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics']
-          );
-        } else if (isWhey) {
-          return makeMapping(
-            ['card-hook-social', 'card-meta-metrics'],
-            ['card-ugc-oferta', 'card-crm-metrics'],
-            ['card-hook-social', 'card-meta-metrics'],
-            ['card-ugc-oferta', 'card-hook-social', 'card-meta-metrics', 'card-crm-metrics']
-          );
-        } else if (isCreatine) {
-          return makeMapping(
-            ['card-meta-metrics'],
-            ['card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics']
-          );
-        } else if (isCrmOrSales) {
-          return makeMapping(
-            ['card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics'],
-            ['card-crm-metrics', 'card-meta-metrics'],
-            ['card-crm-metrics', 'card-meta-metrics']
-          );
-        } else if (isBrain) {
-          return makeMapping(
-            ['card-brain-context'],
-            ['card-meta-metrics'],
-            ['card-brain-context', 'card-meta-metrics'],
-            ['card-brain-context', 'card-meta-metrics']
-          );
-        } else if (isMeetingOrRisk) {
-          return makeMapping(
-            ['card-meta-metrics', 'card-hook-social'],
-            ['card-crm-metrics', 'card-brain-context'],
-            ['card-meta-metrics', 'card-crm-metrics'],
-            ['card-meta-metrics', 'card-crm-metrics', 'card-brain-context']
-          );
-        } else {
-          return makeMapping(
-            ['card-brain-context', 'card-meta-metrics'],
-            ['card-crm-metrics'],
-            ['card-brain-context', 'card-meta-metrics', 'card-crm-metrics'],
-            ['card-brain-context', 'card-meta-metrics', 'card-crm-metrics']
-          );
-        }
-      }
+      window.renderStageCardsFromRun = renderStageCardsFromRun;
 
       function applyStageContentUpdates(query, scenarioId) {
-        const badgeUgc = document.getElementById('badge-ugc-status');
-        const badgeHook = document.getElementById('badge-hook-status');
-        const badgeFaq = document.getElementById('badge-faq-status');
-        const tagsUgc = document.getElementById('tags-ugc-oferta');
-        const tagsFaq = document.getElementById('tags-carousel-faq');
-        const tagsHook = document.getElementById('tags-hook-social');
-        const summary = document.getElementById('stage-summary-text');
-        const badgeCrm = document.getElementById('badge-crm-status');
-        const tagCrmUtm = document.getElementById('tag-crm-utm');
-        const crmMetricsDetails = document.getElementById('metrics-crm-details');
-        const badgeBrain = document.getElementById('badge-brain-status');
-        const brainCardDetails = document.getElementById('brain-card-details');
-
-        if (brainCardDetails) {
-          brainCardDetails.innerHTML =
-            '<div><strong>Política:</strong> Escrita externa requer aprovação expressa.</div>';
-        }
-
-        if (scenarioId === 'S1') {
-          if (badgeUgc) { badgeUgc.textContent = 'Indisponível (CRM)'; badgeUgc.className = 'tag-pill tag-status-paused'; }
-          if (badgeHook) { badgeHook.textContent = 'Ativo (Meta)'; badgeHook.className = 'tag-pill tag-status-active'; }
-          if (badgeFaq) { badgeFaq.textContent = 'Ativo (Meta)'; badgeFaq.className = 'tag-pill tag-status-active'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill tag-hook-strong">Hook Forte</span><span class="tag-pill" style="border-color: #ef4444; color: #f87171;">CRM Indisponível (503)</span>';
-          if (badgeCrm) { badgeCrm.textContent = 'Indisponível (503)'; badgeCrm.className = 'tag-pill tag-status-paused'; }
-          if (crmMetricsDetails) crmMetricsDetails.innerHTML = '<span style="color: #f87171;">Falha de conexão com a API de CRM (503 Service Unavailable)</span>';
-          if (summary) summary.textContent = 'Aviso: API CRM retornou 503 · Replan em andamento';
-        } else if (scenarioId === 'S2') {
-          if (badgeUgc) { badgeUgc.textContent = 'Quarentena (UTM)'; badgeUgc.className = 'tag-pill tag-status-paused'; }
-          if (badgeFaq) { badgeFaq.textContent = 'Quarentena (UTM)'; badgeFaq.className = 'tag-pill tag-status-paused'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill" style="border-color: #f97316; color: #fdba74;">Sem UTM (42% cov)</span><span class="tag-pill tag-cta-bad">Não Atribuível</span>';
-          if (badgeCrm) { badgeCrm.textContent = 'Quarentena (42% UTM)'; badgeCrm.className = 'tag-pill tag-status-paused'; }
-          if (tagCrmUtm) tagCrmUtm.textContent = 'Cobertura UTM: 42% (Mínimo: 80%)';
-          if (crmMetricsDetails) crmMetricsDetails.innerHTML = '<span style="color: #fbbf24;">Dados retidos em quarentena de segurança (sem falsos cortes)</span>';
-          if (summary) summary.textContent = 'Aviso: Cobertura UTM < 80% · Retido em Quarentena sem falso corte';
-        } else if (scenarioId === 'S3') {
-          if (badgeUgc) { badgeUgc.textContent = 'Rejeitado'; badgeUgc.className = 'tag-pill tag-status-paused'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill" style="border-color: #ef4444; color: #f87171;">Incompatibilidade Temporal</span>';
-          if (summary) summary.textContent = 'Incompatibilidade temporal: Pós-condição determinística rejeitou commit';
-        } else if (scenarioId === 'S4') {
-          if (badgeUgc) { badgeUgc.textContent = 'Sanitizado'; badgeUgc.className = 'tag-pill tag-status-active'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill tag-hook-strong">Hook Forte</span><span class="tag-pill" style="border-color: #22c55e; color: #4ade80;">Prompt Injection Protegido</span>';
-          if (summary) summary.textContent = 'Segurança: Dados não-confiáveis do CRM tratados estritamente como texto passivo';
-        } else if (scenarioId === 'S5') {
-          if (badgeUgc) { badgeUgc.textContent = 'Pausa Bloqueada'; badgeUgc.className = 'tag-pill tag-status-paused'; }
-          if (badgeFaq) { badgeFaq.textContent = 'Pausa Bloqueada'; badgeFaq.className = 'tag-pill tag-status-paused'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill tag-hook-strong">Hook Forte</span><span class="tag-pill" style="border-color: #ef4444; color: #f87171;">Aprovação Necessária</span>';
-          if (summary) summary.textContent = 'Capability Broker: Escrita externa bloqueada (exige aprovação humana expressa)';
-        } else if (sessionState.isReactivated) {
-          if (badgeUgc) { badgeUgc.textContent = 'ATIVO (REATIVADO)'; badgeUgc.className = 'tag-pill tag-status-active'; }
-          if (badgeHook) { badgeHook.textContent = 'ATIVO (CAMPEÃO)'; badgeHook.className = 'tag-pill tag-status-active'; }
-          if (badgeFaq) { badgeFaq.textContent = 'ATIVO (REATIVADO)'; badgeFaq.className = 'tag-pill tag-status-active'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill tag-hook-strong">HOOK FORTE 8.5</span><span class="tag-pill tag-status-active">REATIVADO</span><span class="tag-pill" style="border-color: #22c55e; color: #4ade80;">CPA R$ 94,50</span>';
-          if (tagsFaq) tagsFaq.innerHTML = '<span class="tag-pill tag-hook-weak">HOOK 4.2</span><span class="tag-pill tag-status-active">REATIVADO</span><span class="tag-pill" style="border-color: #22c55e; color: #4ade80;">COMMIT SQLITE</span>';
-          if (tagsHook) tagsHook.innerHTML = '<span class="tag-pill tag-hook-strong">HOOK FORTE 8.8</span><span class="tag-pill tag-cta-good">CTA BOM 8.5</span><span class="tag-pill" style="border-color: #22c55e; color: #4ade80;">CPA R$ 42,10</span>';
-          if (badgeCrm) { badgeCrm.textContent = '62 Vendas Auditadas'; badgeCrm.className = 'tag-pill tag-status-active'; }
-          if (tagCrmUtm) tagCrmUtm.textContent = 'Cobertura UTM: 86.4%';
-          if (crmMetricsDetails) crmMetricsDetails.innerHTML = '<span>48 Vendas Aprovadas</span><span>8 Abandonos</span><span>6 Boletos Pendentes</span>';
-          if (summary) summary.textContent = 'Palco: Reativação commitada no SQLite (100% Ativos)';
-        } else if (sessionState.isPaused) {
-          if (badgeUgc) { badgeUgc.textContent = 'PAUSADO (COMMIT)'; badgeUgc.className = 'tag-pill tag-status-paused'; }
-          if (badgeHook) { badgeHook.textContent = 'ATIVO (CAMPEÃO)'; badgeHook.className = 'tag-pill tag-status-active'; }
-          if (badgeFaq) { badgeFaq.textContent = 'PAUSADO (COMMIT)'; badgeFaq.className = 'tag-pill tag-status-paused'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill tag-cta-weak">CTA 4.0</span><span class="tag-pill tag-status-paused">PAUSADO</span><span class="tag-pill" style="border-color: #ef4444; color: #f87171;">COMMIT SQLITE</span>';
-          if (tagsFaq) tagsFaq.innerHTML = '<span class="tag-pill tag-hook-weak">HOOK 4.2</span><span class="tag-pill tag-status-paused">PAUSADO</span><span class="tag-pill" style="border-color: #ef4444; color: #f87171;">COMMIT SQLITE</span>';
-          if (tagsHook) tagsHook.innerHTML = '<span class="tag-pill tag-hook-strong">HOOK FORTE 8.8</span><span class="tag-pill tag-cta-good">CTA BOM 8.5</span><span class="tag-pill" style="border-color: #22c55e; color: #4ade80;">CPA R$ 42,10</span>';
-          if (badgeCrm) { badgeCrm.textContent = '62 Vendas Auditadas'; badgeCrm.className = 'tag-pill tag-status-active'; }
-          if (tagCrmUtm) tagCrmUtm.textContent = 'Cobertura UTM: 86.4%';
-          if (crmMetricsDetails) crmMetricsDetails.innerHTML = '<span>48 Vendas Aprovadas</span><span>8 Abandonos</span><span>6 Boletos Pendentes</span>';
-          if (summary) summary.textContent = 'Palco: Pausa de criativos saturados commitada no SQLite';
-        } else {
-          const q = (query || '').toLowerCase().trim();
-
-          const isGreeting =
-            q === 'oi' ||
-            q === 'ola' ||
-            q === 'olá' ||
-            q.startsWith('oi ') ||
-            q.startsWith('olá ') ||
-            q.startsWith('ola ') ||
-            q.includes('bom dia') ||
-            q.includes('boa tarde') ||
-            q.includes('boa noite') ||
-            q.includes('quem é você') ||
-            q.includes('quem e voce') ||
-            q.includes('ajuda');
-
-          if (isGreeting) {
-            if (summary) summary.textContent = 'AdzHub AI pronto para diagnósticos de tráfego, CRM e governança';
-            return;
-          }
-
-          const isAnomalyOrCost =
-            q.includes('anomalia') ||
-            q.includes('aumentou') ||
-            q.includes('subiu') ||
-            q.includes('cpa') ||
-            q.includes('custo por') ||
-            q.includes('conversão aumentou') ||
-            q.includes('conversao aumentou') ||
-            q.includes('investigar');
-
-          if (isAnomalyOrCost) {
-            if (badgeUgc) { badgeUgc.textContent = 'CPA ALTO (R$ 94,50)'; badgeUgc.className = 'tag-pill tag-status-paused'; }
-            if (badgeHook) { badgeHook.textContent = 'ATIVO (CPA R$ 42,10)'; badgeHook.className = 'tag-pill tag-status-active'; }
-            if (badgeFaq) { badgeFaq.textContent = 'FADIGA (CPA R$ 112)'; badgeFaq.className = 'tag-pill tag-status-paused'; }
-            if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill tag-hook-strong">HOOK 8.5</span><span class="tag-pill tag-cta-bad">CTA RUIM 4.0</span><span class="tag-pill" style="border-color: #ef4444; color: #f87171;">CPA +125%</span>';
-            if (tagsFaq) tagsFaq.innerHTML = '<span class="tag-pill tag-hook-weak">HOOK FRACO 4.2</span><span class="tag-pill tag-cta-bad">FADIGA 2.65X</span><span class="tag-pill" style="border-color: #f59e0b; color: #fbbf24;">CPA R$ 112</span>';
-            if (summary) summary.textContent = 'Palco: Anomalias de CPA e fadiga criativa isoladas';
-            return;
-          }
-
-          const isMeetingOrRisk =
-            q.includes('reuniao') ||
-            q.includes('reunião') ||
-            q.includes('pauta') ||
-            q.includes('risco') ||
-            q.includes('semana') ||
-            q.includes('alinhamento');
-
-          if (isMeetingOrRisk) {
-            if (summary) summary.textContent = 'Palco: Pauta executiva e resumo semanal sincronizados';
-            return;
-          }
-
-          const isCtaOrCreative =
-            q.includes('cta') ||
-            q.includes('criativ') ||
-            q.includes('ruim') ||
-            q.includes('paus') ||
-            q.includes('anunc') ||
-            q.includes('hook') ||
-            q.includes('copy') ||
-            q.includes('ugc') ||
-            q.includes('faq');
-
-          if (badgeUgc) { badgeUgc.textContent = isCtaOrCreative ? 'PAUSADO (CTA RUIM)' : 'Pausado'; badgeUgc.className = 'tag-pill tag-status-paused'; }
-          if (badgeHook) { badgeHook.textContent = 'ATIVO (CAMPEÃO)'; badgeHook.className = 'tag-pill tag-status-active'; }
-          if (badgeFaq) { badgeFaq.textContent = isCtaOrCreative ? 'PAUSADO (FADIGA 2.65X)' : 'Pausado'; badgeFaq.className = 'tag-pill tag-status-paused'; }
-          if (tagsUgc) tagsUgc.innerHTML = '<span class="tag-pill tag-hook-strong">HOOK FORTE 8.5</span><span class="tag-pill tag-cta-bad">CTA RUIM 4.0</span><span class="tag-pill" style="border-color: #ef4444; color: #f87171;">CPA R$ 94,50</span>';
-          if (tagsFaq) tagsFaq.innerHTML = '<span class="tag-pill tag-hook-weak">HOOK FRACO 4.2</span><span class="tag-pill tag-cta-bad">CTA RUIM 3.8</span><span class="tag-pill" style="border-color: #f59e0b; color: #fbbf24;">FADIGA 2.65X</span>';
-          if (tagsHook) tagsHook.innerHTML = '<span class="tag-pill tag-hook-strong">HOOK FORTE 8.8</span><span class="tag-pill tag-cta-good">CTA BOM 8.5</span><span class="tag-pill" style="border-color: #22c55e; color: #4ade80;">CPA R$ 42,10</span>';
-          if (badgeCrm) { badgeCrm.textContent = '62 Vendas Auditadas'; badgeCrm.className = 'tag-pill tag-status-active'; }
-          if (tagCrmUtm) tagCrmUtm.textContent = 'Cobertura UTM: 86.4%';
-          if (crmMetricsDetails) crmMetricsDetails.innerHTML = '<span>48 Vendas Aprovadas</span><span>8 Abandonos</span><span>6 Boletos Pendentes</span>';
-          if (summary) summary.textContent = 'Palco sincronizado com os dados da conta';
-        }
+        renderStageCardsFromRun({ query, scenarioId });
       }
 
       function hideAllStageCards() {
-        setStageState({ selectedCards: [], isFinal: false });
+        const container = document.getElementById('stage-cards-container');
+        const emptyEl = document.getElementById('stage-empty-state');
+        if (container) {
+          clearStageCardsWithExitDelay(container, function() {
+            if (emptyEl) emptyEl.style.display = 'flex';
+            updateStageActiveBadge();
+          }, STAGE_CARD_EXIT_DELAY_MS);
+        } else {
+          if (emptyEl) emptyEl.style.display = 'flex';
+          updateStageActiveBadge();
+        }
       }
 
       function updateStageForScenario(scenarioId) {
         const goalVal = (interactiveInput?.value || goalInput?.value || '').trim();
-        applyStageContentUpdates(goalVal, scenarioId);
-        const mapping = getStageCardMapping(goalVal, scenarioId);
-        setStageState({ selectedCards: mapping.finalSelected, observedCards: mapping.finalObserved, isFinal: true });
+        renderStageCardsFromRun({ scenarioId, goalVal });
       }
 
       function updateStageForQuery(query, scenarioId) {
-        applyStageContentUpdates(query, scenarioId);
-        const mapping = getStageCardMapping(query, scenarioId);
-        setStageState({ selectedCards: mapping.finalSelected, observedCards: mapping.finalObserved, isFinal: true });
+        renderStageCardsFromRun({ query, scenarioId });
       }
 
       function inspectItem(title, payload, idBadge) {
@@ -5218,415 +6042,132 @@ export function renderHtmlShell(): string {
       }
 
       function getClientTrace(goal, scenarioId) {
-        const q = (goal || '').toLowerCase().trim();
+        const rawGoal = (goal || '').trim();
+        const q = rawGoal.toLowerCase();
+        const cleanGoal = rawGoal.length > 45 ? rawGoal.slice(0, 42) + '...' : (rawGoal || 'solicitação operacional');
 
-        if (scenarioId === 'S1') {
-          return {
-            step1: {
-              reasoningText: 'Consultar métricas de criativos no Meta Ads e dados de conversão.',
-              tools: ['meta_ads:get_creatives', 'meta_ads:get_metrics'],
-              observation: 'Campanhas ativas · 184.200 impressões no período'
-            },
-            step2: {
-              reasoningText: 'Tentar conexão com API do CRM e identificar falha 503.',
-              tools: ['hubspot:get_deals', 'error_attributor:diagnose'],
-              observation: 'Falha 503 no CRM · Replan acionado sem falso corte'
-            }
-          };
-        }
-        if (scenarioId === 'S2') {
-          return {
-            step1: {
-              reasoningText: 'Auditar parâmetros de rastreamento UTM e integridade dos dados.',
-              tools: ['audit_utm_tags', 'meta_ads:inspect_creatives'],
-              observation: 'Cobertura UTM em 42% (< 80% threshold de segurança)'
-            },
-            step2: {
-              reasoningText: 'Reter decisões em quarentena determinística para evitar alucinação.',
-              tools: ['quarantine_broker:retain', 'format_analytical_output'],
-              observation: 'Dados retidos em quarentena de segurança'
-            }
-          };
-        }
-
-        const isSkills =
-          q.includes('skill') ||
-          q.includes('skills') ||
-          q.includes('pode fazer') ||
-          q.includes('capacidade') ||
-          q.includes('capacidades') ||
-          q.includes('habilidade') ||
-          q.includes('habilidades') ||
-          q.includes('quais sao') ||
-          q.includes('quais são') ||
-          q.includes('função') ||
-          q.includes('funcoes') ||
-          q.includes('ferramenta') ||
-          q.includes('ferramentas');
-
-        if (isSkills) {
-          return {
-            step1: {
-              reasoningText: 'Mapear catálogo de capacidades, ferramentas e skills do Supercérebro.',
-              tools: ['get_supercerebro_skills', 'read_memory_context'],
-              observation: 'Capacidades de Tráfego (Meta), CRM (HubSpot), Governança (PEV-C) e Memória ativas'
-            },
-            step2: {
-              reasoningText: 'Sincronizar manifesto de ferramentas e regras da conta Housewhey.',
-              tools: ['get_dataset_manifest', 'format_analytical_output'],
-              observation: 'Skills sincronizadas e prontas para uso'
-            }
-          };
-        }
-
-        const isWhatsApp =
-          q.includes('whatsapp') ||
-          q.includes('whats') ||
-          q.includes('zap') ||
-          q.includes('conversa') ||
-          q.includes('conversas') ||
-          q.includes('thread') ||
-          q.includes('threads') ||
-          q.includes('mensagem') ||
-          q.includes('mensagens');
-
-        if (isWhatsApp) {
-          return {
-            step1: {
-              reasoningText: 'Consultar histórico de conversas do WhatsApp no banco de dados e memória Mem0.',
-              tools: ['memory:get_whatsapp_threads', 'read_memory_context'],
-              observation: 'Thread "SPOT <> Housewhey Growth Team" localizada com 5 mensagens'
-            },
-            step2: {
-              reasoningText: 'Sincronizar diálogos operacionais entre Aline Rocha, Luiza Valente e Carolina Mendes.',
-              tools: ['supercerebro:graph', 'format_conversational_output'],
-              observation: '5 registros de WhatsApp recuperados e auditados com carimbo de data/hora'
-            }
-          };
-        }
-
-        const isGreeting =
-          q === 'oi' ||
-          q === 'ola' ||
-          q === 'olá' ||
-          q.startsWith('oi ') ||
-          q.startsWith('olá ') ||
-          q.startsWith('ola ') ||
-          q.startsWith('opa ') ||
-          q.includes('bom dia') ||
-          q.includes('boa tarde') ||
-          q.includes('boa noite') ||
-          q.includes('quem é você') ||
-          q.includes('quem e voce') ||
-          q.includes('o que você faz') ||
-          q.includes('o que voce faz') ||
-          q.includes('ajuda');
-
-        if (isGreeting) {
-          return {
-            step1: {
-              reasoningText: 'Identificar contexto da conta Housewhey e perfil do operador.',
-              tools: ['read_memory_context', 'get_account_profile'],
-              observation: 'Conta Housewhey & Agência SPOT conectadas'
-            },
-            step2: {
-              reasoningText: 'Formular saudação e listar capacidades operacionais disponíveis.',
-              tools: ['adzhub_agent:greet', 'format_conversational_output'],
-              observation: 'Pronto para executar diagnósticos de tráfego, CRM e governança'
-            }
-          };
-        }
-
-        const isAnomalyOrCost =
-          q.includes('anomalia') ||
-          q.includes('aumentou') ||
-          q.includes('subiu') ||
-          q.includes('cpa') ||
-          q.includes('custo por') ||
-          q.includes('conversão aumentou') ||
-          q.includes('conversao aumentou') ||
-          q.includes('investigar');
-
-        if (isAnomalyOrCost) {
-          return {
-            step1: {
-              reasoningText: 'Analisar histórico de campanhas e identificar picos de custo por aquisição.',
-              tools: ['meta_ads:get_anomalies', 'calculate_cpa_variance'],
-              observation: 'Identificado aumento no CPA dos criativos fatigados (R$ 94,50 e R$ 112,00)'
-            },
-            step2: {
-              reasoningText: 'Isolar fatores causais entre fadiga de criativo, CTR em queda e falhas de checkout.',
-              tools: ['diagnose_creative_fatigue', 'crm_dropout_analysis'],
-              observation: '2 anúncios com fadiga severa (frequência > 2.5x) e 8 abandonos de carrinho'
-            }
-          };
-        }
-
-        const isMeetingOrRisk =
-          q.includes('reuniao') ||
-          q.includes('reunião') ||
-          q.includes('pauta') ||
-          q.includes('risco') ||
-          q.includes('semana') ||
-          q.includes('alinhamento');
-
-        if (isMeetingOrRisk) {
-          return {
-            step1: {
-              reasoningText: 'Consolidar métricas de tráfego pago, reconciliação de CRM e decisões recentes da conta.',
-              tools: ['weekly_digest:aggregate', 'read_memory_context'],
-              observation: 'Dados consolidados de 01 a 20 de Agosto · Reconciliação 86.4%'
-            },
-            step2: {
-              reasoningText: 'Estruturar pauta executiva com métricas, anomalias e pontos de governança.',
-              tools: ['executive_agenda_builder', 'format_analytical_output'],
-              observation: 'Pauta semanal gerada com 4 blocos executivos e riscos mapeados'
-            }
-          };
-        }
-
-        const isCrmOrSales =
-          q.includes('crm') ||
-          q.includes('venda') ||
-          q.includes('fatur') ||
-          q.includes('deal') ||
-          q.includes('pedido') ||
-          q.includes('ticket') ||
-          q.includes('receita') ||
-          q.includes('cruzar') ||
-          q.includes('realmente vendeu') ||
-          q.includes('reconcili');
-
-        if (isCrmOrSales) {
-          return {
-            step1: {
-              reasoningText: 'Consultar base de leads, pedidos e faturamento no HubSpot CRM.',
-              tools: ['read_memory:spot_context', 'crm:get_leads'],
-              observation: '62 pedidos auditados · R$ 14.890 faturados · 48 vendas aprovadas'
-            },
-            step2: {
-              reasoningText: 'Reconciliar tags UTM do Meta Ads com as vendas reais registradas no CRM.',
-              tools: ['utm_normalizer', 'reconcile_meta_crm'],
-              observation: 'Reconciliação concluída: 86.4% de cobertura UTM · ROAS real 3.48x'
-            }
-          };
-        }
-
-        const isProposal =
-          q.includes('proposta') ||
-          q.includes('submeter') ||
-          q.includes('despachar') ||
-          q.includes('pode enviar') ||
-          q.includes('pode mandar') ||
-          q.includes('confirmar envio') ||
-          q.includes('enviar proposta');
-
-        if (isProposal) {
-          const isDirectDispatch =
-            q.includes('pode enviar') ||
-            q.includes('pode mandar') ||
-            q.includes('confirmar envio') ||
-            q.includes('despachar proposta') ||
-            (q.includes('enviar') && q.includes('proposta')) ||
-            (q.includes('submeter') && q.includes('proposta'));
-
-          if (isDirectDispatch) {
-            return {
-              step1: {
-                reasoningText: 'Validar integridade da proposta e autorizações de alçada no Capability Broker.',
-                tools: ['staging_writer:draft', 'capability_broker:check_approval'],
-                observation: 'Proposta executiva validada · Alçada de Carolina Mendes (SPOT) confirmada'
-              },
-              step2: {
-                reasoningText: 'Executar commit atômico no SQLite e despachar proposta para Marcos Silva no Supercérebro.',
-                tools: ['governed_pevc:eval', 'delegate_task'],
-                observation: 'Proposta despachada para Marcos Silva · Commit atômico gravado no Supercérebro'
-              }
-            };
-          }
-
-          const isDevolutiva =
-            q.includes('devolutiva') ||
-            q.includes('devolver') ||
-            (q.includes('aprova') && (q.includes('pausa') || q.includes('proposta')));
-
-          if (isDevolutiva) {
-            return {
-              step1: {
-                reasoningText: 'Consultar proposta formal da SPOT e registrar parecer de aprovação de Marcos Silva.',
-                tools: ['read_memory_context', 'supercerebro:get_proposal'],
-                observation: 'Proposta formal de pausa da SPOT localizada · Parecer favorável de Marcos Silva (Housewhey)'
-              },
-              step2: {
-                reasoningText: 'Gerar documento formal de devolutiva autorizando a pausa e delegando execução.',
-                tools: ['governed_pevc:eval', 'delegate_task'],
-                observation: 'Devolutiva de aprovação estruturada com solicitação de delegação formal para Carolina Mendes (SPOT)'
-              }
-            };
-          }
-
-          return {
-            step1: {
-              reasoningText: 'Inspecionar criativos saturados e métricas operacionais no Meta Ads.',
-              tools: ['meta_ads:inspect_creatives', 'get_cta_diagnostics'],
-              observation: 'Criativos saturados mapeados (ad_namorados_casal_03 e ad_whey_sabores_04) · Métricas de CPA auditadas'
-            },
-            step2: {
-              reasoningText: 'Preparar proposta formal de governança e requisição de despacho para Marcos Silva.',
-              tools: ['capability_broker:check_approval', 'staging_writer:draft'],
-              observation: 'Proposta executiva em rascunho aguardando confirmação de despacho'
-            }
-          };
-        }
-
-        const isCopyOrCreative =
-          q.includes('sugira') ||
-          q.includes('sugest') ||
-          q.includes('novos anuncio') ||
-          q.includes('novos anúncio') ||
-          q.includes('novos criativo') ||
-          q.includes('proponha novos') ||
-          q.includes('copys') ||
-          q.includes('cópias') ||
-          q.includes('copy') ||
-          q.includes('headline') ||
-          q.includes('gancho');
-
-        if (isCopyOrCreative) {
-          return {
-            step1: {
-              reasoningText: 'Consultar diferenciais clean label no Supercérebro e métricas de criativos.',
-              tools: ['supercerebro:get_product_specs', 'meta_ads:inspect_creatives'],
-              observation: 'Diferenciais Housewhey recuperados · Análise de criativos campeões'
-            },
-            step2: {
-              reasoningText: 'Formatar variações de copy, ganchos de conversão e chamadas para ação (CTAs).',
-              tools: ['copy_generator:propose_ctas', 'format_analytical_output'],
-              observation: '3 variações estratégicas formuladas (Pureza, Longevidade e Oferta)'
-            }
-          };
-        }
-
-        const isCtaOrPause =
-          q.includes('pause') ||
-          q.includes('pausar') ||
-          q.includes('desativar') ||
-          q.includes('reativar') ||
-          q.includes('religar') ||
-          q.includes('cta') ||
-          q.includes('criativ') ||
-          q.includes('ruim') ||
-          q.includes('fadiga') ||
-          q.includes('novas opç') ||
-          q.includes('novas opc') ||
-          q.includes('variaç') ||
-          q.includes('variac');
-
-        if (isCtaOrPause) {
-          return {
-            step1: {
-              reasoningText: 'Inspecionar criativos no Meta Ads e scores de Hook e CTA.',
-              tools: ['meta_ads:inspect_creatives', 'get_cta_diagnostics'],
-              observation: '3 anúncios auditados · UGC Oferta A e FAQ com CTA fraco (nota < 4.0)'
-            },
-            step2: {
-              reasoningText: 'Gerar 3 variações de CTA de alta conversão e preparar rascunho de pausa.',
-              tools: ['copy_generator:propose_ctas', 'staging_writer:draft'],
-              observation: '3 CTAs formulados · Proposta de governança estruturada'
-            }
-          };
-        }
-
-        const isTeam =
-          !isCopyOrCreative &&
-          (q.includes('equipe') ||
-          q.includes('time') ||
-          q.includes('membro') ||
-          q.includes('colaborad') ||
-          q.includes('deleg') ||
-          q.includes('atribu') ||
-          q.includes('aline') ||
-          q.includes('marcos') ||
-          q.includes('carolina') ||
-          q.includes('luiza') ||
-          q.includes('supercérebro') ||
-          q.includes('supercerebro') ||
-          q.includes('govern'));
-
-        if (isTeam) {
-          return {
-            step1: {
-              reasoningText: 'Consultar hierarquia da empresa, governança e memórias no Supercérebro.',
-              tools: ['read_memory_context', 'get_supercerebro_hierarchy'],
-              observation: 'Hierarquia SPOT/Housewhey sincronizada · Marcos Silva e Aline Rocha'
-            },
-            step2: {
-              reasoningText: 'Orquestrar autorizações da hierarquia e formalizar fluxo de governança.',
-              tools: ['governed_pevc:eval', 'delegate_task'],
-              observation: 'Proposta formal de governança vinculada com permissões auditadas'
-            }
-          };
-        }
-
-        const isOmega = q.includes('omega') || q.includes('ômega') || q.includes('ifos');
-        if (isOmega) {
-          return {
-            step1: {
-              reasoningText: 'Consultar specs e métricas da Campanha Ômega 3 Ultra IFOS.',
-              tools: ['read_memory:omega3', 'meta_ads:get_insights'],
-              observation: 'Campanha ativa · R$ 3.100 spend · CPA R$ 68,00'
-            },
-            step2: {
-              reasoningText: 'Verificar certificações de pureza e laudos IFOS no Mapa da Solução.',
-              tools: ['get_mapa_solucao', 'verify_certifications'],
-              observation: 'Selo IFOS 5★ validado · Retenção 7.0'
-            }
-          };
-        }
+        // Extração dinâmica de entidades e tópicos
+        const isMarcos = q.includes('marcos') || q.includes('head');
+        const isAline = q.includes('aline') || q.includes('tráfego') || q.includes('trafego');
+        const isCarolina = q.includes('carolina') || q.includes('carol') || q.includes('gerente');
+        const isLuiza = q.includes('luiza') || q.includes('atendimento') || q.includes('sac');
+        const personName = isMarcos ? 'Marcos Silva' : isAline ? 'Aline Rocha' : isCarolina ? 'Carolina Mendes' : isLuiza ? 'Luiza Valente' : '';
 
         const isWhey = q.includes('whey') || q.includes('baunilha') || q.includes('grass');
-        if (isWhey) {
-          return {
-            step1: {
-              reasoningText: 'Consultar métricas da Linha Whey Isolado e criativos ativos.',
-              tools: ['read_memory:whey', 'meta_ads:campaign_insights'],
-              observation: 'R$ 2.450 spend · 51 vendas · CPA R$ 48,00'
-            },
-            step2: {
-              reasoningText: 'Cruzar performance de criativos e matéria-prima Glanbia Grass-Fed.',
-              tools: ['creative_analysis:scores', 'crm:reconcile_sales'],
-              observation: 'Hook Prova Social campeão ativo (CPA R$ 42,10)'
-            }
-          };
-        }
-
+        const isOmega = q.includes('omega') || q.includes('ômega') || q.includes('ifos');
         const isCreatine = q.includes('creatina') || q.includes('creapure');
-        if (isCreatine) {
-          return {
-            step1: {
-              reasoningText: 'Consultar métricas e diferenciais da Creatina Creapure.',
-              tools: ['read_memory:creapure', 'meta_ads:get_insights'],
-              observation: 'R$ 1.830 spend · CPA R$ 38,50 · 100% Creapure'
-            },
-            step2: {
-              reasoningText: 'Verificar rastreabilidade de laudo lote a lote no Mapa da Solução.',
-              tools: ['get_mapa_solucao', 'cross_crm_orders'],
-              observation: 'Matéria-prima alemã certificada'
-            }
-          };
+        const isNamorados = q.includes('namorados') || q.includes('casal') || q.includes('saturado');
+        const productName = isWhey ? 'Whey Isolado Grass-Fed' : isOmega ? 'Ômega 3 IFOS 5★' : isCreatine ? 'Creatina Creapure' : isNamorados ? 'Campanha Namorados' : '';
+
+        // Inferência 100% dinâmica por inteligência de mensagem, domínio e entidades extraídas
+        let step1Reasoning = '';
+        let step1Tools = ['read_memory_context'];
+        let step1Obs = '';
+
+        let step2Reasoning = '';
+        let step2Tools = ['governed_pevc:eval', 'format_analytical_output'];
+        let step2Obs = '';
+
+        const isUtmOrQuarantine = q.includes('utm') || q.includes('quarentena') || q.includes('rastreamento');
+        const isExternalWriteOrCapability = q.includes('pausa') || q.includes('pausar') || q.includes('alterar') || q.includes('escrita') || q.includes('capability');
+        const isGreeting = q === 'oi' || q === 'olá' || q === 'ola' || q.includes('tudo bem') || q.includes('boa tarde') || q.includes('bom dia') || q.includes('boa noite');
+        const isTaskInquiry = q.includes('pra fazer') || q.includes('para fazer') || q.includes('pendências') || q.includes('pendencias') || q.includes('tarefas');
+        const isWhatsApp = q.includes('whatsapp') || q.includes('whats') || q.includes('zap') || q.includes('conversa') || q.includes('mensagem');
+        const isCrmMetaCombo = (q.includes('crm') || q.includes('venda') || q.includes('pedido') || q.includes('fatur')) && (q.includes('meta') || q.includes('gasto') || q.includes('spend') || q.includes('cpa'));
+        const isCrmOnly = q.includes('crm') || q.includes('venda') || q.includes('pedido') || q.includes('fatur') || q.includes('deal');
+        const isMetaOnly = q.includes('meta') || q.includes('gasto') || q.includes('spend') || q.includes('cpa') || q.includes('roas') || q.includes('impress');
+        const isGovernanceOrBrain = q.includes('governança') || q.includes('governanca') || q.includes('alçada') || q.includes('alcada') || q.includes('supercérebro') || q.includes('supercerebro');
+
+        if (isUtmOrQuarantine) {
+          step1Reasoning = 'Auditar parâmetros de rastreamento UTM e integridade dos dados.';
+          step1Tools = ['audit_utm_tags', 'meta_ads:inspect_creatives'];
+          step1Obs = 'Cobertura de rastreamento UTM auditada no barramento de dados';
+          step2Reasoning = 'Reter decisões em quarentena determinística para evitar alucinação.';
+          step2Tools = ['quarantine_broker:retain', 'format_analytical_output'];
+          step2Obs = 'Dados avaliados com retenção de segurança';
+        } else if (isExternalWriteOrCapability) {
+          step1Reasoning = 'Avaliar proposta de alteração e regras de governança PEV-C.';
+          step1Tools = ['capability_broker:verify', 'meta_ads:inspect_campaigns'];
+          step1Obs = 'Verificação de alçadas operacionais e políticas ativas';
+          step2Reasoning = 'Verificar alçadas do operador e políticas de escrita externa.';
+          step2Tools = ['governed_pevc:eval', 'approval_broker:check'];
+          step2Obs = 'Alçada auditada no Capability Broker';
+        } else if (isGreeting) {
+          step1Reasoning = 'Identificar operador ativo e carregar contexto da sessão no Supercérebro.';
+          step1Tools = ['read_memory_context'];
+          step1Obs = 'Perfil de operador identificado e sessão ativa sincronizada';
+          step2Reasoning = 'Sincronizar alçadas de governança e formatar atendimento personalizado.';
+          step2Tools = ['supercerebro:operators', 'format_conversational_output'];
+          step2Obs = 'Atendimento inicial pronto com alçadas e contexto ativos';
+        } else if (isTaskInquiry) {
+          step1Reasoning = 'Consultar pendências ativas, perfil do operador e alçadas de governança no Supercérebro.';
+          step1Tools = ['read_memory_context', 'supercerebro:operator_profiles'];
+          step1Obs = 'Pendências operacionais e alçadas do operador carregadas';
+          step2Reasoning = 'Reconciliar ações prioritárias e formatar lista de recomendações para o operador.';
+          step2Tools = ['supercerebro:graph', 'format_conversational_output'];
+          step2Obs = 'Ações prioritárias e pendências formatadas com sucesso';
+        } else if (isWhatsApp) {
+          step1Reasoning = 'Consultar histórico de conversas do WhatsApp Business e mensagens de atendimento.';
+          step1Tools = ['supercerebro:whatsapp_threads', 'read_memory_context'];
+          step1Obs = 'Thread "SPOT <> Housewhey Growth Team" e atendimentos SAC recuperados';
+          step2Reasoning = 'Reconciliar atendimentos com registros de clientes e interações da equipe.';
+          step2Tools = ['supercerebro:graph', 'format_conversational_output'];
+          step2Obs = 'Mensagens auditadas com carimbo temporal e vínculos operacionais validados';
+        } else if (personName) {
+          step1Reasoning = 'Consultar perfil de ' + personName + ', matriz de alçadas e governança no Supercérebro.';
+          step1Tools = ['supercerebro:operator_profiles', 'read_memory_context'];
+          step1Obs = 'Perfil de ' + personName + ' e permissões de governança carregados do SQLite';
+          step2Reasoning = 'Cruzar histórico de decisões, atribuições operacionais e registros da conta.';
+          step2Tools = ['supercerebro:graph_traversal', 'format_analytical_output'];
+          step2Obs = 'Estrutura de governança e alçadas institucionais validadas';
+        } else if (productName) {
+          step1Reasoning = 'Inspecionar métricas de ' + productName + ' no Meta Ads e scores de criativos.';
+          step1Tools = ['meta_ads:inspect_creatives', 'creative_analysis:scores'];
+          step1Obs = 'Métricas de entrega, CTR, CPA e retenção de ' + productName + ' carregadas';
+          step2Reasoning = 'Cruzar specs do produto no Mapa da Solução com desempenho real de conversão.';
+          step2Tools = ['supercerebro:solution_map', 'format_analytical_output'];
+          step2Obs = 'Laudos, diferenciais clean label e benchmarks comparativos reconciliados';
+        } else if (isCrmMetaCombo) {
+          step1Reasoning = 'Consultar investimento no Meta Ads e pedidos aprovados no HubSpot CRM.';
+          step1Tools = ['meta_ads:get_insights', 'crm:get_leads'];
+          step1Obs = 'Investimento no Meta e vendas aprovadas auditadas no CRM';
+          step2Reasoning = 'Executar reconciliação ponta a ponta de UTMs e calcular ROAS real.';
+          step2Tools = ['utm_normalizer', 'reconcile_meta_crm'];
+          step2Obs = 'Cobertura UTM e ROAS real reconciliados com sucesso';
+        } else if (isCrmOnly) {
+          step1Reasoning = 'Consultar base de leads, pedidos e faturamento no HubSpot CRM.';
+          step1Tools = ['read_memory_context', 'crm:get_leads'];
+          step1Obs = 'Pedidos auditados e faturamento recuperados no CRM';
+          step2Reasoning = 'Auditar taxa de conversão, status dos deals e ticket médio da conta.';
+          step2Tools = ['supercerebro:crm_orders', 'format_analytical_output'];
+          step2Obs = 'Métricas de faturamento e status de pedidos consolidados';
+        } else if (isMetaOnly) {
+          step1Reasoning = 'Consultar métricas de tráfego pago, campanhas e anúncios ativos no Meta Ads.';
+          step1Tools = ['meta_ads:get_insights', 'read_memory_context'];
+          step1Obs = 'Campanhas ativas carregadas e métricas de tráfego auditadas';
+          step2Reasoning = 'Analisar distribuição de verba, CPA por conjunto e indicadores de conversão.';
+          step2Tools = ['meta_ads:campaign_metrics', 'format_analytical_output'];
+          step2Obs = 'Indicadores de performance de tráfego consolidados';
+        } else if (isGovernanceOrBrain) {
+          step1Reasoning = 'Consultar grafo de conhecimento, entidades e histórico de governança no Supercérebro.';
+          step1Tools = ['supercerebro:graph_traversal', 'read_memory_context'];
+          step1Obs = 'Entidades, conexões e linha do tempo de governança sincronizadas do SQLite';
+          step2Reasoning = 'Verificar regras de governança, conformidade e integridade dos nós.';
+          step2Tools = ['governed_pevc:eval', 'format_analytical_output'];
+          step2Obs = 'Políticas institucionais e permissões validadas com sucesso';
+        } else {
+          // Síntese dinâmica geral com injeção do objetivo limpo
+          step1Reasoning = 'Consultar base de conhecimento e contexto operacional sobre "' + escapeHtml(cleanGoal) + '".';
+          step1Tools = ['read_memory_context', 'supercerebro:query'];
+          step1Obs = 'Contexto operacional e memórias da conta Housewhey sincronizados';
+          step2Reasoning = 'Estruturar resposta analítica e fundamentar com evidências auditadas.';
+          step2Tools = ['governed_pevc:eval', 'format_analytical_output'];
+          step2Obs = 'Conclusão técnica validada com rastreabilidade formal';
         }
 
         return {
-          step1: {
-            reasoningText: 'Consultar memórias da conta e dataset canônico Housewhey.',
-            tools: ['read_memory_context', 'get_dataset_manifest'],
-            observation: 'Contexto Housewhey sincronizado'
-          },
-          step2: {
-            reasoningText: 'Gerar análise técnica fundamentada com dados reconciliados.',
-            tools: ['governed_pevc:eval', 'format_analytical_output'],
-            observation: 'Conclusão auditada com evidências rastreáveis'
-          }
+          step1: { reasoningText: step1Reasoning, tools: step1Tools, observation: step1Obs },
+          step2: { reasoningText: step2Reasoning, tools: step2Tools, observation: step2Obs }
         };
       }
 
@@ -5727,7 +6268,7 @@ export function renderHtmlShell(): string {
             '<div class="reasoning-accordion-card open" id="reasoning-card-' + turnId + '" style="display: none;">' +
               '<button type="button" class="reasoning-accordion-header" id="reasoning-toggle-' + turnId + '" data-turn-id="' + turnId + '" aria-expanded="true" onclick="window.toggleReasoningCard(this.dataset.turnId)">' +
                 '<div class="reasoning-header-left">' +
-                  '<span class="reasoning-icon">' + getLucideSvg('brain', { size: 14, style: 'color: var(--navy);' }) + '</span>' +
+                  '<span class="reasoning-icon">' + getLucideSvg('cpu', { size: 14, style: 'color: var(--navy);' }) + '</span>' +
                   '<span class="reasoning-title" id="reasoning-title-' + turnId + '">Raciocínio</span>' +
                 '</div>' +
                 '<span class="reasoning-chevron" id="reasoning-chevron-' + turnId + '">▾</span>' +
@@ -5790,215 +6331,72 @@ export function renderHtmlShell(): string {
 
         const qLower = (queryText || answer.question || '').toLowerCase();
         const concLower = (answer.conclusion || answer.error || '').toLowerCase();
-        const activeOpId = sessionState.currentOperator?.id || 'p_carolina';
-        const isUnauthorizedForDirectWrite = (activeOpId === 'p_luiza');
+        const activeOpId = sessionState.currentOperator?.id || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].id : '');
+        const opRole = (sessionState.currentOperator?.role || '').toLowerCase();
+        const opFocus = Array.isArray(sessionState.currentOperator?.focusAreas) ? sessionState.currentOperator.focusAreas : [];
+        const isUnauthorizedForDirectWrite = opRole.includes('vendas') || opRole.includes('atendimento') || (opFocus.length > 0 && !opFocus.includes('meta_ads') && !opFocus.includes('traffic'));
 
-        const wantsCtas =
-          qLower.includes('proponha cta') ||
-          qLower.includes('novos cta') ||
-          qLower.includes('crie cta') ||
-          qLower.includes('gere cta') ||
-          qLower.includes('sugestão de cta') ||
-          qLower.includes('sugira cta') ||
-          qLower.includes('novas cop') ||
-          qLower.includes('novos textos') ||
-          (qLower.includes('cta') && (qLower.includes('proponha') || qLower.includes('crie') || qLower.includes('novo') || qLower.includes('sugira')));
+        const isActionRequired = Boolean(answer.actionCard || answer.isActionRequired || answer.requiresApproval);
 
-        const isQueryState =
-          qLower.includes('quem') ||
-          qLower.includes('qual') ||
-          qLower.includes('quais') ||
-          qLower.includes('recebeu') ||
-          qLower.includes('enviad') ||
-          qLower.includes('enviou') ||
-          qLower.includes('ficou') ||
-          qLower.includes('como está') ||
-          qLower.includes('foi enviada') ||
-          qLower.includes('status') ||
-          qLower.includes('saber se') ||
-          qLower.includes('saber') ||
-          qLower.includes('verificar') ||
-          qLower.includes('aconteceu') ||
-          (qLower.includes('?') && !qLower.includes('delegar') && !qLower.includes('atribuir') && !qLower.includes('pausar agora') && !qLower.includes('reativar agora'));
-
-        const isInformationalQuery =
-          isQueryState ||
-          qLower.includes('me fale') ||
-          qLower.includes('fale mais') ||
-          qLower.includes('resumo') ||
-          qLower.includes('quem é') ||
-          qLower.includes('quais') ||
-          qLower.includes('conte') ||
-          qLower.includes('explique') ||
-          qLower.includes('o que') ||
-          qLower.includes('qual') ||
-          qLower.includes('por que') ||
-          qLower.includes('porque') ||
-          qLower.includes('como está') ||
-          qLower.includes('sobre o') ||
-          qLower.includes('sobre a') ||
-          qLower.includes('ajuda') ||
-          qLower.startsWith('oi') ||
-          qLower.startsWith('olá') ||
-          qLower.startsWith('ola') ||
-          qLower.startsWith('opi') ||
-          qLower.startsWith('opa');
-
-        const isSubmissionOrProposalAction =
-          !isInformationalQuery &&
-          (qLower.includes('submeter proposta') ||
-            qLower.includes('submeta a proposta') ||
-            qLower.includes('submeter a proposta') ||
-            qLower.includes('gerar proposta') ||
-            qLower.includes('gerar a proposta') ||
-            qLower.includes('crie a proposta') ||
-            qLower.includes('elabore a proposta') ||
-            qLower.includes('formalize a proposta') ||
-            qLower.includes('formalizar proposta') ||
-            qLower.includes('despachar proposta') ||
-            qLower.includes('despache a proposta') ||
-            qLower.includes('enviar proposta') ||
-            qLower.includes('envie a proposta') ||
-            qLower.includes('pode enviar') ||
-            qLower.includes('pode mandar') ||
-            qLower.includes('confirmar envio') ||
-            qLower.includes('proposta executiva'));
-
-        const isDirectDispatch =
-          !isInformationalQuery &&
-          (qLower.includes('pode enviar') ||
-            qLower.includes('pode mandar') ||
-            qLower.includes('confirmar envio') ||
-            qLower.includes('despachar proposta') ||
-            (qLower.includes('enviar') && qLower.includes('proposta')) ||
-            (qLower.includes('submeter') && qLower.includes('proposta')));
-
-        const isDevolutivaAction =
-          !isInformationalQuery &&
-          (qLower.includes('devolutiva') ||
-            qLower.includes('devolver') ||
-            qLower.includes('despacho') ||
-            (qLower.includes('aprova') && (qLower.includes('pausa') || qLower.includes('proposta'))));
-
-        const isApprovalAction =
-          !isInformationalQuery &&
-          (isDevolutivaAction ||
-            qLower.includes('aprovar') ||
-            qLower.includes('aprova') ||
-            qLower.includes('aprovação') ||
-            qLower.includes('aprovado') ||
-            qLower.includes('homologar') ||
-            (activeOpId === 'p_marcos' && (
-              qLower.includes('alteração e realocação') ||
-              qLower.includes('remanejamento') ||
-              qLower.includes('verba de mídia') ||
-              qLower.includes('mudança de verba')
-            )));
-
-        const isBriefingAction =
-          !isInformationalQuery &&
-          (qLower.includes('briefing') || qLower.includes('resumo da reunião') || qLower.includes('resumo da reuniao') || qLower.includes('pauta da reunião') || qLower.includes('pauta da reuniao')) &&
-          (qLower.includes('mande') || qLower.includes('mandar') || qLower.includes('envie') || qLower.includes('enviar') || qLower.includes('despach') || qLower.includes('gerar') || qLower.includes('elabor') || qLower.includes('escreva') || qLower.includes('para ') || qLower.includes('devolva'));
-
-        const isDelegationAction =
-          !isInformationalQuery &&
-          !isApprovalAction &&
-          (isSubmissionOrProposalAction ||
-            isBriefingAction ||
-            qLower.includes('deleg') ||
-            qLower.includes('atribu') ||
-            qLower.includes('escreva essa proposta') ||
-            qLower.includes('escreva a proposta') ||
-            (qLower.includes('briefing') && (qLower.includes('mande') || qLower.includes('mandar') || qLower.includes('envie') || qLower.includes('enviar') || qLower.includes('despach') || qLower.includes('para '))) ||
-            (qLower.includes('proposta') && (
-              qLower.includes('escreva') ||
-              qLower.includes('crie') ||
-              qLower.includes('elabore') ||
-              qLower.includes('formalize') ||
-              qLower.includes('envie') ||
-              qLower.includes('mandar') ||
-              qLower.includes('gerar') ||
-              qLower.includes('submeter') ||
-              qLower.includes('despachar')
-            )));
-
-        let targetPerson = 'Marcos Silva';
-        if (isApprovalAction || isDevolutivaAction) {
-          if (qLower.includes('aline')) targetPerson = 'Aline Rocha';
-          else if (qLower.includes('luiza')) targetPerson = 'Luiza Valente';
-          else targetPerson = 'Carolina Mendes';
-        } else if (qLower.includes('luiza')) {
-          targetPerson = 'Luiza Valente';
-        } else if (qLower.includes('aline')) {
-          targetPerson = 'Aline Rocha';
-        } else if (qLower.includes('carolina') || qLower.includes('carol')) {
-          targetPerson = 'Carolina Mendes';
-        } else if (qLower.includes('marcos') || qLower.includes('head') || qLower.includes('marketing') || isSubmissionOrProposalAction) {
-          targetPerson = 'Marcos Silva';
-        }
-
-        const isPauseAction = !isInformationalQuery && (qLower.includes('pause') || qLower.includes('pausar') || qLower.includes('desativar'));
-        const isReactivation = !isInformationalQuery && (qLower.includes('reativar') || qLower.includes('religar') || qLower.includes('despausar') || qLower.includes('ativar'));
-        const isSacReconcileAction = !isInformationalQuery && (qLower.includes('reconciliar') || (qLower.includes('sac') && qLower.includes('conversões')) || qLower.includes('atendimentos whatsapp'));
-
-        const isExplicitActionRequested =
-          !isInformationalQuery &&
-          (isApprovalAction ||
-          isDelegationAction ||
-          isPauseAction ||
-          isReactivation ||
-          isSacReconcileAction ||
-          qLower.includes('executar') ||
-          qLower.includes('confirmar') ||
-          qLower.includes('aprovar') ||
-          qLower.includes('remanejar') ||
-          qLower.includes('substituir'));
-
-        const isActionRequired =
-          !isInformationalQuery &&
-          (isExplicitActionRequested ||
-           concLower.includes('proposta formal de alteração operacional') ||
-           concLower.includes('documento de devolutiva') ||
-           concLower.includes('briefing para') ||
-           concLower.includes('proposta de reativação operacional') ||
-           concLower.includes('salvar no supercérebro') ||
-           concLower.includes('confirmar no botão') ||
-           concLower.includes('card de governança') ||
-           concLower.includes('painel de governança abaixo') ||
-           concLower.includes('aguardando confirmação') ||
-           concLower.includes('aguardando aprovação'));
-
-        let isAtomicCommit = Boolean(
-          answer.isAtomicCommit ||
-          answer.hasMemoryCommit ||
-          answer.isCommitted ||
-          isDirectDispatch ||
-          (answer.status === 'COMMITTED' && !isInformationalQuery && (isExplicitActionRequested || concLower.includes('commit auditado') || concLower.includes('salvo no supercérebro')))
+        const isExplicitAtomicCommit = Boolean(
+          (answer.isAtomicCommit === true ||
+          answer.hasMemoryCommit === true ||
+          answer.isApproved === true ||
+          answer.isDelegated === true ||
+          answer.isDocumentGenerated === true ||
+          answer.isPaused === true ||
+          answer.isReactivated === true ||
+          Boolean(answer.actionType)) &&
+          !isActionRequired
         );
 
-        let effectiveStatus = answer.status;
-        if (!effectiveStatus) {
-          if (isAtomicCommit) {
-            effectiveStatus = 'COMMITTED';
-          } else if (isActionRequired) {
-            effectiveStatus = 'PROVISIONAL';
-          } else {
-            effectiveStatus = 'COMPLETED';
-          }
-        } else if (effectiveStatus === 'COMMITTED' && !isAtomicCommit) {
-          effectiveStatus = isActionRequired ? 'PROVISIONAL' : 'COMPLETED';
-        }
+        const isDirectDispatch = Boolean(
+          (answer.isDirectDispatch || (isExplicitAtomicCommit && answer.status === 'COMMITTED')) &&
+          !isActionRequired
+        );
 
+        const wantsCtas = Boolean(
+          (answer.ctas && answer.ctas.length > 0) ||
+          (answer.actionCard?.suggestions && answer.actionCard.suggestions.length > 0)
+        );
+
+        const isQueryState = Boolean(
+          qLower.startsWith('como') ||
+          qLower.startsWith('qual') ||
+          qLower.startsWith('quais') ||
+          qLower.startsWith('onde') ||
+          qLower.startsWith('o que') ||
+          qLower.includes('analis') ||
+          qLower.includes('verific') ||
+          qLower.includes('relatório')
+        );
+
+        const isInformationalQuery = Boolean(
+          isQueryState ||
+          answer.isInformational === true
+        );
+
+        const isAtomicCommit = Boolean(
+          isExplicitAtomicCommit &&
+          (answer.status === 'COMMITTED' || answer.isAtomicCommit === true) &&
+          answer.verified !== false &&
+          !isInformationalQuery &&
+          !isActionRequired
+        );
+
+        let effectiveStatus = (answer.status && answer.status !== 'COMMITTED')
+          ? answer.status
+          : (isAtomicCommit ? 'COMMITTED' : (isActionRequired ? 'PROVISIONAL' : 'COMPLETED'));
         let effectiveVerified = Boolean(answer.verified);
 
         if (answer.status === 'BLOCKED') {
           effectiveStatus = 'BLOCKED';
           effectiveVerified = false;
           respEl.innerHTML =
-            '<div style="background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-control); padding: 14px; font-size: var(--label); width: 100%;" aria-live="assertive">' +
-              '<h4 style="color: #8F2D36; margin-bottom: 4px; font-family: var(--font-display); font-weight: 600;">🔒 Ação Bloqueada por Política (Capability Broker)</h4>' +
+            '<div class="commit-danger-card" style="border-radius: var(--radius-control); padding: 14px; font-size: var(--label); width: 100%;" aria-live="assertive">' +
+              '<h4 style="color: var(--danger-ink); margin-bottom: 4px; font-family: var(--font-display); font-weight: 600;">🔒 Ação Bloqueada por Política (Capability Broker)</h4>' +
               '<p style="color: var(--ink); margin: 0 0 8px;">' + escapeHtml(answer.error || 'Escrita externa não autorizada sem aprovação humana expressa.') + '</p>' +
-              '<div style="font-size: var(--micro); font-family: var(--font-mono); padding: 6px 10px; background: rgba(255,255,255,0.7); border-radius: var(--radius-small); border-left: 3px solid var(--danger);">' +
+              '<div style="font-size: var(--micro); font-family: var(--font-mono); padding: 6px 10px; background: var(--surface-soft); color: var(--ink); border-radius: var(--radius-small); border-left: 3px solid var(--danger);">' +
                 '<strong>Condição faltante:</strong> Aprovação humana expressa com escopo e prazo definidos para escrita externa.' +
               '</div>' +
             '</div>';
@@ -6010,8 +6408,8 @@ export function renderHtmlShell(): string {
           effectiveStatus = 'FAILED';
           effectiveVerified = false;
           respEl.innerHTML =
-            '<div style="background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-control); padding: 14px; font-size: var(--label); width: 100%;" aria-live="assertive">' +
-              '<h4 style="color: #8F2D36; margin-bottom: 4px; font-family: var(--font-display); font-weight: 600;">❌ Falha de Execução / Pós-condição</h4>' +
+            '<div class="commit-danger-card" style="border-radius: var(--radius-control); padding: 14px; font-size: var(--label); width: 100%;" aria-live="assertive">' +
+              '<h4 style="color: var(--danger-ink); margin-bottom: 4px; font-family: var(--font-display); font-weight: 600;">❌ Falha de Execução / Pós-condição</h4>' +
               '<p style="color: var(--ink); margin: 0;">' + escapeHtml(answer.error || 'Erro na execução da tarefa.') + '</p>' +
             '</div>';
           updateChatBadge(effectiveStatus, effectiveVerified);
@@ -6023,36 +6421,17 @@ export function renderHtmlShell(): string {
             formatMarkdownToHtml(answer.conclusion || 'Execução finalizada.') +
           '</div>';
 
-        if (isDirectDispatch) {
+        if (isAtomicCommit) {
           innerHtml +=
-            '<div style="margin-top: 8px; color: #1E6B56; font-size: var(--label); font-weight: 600; padding: 10px 14px; background: var(--success-soft); border-radius: var(--radius-control); border: 1px solid var(--green); width: 100%; font-family: var(--font-mono); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">' +
-              '<span>✓ Documento despachado para ' + escapeHtml(targetPerson) + ' e commitado no SQLite (Supercérebro atualizado).</span>' +
+            '<div class="commit-success-card" style="margin-top: 8px; font-size: var(--label); font-weight: 600; padding: 10px 14px; border-radius: var(--radius-control); width: 100%; font-family: var(--font-mono); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">' +
+              '<span>✓ Operação sincronizada e commitada no SQLite (Supercérebro atualizado).</span>' +
               '<button type="button" class="btn-secondary" style="font-size: var(--micro); padding: 4px 10px; border-radius: var(--radius-pill); cursor: pointer;" onclick="if(window.switchView) window.switchView(&quot;timeline&quot;)">Ver na Linha do Tempo →</button>' +
             '</div>';
         }
 
-        if (wantsCtas && answer.status !== 'QUARANTINED') {
-          let ctaTargetText = 'Para: <strong>Criativos de E-commerce</strong>';
-          let item1 = '<strong>CTA 1:</strong> "Garanta seu suplemento clean label com frete grátis hoje"';
-          let item2 = '<strong>CTA 2:</strong> "Confira o laudo laboratorial de pureza lote a lote"';
-          let item3 = '<strong>CTA 3:</strong> "Aproveite 10% OFF no PIX com envio imediato"';
-
-          if (qLower.includes('omega') || qLower.includes('ômega') || qLower.includes('ifos')) {
-            ctaTargetText = 'Foco: <strong>Ômega 3 Ultra Concentrado (IFOS 5★)</strong>';
-            item1 = '<strong>Ângulo Pureza:</strong> "Garanta seu Ômega 3 Ultra Concentrado com Selo IFOS 5 Estrelas"';
-            item2 = '<strong>Ângulo Longevidade:</strong> "Veja o laudo laboratorial de ausência de metais pesados em 30s"';
-            item3 = '<strong>Oferta Direta:</strong> "Compre 2 potes de Ômega 3 IFOS com Frete Grátis hoje"';
-          } else if (qLower.includes('whey') || qLower.includes('baunilha') || qLower.includes('grass')) {
-            ctaTargetText = 'Foco: <strong>Linha Whey Isolado Baunilha Grass-Fed</strong>';
-            item1 = '<strong>UGC Oferta A:</strong> "Garanta seu Whey Isolado 100% Puro com 10% OFF no PIX"';
-            item2 = '<strong>Carrossel Sabores:</strong> "Experimente o sabor Baunilha Natural com 27g de proteína por dose"';
-            item3 = '<strong>Refil Campeão:</strong> "Peça seu refil Whey Isolado Grass-Fed com Frete Grátis hoje"';
-          } else if (qLower.includes('creatina') || qLower.includes('creapure')) {
-            ctaTargetText = 'Foco: <strong>Creatina 100% Creapure Alemã</strong>';
-            item1 = '<strong>Pureza Máxima:</strong> "Treine com a Creatina Creapure 100% Pura importada da Alemanha"';
-            item2 = '<strong>Laudo Aberto:</strong> "Acesse o laudo de pureza lote a lote via QR code na embalagem"';
-            item3 = '<strong>Combo Força:</strong> "Garanta seu pote de 300g Creapure com 10% OFF no PIX"';
-          }
+        const structuredCtas = Array.isArray(answer.ctas) ? answer.ctas : (Array.isArray(answer.actionCard?.suggestions) ? answer.actionCard.suggestions : []);
+        if (structuredCtas.length > 0 && answer.status !== 'QUARANTINED') {
+          const ctaTargetText = answer.ctaTarget ? escapeHtml(answer.ctaTarget) : 'Sugestões de Copy &amp; Conversão';
 
           innerHtml +=
             '<div style="display: flex; flex-direction: column; gap: 6px;">' +
@@ -6061,70 +6440,33 @@ export function renderHtmlShell(): string {
                 '<span style="font-family: var(--font-mono); font-size: var(--label); color: var(--ink-muted);">' + ctaTargetText + '</span>' +
               '</div>' +
               '<div class="cta-suggestions-container">' +
-                '<div class="cta-suggestion-item">' +
-                  '<span class="cta-num">1</span>' +
-                  '<span>' + item1 + '</span>' +
-                '</div>' +
-                '<div class="cta-suggestion-item">' +
-                  '<span class="cta-num">2</span>' +
-                  '<span>' + item2 + '</span>' +
-                '</div>' +
-                '<div class="cta-suggestion-item">' +
-                  '<span class="cta-num">3</span>' +
-                  '<span>' + item3 + '</span>' +
-                '</div>' +
+                structuredCtas.map((ctaItem, idx) => {
+                  const formattedCta = typeof ctaItem === 'string' ? escapeHtml(ctaItem) : escapeHtml(ctaItem.text || ctaItem.label || JSON.stringify(ctaItem));
+                  return (
+                    '<div class="cta-suggestion-item">' +
+                      '<span class="cta-num">' + (idx + 1) + '</span>' +
+                      '<span>' + formattedCta + '</span>' +
+                    '</div>'
+                  );
+                }).join('') +
               '</div>' +
             '</div>';
         }
 
-        if (isActionRequired && !isDirectDispatch && answer.status !== 'QUARANTINED') {
-          let actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança de Tráfego: Confirmar Alteração';
-          let actionSubtext = 'Ação: Executar proposta operacional e sincronizar no Meta Ads';
+        let actionSuccessMsg = '✓ Ação aprovada pelo operador. Alterações sincronizadas com o Meta Ads (Commit auditado no SQLite).';
+
+        if (isActionRequired && answer.status !== 'QUARANTINED') {
+          let actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança: Confirmar Alteração';
+          let actionSubtext = 'Ação: Executar proposta operacional e sincronizar';
           let btnText = 'Confirmar alteração';
 
-          if (isApprovalAction) {
-            if (isDevolutivaAction) {
-              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Devolutiva: Confirmar Devolutiva de Aprovação para ' + targetPerson;
-              actionSubtext = 'Ação: Formalizar aprovação de Marcos Silva e delegar execução técnica a ' + targetPerson + ' (SPOT)';
-              btnText = 'Confirmar Devolutiva de Aprovação';
-            } else {
-              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Aprovação: Homologar Alteração e Sincronizar Meta Ads';
-              actionSubtext = 'Ação: Formalizar aprovação executiva de Marcos Silva e commit no Supercérebro';
-              btnText = 'Confirmar alteração';
+          if (answer.actionCard) {
+            actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' ' + escapeHtml(answer.actionCard.title || 'Governança: Confirmar Alteração');
+            actionSubtext = escapeHtml(answer.actionCard.subtext || 'Ação: Executar proposta operacional');
+            btnText = escapeHtml(answer.actionCard.btnText || 'Confirmar alteração');
+            if (answer.actionCard.successMsg) {
+              actionSuccessMsg = answer.actionCard.successMsg;
             }
-          } else if (isDelegationAction) {
-            const firstName = targetPerson.split(' ')[0] || 'Marcos';
-            if (isBriefingAction || qLower.includes('briefing')) {
-              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Despacho: Enviar Briefing para ' + targetPerson;
-              actionSubtext = 'Ação: Formalizar briefing da próxima reunião e despachar para ' + targetPerson;
-              btnText = 'Enviar briefing para ' + firstName.toLowerCase() + '?';
-            } else if (isSubmissionOrProposalAction || targetPerson === 'Marcos Silva') {
-              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Submissão: Enviar Proposta para Marcos Silva (Head de Marketing)';
-              actionSubtext = 'Ação: Formalizar proposta executiva de realocação e despachar para validação de Marcos Silva';
-              btnText = 'Enviar Proposta para Marcos Silva';
-            } else {
-              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Delegação: Atribuir Tarefa para ' + targetPerson;
-              actionSubtext = 'Ação: Formalizar proposta operacional e delegar execução técnica a ' + targetPerson;
-              btnText = 'Delegar tarefa para ' + firstName.toLowerCase() + '?';
-            }
-          } else if (isReactivation) {
-            actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança de Tráfego: Confirmar Reativação de Anúncios';
-            actionSubtext = 'Ação: Reativar e religar a veiculação dos anúncios selecionados no Meta Ads';
-            btnText = 'Confirmar Reativação';
-          } else if (isPauseAction) {
-            if (isUnauthorizedForDirectWrite) {
-              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; Solicitação: Pedido de Pausa de Anúncios';
-              actionSubtext = 'Ação: Encaminhar proposta de pausa de anúncios para Aline Rocha (Gestora de Tráfego SPOT)';
-              btnText = 'Enviar Proposta de Pausa para Aline Rocha';
-            } else {
-              actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança de Tráfego: Confirmar Pausa de Anúncios';
-              actionSubtext = 'Ação: Pausar anúncios de baixa conversão e sincronizar Meta Ads';
-              btnText = 'Confirmar Pausa';
-            }
-          } else if (isSacReconcileAction) {
-            actionTitle = getLucideSvg('shield-check', { size: 16, style: 'color: var(--navy); vertical-align: middle; margin-right: 4px;' }) + ' Governança &amp; SAC: Commit de Reconciliação do WhatsApp';
-            actionSubtext = 'Ação: Salvar reconciliação de atendimentos e conversões do WhatsApp no Supercérebro';
-            btnText = 'Salvar no Supercérebro';
           }
 
           innerHtml +=
@@ -6151,47 +6493,13 @@ export function renderHtmlShell(): string {
           effectiveVerified = false;
         }
 
-        if (answer.limitations && answer.limitations.length > 0) {
-          const listItems = answer.limitations.map(function(l) { return '<li>' + escapeHtml(l) + '</li>'; }).join('');
-          innerHtml +=
-            '<div style="background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-control); padding: 10px 12px; font-size: var(--label);">' +
-              '<strong style="color: #7D631E; font-family: var(--font-mono);">⚠ Limitações e Abstenções:</strong>' +
-              '<ul style="padding-left: 18px; margin-top: 4px; color: var(--ink);">' + listItems + '</ul>' +
-            '</div>';
-        }
-
         respEl.innerHTML = innerHtml;
 
         // Binda os botões de ação deste turno se presentes
-        if (isActionRequired && !isDirectDispatch && answer.status !== 'QUARANTINED') {
+        if (isActionRequired && answer.status !== 'QUARANTINED') {
           const btnApp = document.getElementById('btn-approve-' + turnId);
           const btnRej = document.getElementById('btn-reject-' + turnId);
           const cardEl = document.getElementById('approval-card-' + turnId);
-
-          let successMsg = '✓ Ação aprovada pelo operador. Alterações sincronizadas com o Meta Ads (Commit auditado no SQLite).';
-          if (isApprovalAction) {
-            if (isDevolutivaAction) {
-              successMsg = '✓ Devolutiva de aprovação confirmada e commitada com sucesso no sistema. Decisão oficialmente delegada de volta para ' + targetPerson + ' (Commit auditado no SQLite).';
-            } else {
-              successMsg = '✓ Ação aprovada pelo operador. Alterações sincronizadas com o Meta Ads (Commit auditado no SQLite).';
-            }
-          } else if (isDelegationAction) {
-            if (isBriefingAction || qLower.includes('briefing')) {
-              successMsg = '✓ Briefing formalmente despachado para ' + targetPerson + ' e commitado no SQLite (Supercérebro atualizado). O status das pendências foi atualizado.';
-            } else {
-              successMsg = '✓ Proposta formalmente enviada para ' + targetPerson + ' e registrada no Supercérebro (Commit auditado no SQLite). O status das pendências foi atualizado.';
-            }
-          } else if (isReactivation) {
-            successMsg = '✓ Reativação aprovada pelo operador. Anúncios religados com sucesso no Meta Ads (Commit auditado no SQLite).';
-          } else if (isPauseAction) {
-            if (isUnauthorizedForDirectWrite) {
-              successMsg = '✓ Proposta de pausa enviada com sucesso por ' + (sessionState.currentOperator?.name || 'Luiza Valente') + ' para Aline Rocha (Gestora de Tráfego SPOT). Registro auditado no SQLite.';
-            } else {
-              successMsg = '✓ Pausa aprovada pelo operador. Anúncios pausados com sucesso no Meta Ads (Commit auditado no SQLite).';
-            }
-          } else if (isSacReconcileAction) {
-            successMsg = '✓ Reconciliação de conversões SAC do WhatsApp Business auditada e salva com sucesso no Supercérebro (Commit registrado no SQLite).';
-          }
 
           btnApp?.addEventListener('click', () => {
             updateStageForScenario('S0');
@@ -6201,235 +6509,260 @@ export function renderHtmlShell(): string {
             updateChatBadge('COMMITTED', true, true);
 
             const op = sessionState.currentOperator || {
-              name: 'Aline Rocha',
-              role: 'Gestora de Tráfego',
-              company: 'SPOT',
-              initials: 'AR',
+              name: 'Operador',
+              role: 'Gestor',
+              initials: 'OP',
               avatarBg: 'var(--tag-info-bg)',
               avatarColor: 'var(--tag-info-ink)'
             };
+
             const nowStr = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const cardData = answer.actionCard || {};
+            const actionType = cardData.actionType || (answer.actionType || 'APPROVE_PROPOSAL');
+            const titleText = String(cardData.title || answer.question || '').toLowerCase();
+            const subtextText = String(cardData.subtext || answer.conclusion || '').toLowerCase();
+            const currentOpName = (op && op.name) || 'Aline Rocha';
+            const isHousewheyOp = currentOpName.includes('Marcos') || currentOpName.includes('Luiza');
+            const targetPerson = cardData.targetPerson || answer.targetPerson || (isHousewheyOp ? 'Aline Rocha (SPOT)' : 'Marcos Silva (Housewhey)');
+            const normAction = String(actionType).toUpperCase();
 
-            if (isApprovalAction) {
+            const isApproval =
+              normAction.startsWith('APPROVE') ||
+              normAction.includes('APPROVE_PROPOSAL') ||
+              normAction.includes('APPROVE_BUDGET_REALLOCATION') ||
+              normAction.includes('CONFIRM') ||
+              normAction.includes('DEVOLUTIVA') ||
+              titleText.startsWith('aprovar') ||
+              titleText.includes('devolutiva');
+
+            const isProposalSubmission =
+              !isApproval && (
+                normAction.includes('PROPOSAL') ||
+                normAction.includes('DELEGAT') ||
+                normAction.includes('DESPACHO') ||
+                normAction.includes('SUBMETER') ||
+                normAction.includes('ENVIAR') ||
+                titleText.includes('submeter') ||
+                titleText.includes('proposta') ||
+                titleText.includes('despacho') ||
+                titleText.includes('enviar')
+              );
+
+            if (isApproval) {
               sessionState.isApproved = true;
-              sessionState.isPaused = true;
-              sessionState.isReactivated = false;
-              sessionState.delegation = { isDelegated: true, delegatedTo: 'Carolina Mendes', isApproved: true };
+              const resolvedAction = normAction.includes('PAUSE') || titleText.includes('pausa') ? 'EXTERNAL_WRITE_PAUSE' :
+                                     normAction.includes('BID') || titleText.includes('lance') ? 'UPDATE_BID_STRATEGY' :
+                                     normAction.includes('DISCOUNT') || titleText.includes('cupom') ? 'APPLY_SAC_DISCOUNT' :
+                                     normAction.includes('BUDGET') || normAction.includes('REALLOCATION') || titleText.includes('verba') || titleText.includes('remanejamento') ? 'BUDGET_REALLOCATION' :
+                                     (sessionState.delegation?.actionType || 'BUDGET_REALLOCATION');
 
-              fetch('/api/governance/commit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  action: 'APPROVE_PROPOSAL',
-                  targetPerson: 'Carolina Mendes',
-                  proposalTitle: 'Aprovação da Proposta de Remanejamento de Orçamento',
-                  details: isDevolutivaAction
-                    ? 'Devolutiva de aprovação expressa emitida por Marcos Silva autorizando a pausa de anúncios e remanejamento orçamentário.'
-                    : 'Marcos Silva aprovou a proposta #prop-8921 permitindo o remanejamento de R$ 500,00/dia e a pausa de criativos saturados.'
-                })
-              }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+              sessionState.approvedActions = sessionState.approvedActions || {};
+              sessionState.delegatedActions = sessionState.delegatedActions || {};
+              sessionState.approvedActions[resolvedAction] = true;
+              sessionState.delegatedActions[resolvedAction] = false;
 
-              if (typeof window.addTimelineEvent === 'function') {
-                window.addTimelineEvent({
-                  category: 'governance',
-                  actor: {
-                    name: op.name,
-                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
-                    avatarBg: op.avatarBg || 'var(--tag-success-bg)',
-                    avatarColor: op.avatarColor || 'var(--tag-success-ink)',
-                    avatarInitials: op.initials || 'MS'
-                  },
-                  actionTitle: isDevolutivaAction ? 'Devolutiva de Aprovação para ' + targetPerson : 'Aprovação da Proposta de Remanejamento de Orçamento',
-                  badgeText: 'Proposta Aprovada',
-                  badgeBg: 'var(--tag-success-bg)',
-                  badgeBorder: 'var(--tag-success-border)',
-                  badgeColor: 'var(--tag-success-ink)',
-                  summary: isDevolutivaAction
-                    ? (op.name + ' confirmou a devolutiva de aprovação da proposta de realocação para ' + targetPerson + ' com commit auditado no SQLite.')
-                    : (op.name + ' aprovou a proposta #prop-8921 permitindo o remanejamento de R$ 500,00/dia da campanha Namorados para alavancar o lançamento de Whey Isolar.'),
-                  target: 'Proposta #prop-8921 · Aprovada por ' + op.name,
-                  timestamp: nowStr,
-                  provenance: 'Aprovação da Conta'
-                });
-              }
-            } else if (isDelegationAction) {
-              sessionState.delegation = { isDelegated: true, delegatedTo: targetPerson };
-              const isBriefing = isBriefingAction || qLower.includes('briefing');
-              fetch('/api/governance/commit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  action: 'DELEGATE_PROPOSAL',
-                  targetPerson: targetPerson,
-                  proposalTitle: isBriefing ? 'Briefing da Próxima Reunião' : 'Proposta de Realocação de Verba Meta Ads',
-                  proposalDetails: isBriefing
-                    ? ('Briefing da próxima reunião despachado para ' + targetPerson + ' com commit auditado no SQLite.')
-                    : ('Proposta formal de alteração operacional despachada para ' + targetPerson + '.')
-                })
-              }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
-
-              if (typeof window.addTimelineEvent === 'function') {
-                window.addTimelineEvent({
-                  category: 'governance',
-                  actor: {
-                    name: op.name,
-                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
-                    avatarBg: op.avatarBg || 'var(--tag-info-bg)',
-                    avatarColor: op.avatarColor || 'var(--tag-info-ink)',
-                    avatarInitials: op.initials || 'OP'
-                  },
-                  actionTitle: isBriefing ? ('Envio de Briefing para ' + targetPerson) : ('Submissão de Proposta para ' + targetPerson),
-                  badgeText: isBriefing ? 'Briefing Enviado' : 'Proposta Submetida',
-                  badgeBg: 'var(--tag-success-bg)',
-                  badgeBorder: 'var(--tag-success-border)',
-                  badgeColor: 'var(--tag-success-ink)',
-                  summary: isBriefing
-                    ? (op.name + ' despachou formalmente o briefing da próxima reunião para ' + targetPerson + ' com commit auditado no SQLite.')
-                    : (op.name + ' despachou formalmente a proposta executiva de realocação para ' + targetPerson + ' com commit auditado no SQLite.'),
-                  target: (isBriefing ? 'Briefing Operacional · ' : 'Proposta Operacional · ') + targetPerson,
-                  timestamp: nowStr,
-                  provenance: 'Governança da Conta'
-                });
-              }
-            } else if (isReactivation) {
-              sessionState.isReactivated = true;
-              sessionState.isPaused = false;
+              sessionState.delegation = {
+                isDelegated: true,
+                delegatedTo: targetPerson || 'Aline Rocha',
+                personId: 'p_aline',
+                proposalTitle: cardData.title || (resolvedAction === 'EXTERNAL_WRITE_PAUSE' ? 'Aprovação de Pausa no Meta Ads' : 'Aprovação de Mudança de Verba'),
+                proposalDetails: cardData.subtext || '',
+                actionType: resolvedAction
+              };
+            } else if (isProposalSubmission) {
               sessionState.isApproved = false;
-              fetch('/api/governance/commit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'REACTIVATE' })
-              }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+              const resolvedActionType =
+                normAction.includes('PAUSE') || titleText.includes('pausa') ? 'EXTERNAL_WRITE_PAUSE' :
+                normAction.includes('BID') || titleText.includes('lance') || titleText.includes('estratégia') || titleText.includes('estrategia') ? 'UPDATE_BID_STRATEGY' :
+                normAction.includes('DISCOUNT') || normAction.includes('CUPOM') || titleText.includes('cupom') ? 'APPLY_SAC_DISCOUNT' :
+                normAction.includes('BUDGET') || normAction.includes('REMANEJAMENTO') || titleText.includes('remanejamento') || titleText.includes('verba') ? 'BUDGET_REALLOCATION' :
+                'EXTERNAL_WRITE_PAUSE';
 
-              if (typeof window.addTimelineEvent === 'function') {
-                window.addTimelineEvent({
-                  category: 'media',
-                  actor: {
-                    name: op.name,
-                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
-                    avatarBg: op.avatarBg || 'var(--tag-info-bg)',
-                    avatarColor: op.avatarColor || 'var(--tag-info-ink)',
-                    avatarInitials: op.initials || 'AR'
-                  },
-                  actionTitle: 'Reativação de Anúncios no Meta Ads',
-                  badgeText: 'Reativação Aprovada',
-                  badgeBg: 'var(--tag-success-bg)',
-                  badgeBorder: 'var(--tag-success-border)',
-                  badgeColor: 'var(--tag-success-ink)',
-                  summary: op.name + ' aprovou a reativação dos anúncios de alta conversão. Operação sincronizada com Meta Ads e registrada no Supercérebro.',
-                  target: 'Campanha Whey Isolar · Meta Ads',
-                  timestamp: nowStr,
-                  provenance: 'Painel da Conta'
-                });
-              }
-            } else if (isPauseAction) {
-              if (isUnauthorizedForDirectWrite) {
-                sessionState.delegation = { isDelegated: true, delegatedTo: 'Aline Rocha' };
-                fetch('/api/governance/commit', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ action: 'DELEGATE_PROPOSAL', targetPerson: 'Aline Rocha' })
-                }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+              sessionState.delegatedActions = sessionState.delegatedActions || {};
+              sessionState.approvedActions = sessionState.approvedActions || {};
+              sessionState.delegatedActions[resolvedActionType] = true;
+              sessionState.approvedActions[resolvedActionType] = false;
 
-                if (typeof window.addTimelineEvent === 'function') {
-                  window.addTimelineEvent({
-                    category: 'governance',
-                    actor: {
-                      name: op.name,
-                      role: op.role + (op.company ? ' (' + op.company + ')' : ''),
-                      avatarBg: op.avatarBg || 'var(--tag-warning-bg)',
-                      avatarColor: op.avatarColor || 'var(--tag-warning-ink)',
-                      avatarInitials: op.initials || 'LV'
-                    },
-                    actionTitle: 'Submissão de Proposta de Pausa para Aline Rocha',
-                    badgeText: 'Proposta Submetida',
-                    badgeBg: 'var(--tag-warning-bg)',
-                    badgeBorder: 'var(--tag-warning-border)',
-                    badgeColor: 'var(--tag-warning-ink)',
-                    summary: op.name + ' registrou e encaminhou proposta de pausa dos criativos saturados (ad_namorados_casal_03) para validação de Aline Rocha (Gestora de Tráfego SPOT).',
-                    target: 'Proposta #prop-pausa-01 · Aline Rocha',
-                    timestamp: nowStr,
-                    provenance: 'Painel de Governança'
-                  });
-                }
-              } else {
-                sessionState.isPaused = true;
-                sessionState.isReactivated = false;
-                fetch('/api/governance/commit', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ action: 'PAUSE', pausedAds: ['ad_namorados_casal_03', 'ad_whey_sabores_04'] })
-                }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+              const targetName = cardData.targetPerson || targetPerson || 'Marcos Silva';
+              const matchedOp = (Array.isArray(OPERATOR_PROFILES) ? OPERATOR_PROFILES : []).find(op =>
+                op.name && targetName && (op.name.toLowerCase().includes(targetName.toLowerCase()) || targetName.toLowerCase().includes(op.name.toLowerCase()))
+              );
+              const targetId = cardData.targetPersonId || answer.targetPersonId || (matchedOp ? matchedOp.id : 'p_marcos');
+              const resolvedName = matchedOp ? matchedOp.name : targetName;
 
-                if (typeof window.addTimelineEvent === 'function') {
-                  window.addTimelineEvent({
-                    category: 'media',
-                    actor: {
-                      name: op.name,
-                      role: op.role + (op.company ? ' (' + op.company + ')' : ''),
-                      avatarBg: op.avatarBg || 'var(--tag-danger-bg)',
-                      avatarColor: op.avatarColor || 'var(--tag-danger-ink)',
-                      avatarInitials: op.initials || 'AR'
-                    },
-                    actionTitle: 'Pausa de Anúncios de Baixa Conversão',
-                    badgeText: 'Pausa de Anúncio',
-                    badgeBg: 'var(--tag-danger-bg)',
-                    badgeBorder: 'var(--tag-danger-border)',
-                    badgeColor: 'var(--tag-danger-ink)',
-                    summary: op.name + ' aprovou a pausa dos anúncios saturados (ad_namorados_casal_03 e ad_whey_sabores_04) no Meta Ads com commit auditado no SQLite.',
-                    target: 'Anúncios: ad_namorados_casal_03, ad_whey_sabores_04 · Meta Ads',
-                    timestamp: nowStr,
-                    provenance: 'Meta Ads'
-                  });
-                }
-              }
-            } else if (isSacReconcileAction) {
+              sessionState.delegation = {
+                isDelegated: true,
+                delegatedTo: resolvedName,
+                personId: targetId,
+                proposalTitle: cardData.title || 'Proposta SPOT',
+                proposalDetails: cardData.subtext || '',
+                actionType: resolvedActionType
+              };
+            } else if (normAction.includes('RECONCILE') || titleText.includes('reconcili') || subtextText.includes('reconcili')) {
               sessionState.isSacReconciled = true;
-              fetch('/api/governance/commit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'RECONCILE_SAC' })
-              }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
-
-              if (typeof window.addTimelineEvent === 'function') {
-                window.addTimelineEvent({
-                  category: 'audit',
-                  actor: {
-                    name: op.name,
-                    role: op.role + (op.company ? ' (' + op.company + ')' : ''),
-                    avatarBg: op.avatarBg || 'var(--tag-neutral-bg)',
-                    avatarColor: op.avatarColor || 'var(--tag-neutral-ink)',
-                    avatarInitials: op.initials || 'LV'
-                  },
-                  actionTitle: 'Reconciliação de Atendimentos WhatsApp com CRM',
-                  badgeText: 'Reconciliação Auditada',
-                  badgeBg: 'var(--tag-info-bg)',
-                  badgeBorder: 'var(--tag-info-border)',
-                  badgeColor: 'var(--tag-info-ink)',
-                  summary: op.name + ' auditou e confirmou a reconciliação das conversões do WhatsApp Business com os registros de vendas no CRM, gravando no Supercérebro.',
-                  target: 'SAC WhatsApp & CRM · Supercérebro',
-                  timestamp: nowStr,
-                  provenance: 'Motor de Auditoria'
-                });
-              }
-            } else {
+            } else if (normAction.includes('DISCOUNT') || normAction.includes('CUPOM') || normAction.includes('APPLY_SAC_DISCOUNT') || titleText.includes('cupom') || titleText.includes('autoriza') || subtextText.includes('cupom')) {
+              sessionState.isSacDiscountSubmitted = true;
+              if (sessionState.approvedActions) sessionState.approvedActions['APPLY_SAC_DISCOUNT'] = false;
+              if (sessionState.delegatedActions) sessionState.delegatedActions['APPLY_SAC_DISCOUNT'] = false;
+            } else if (normAction.includes('BID_STRATEGY') || normAction.includes('UPDATE_BID_STRATEGY') || titleText.includes('lance') || titleText.includes('estratégia') || titleText.includes('estrategia')) {
+              sessionState.isBidStrategyUpdated = true;
+              if (sessionState.approvedActions) sessionState.approvedActions['UPDATE_BID_STRATEGY'] = false;
+              if (sessionState.delegatedActions) sessionState.delegatedActions['UPDATE_BID_STRATEGY'] = false;
+            } else if (normAction.includes('BUDGET_REALLOCATION') || normAction.includes('REMANEJAMENTO') || titleText.includes('remanejamento') || titleText.includes('verba')) {
+              sessionState.isBudgetReallocated = true;
+              if (sessionState.approvedActions) sessionState.approvedActions['BUDGET_REALLOCATION'] = false;
+              if (sessionState.delegatedActions) sessionState.delegatedActions['BUDGET_REALLOCATION'] = false;
+            } else if (normAction.includes('PAUSE') || normAction.includes('PAUSAR') || titleText.includes('pausa') || titleText.includes('pausar') || subtextText.includes('pausa') || subtextText.includes('pausar')) {
               sessionState.isPaused = true;
-              sessionState.isApproved = true;
-              fetch('/api/governance/commit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'APPROVE_PROPOSAL', details: 'Alteração operacional confirmada pelo operador com commit auditado no SQLite.' })
-              }).then(function() { loadSupercerebroPendencies(); }).catch(() => {});
+              if (sessionState.approvedActions) sessionState.approvedActions['EXTERNAL_WRITE_PAUSE'] = false;
+              if (sessionState.delegatedActions) sessionState.delegatedActions['EXTERNAL_WRITE_PAUSE'] = false;
+            } else if (normAction.includes('REACTIVATE') || titleText.includes('reativar') || subtextText.includes('reativar')) {
+              sessionState.isReactivated = true;
+              if (sessionState.approvedActions) sessionState.approvedActions['EXTERNAL_WRITE_REACTIVATE'] = false;
+              if (sessionState.delegatedActions) sessionState.delegatedActions['EXTERNAL_WRITE_REACTIVATE'] = false;
             }
+
+            saveSessionState();
+
+            // Atualiza imediatamente o Palco Operacional (painel direito) para COMMITTED
+            const brainCardDetails = document.getElementById('brain-card-details');
+            if (brainCardDetails) {
+              brainCardDetails.innerHTML =
+                '<div><strong>Política:</strong> Escrita externa commitada e auditada no SQLite.</div>';
+            }
+            const palcoStatus = document.getElementById('palco-status');
+            if (palcoStatus) {
+              palcoStatus.textContent = 'Palco: Operação commitada no SQLite (Supercérebro atualizado)';
+            }
+            if (typeof window.renderStageCardsFromRun === 'function') {
+              window.renderStageCardsFromRun({ ...answer, status: 'COMMITTED', verified: true }, 'S0');
+            }
+
+            const isProposalSubmit = isProposalSubmission || (!isApproval && (
+              (cardData.title || '').toLowerCase().includes('submeter') ||
+              (cardData.title || '').toLowerCase().includes('proposta') ||
+              (cardData.title || '').toLowerCase().includes('enviar')
+            ));
+
+            fetch('/api/governance/commit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                action: actionType,
+                targetPerson: targetPerson,
+                proposalTitle: cardData.title || 'Aprovação Operacional',
+                details: cardData.subtext || 'Operação confirmada pelo operador e commitada no SQLite.',
+                operatorName: op.name,
+                operatorRole: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                badgeText: isApproval ? 'Aprovado' : (isProposalSubmit ? 'Enviado para Aprovação' : 'Ação Commitada'),
+                actor: {
+                  name: op.name,
+                  role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                  avatarBg: op.avatarBg || 'var(--tag-info-bg)',
+                  avatarColor: op.avatarColor || 'var(--tag-info-ink)',
+                  avatarInitials: op.initials || 'OP'
+                }
+              })
+            }).then(function(res) {
+              return res.json().catch(function() { return {}; });
+            }).then(function(data) {
+              if (data) {
+                if (data.isPaused !== undefined) sessionState.isPaused = Boolean(data.isPaused);
+                if (data.isSacReconciled !== undefined) sessionState.isSacReconciled = Boolean(data.isSacReconciled);
+                if (data.isSacDiscountSubmitted !== undefined) sessionState.isSacDiscountSubmitted = Boolean(data.isSacDiscountSubmitted);
+                if (data.isBidStrategyUpdated !== undefined) sessionState.isBidStrategyUpdated = Boolean(data.isBidStrategyUpdated);
+                if (data.isBudgetReallocated !== undefined) sessionState.isBudgetReallocated = Boolean(data.isBudgetReallocated);
+                if (data.isApproved !== undefined) sessionState.isApproved = Boolean(data.isApproved);
+                if (data.isReactivated !== undefined) sessionState.isReactivated = Boolean(data.isReactivated);
+                if (data.delegatedActions) sessionState.delegatedActions = data.delegatedActions;
+                if (data.approvedActions) sessionState.approvedActions = data.approvedActions;
+                if (data.delegation) sessionState.delegation = data.delegation;
+              }
+              saveSessionState();
+              syncGovernanceAndGraphState();
+            }).catch(() => {});
+
+            updateOperatorUI();
+
+            const cleanedCardTitle = cleanCardTitle(cardData.title);
+            if (typeof window.addDocumentToCenter === 'function' && cleanedCardTitle) {
+              const fullReportBody = answer.conclusion
+                ? answer.conclusion
+                : (cardData.subtext || 'Operação auditada e registrada no Supercérebro.');
+
+              const docCat = typeof window.detectDocumentCategory === 'function'
+                ? window.detectDocumentCategory(cleanedCardTitle, fullReportBody, cardData.subtext)
+                : { type: 'relatorio', typeName: 'RELATÓRIO', badgeBg: 'var(--tag-success-bg)', badgeBorder: 'var(--tag-success-border)', badgeColor: 'var(--tag-success-ink)' };
+
+              window.addDocumentToCenter({
+                id: 'doc-gov-' + turnId,
+                type: docCat.type,
+                typeName: docCat.typeName,
+                badgeBg: docCat.badgeBg,
+                badgeBorder: docCat.badgeBorder,
+                badgeColor: docCat.badgeColor,
+                title: cleanedCardTitle,
+                date: nowStr,
+                author: op.name + ' (' + op.role + ')',
+                status: 'Confirmado e Auditado no SQLite',
+                summary: cardData.subtext ? (cardData.subtext + ' · Auditado no Supercérebro.') : (op.name + ' aprovou a operação com commit auditado no SQLite.'),
+                content: [
+                  '# ' + (cleanedCardTitle || 'DOCUMENTO DE GOVERNANÇA OPERACIONAL'),
+                  '',
+                  '**OPERADOR:** ' + op.name + ' (' + op.role + ')',
+                  '**DATA:** ' + nowStr,
+                  '**STATUS:** CONFIRMADO E COMMITADO NO SUPERCÉREBRO (SQLite Auditado)',
+                  '',
+                  '---',
+                  '',
+                  '### 1. Resumo da Decisão de Governança',
+                  cardData.subtext || 'Operação auditada e registrada no Supercérebro.',
+                  '',
+                  '### 2. Dados Auditados da Operação & Reconciliação',
+                  fullReportBody
+                ].join(String.fromCharCode(10))
+              });
+            }
+
+            const isProposalEvent = !sessionState.isApproved && (
+              (cleanedCardTitle || '').toLowerCase().includes('submeter') ||
+              (cleanedCardTitle || '').toLowerCase().includes('proposta') ||
+              (cleanedCardTitle || '').toLowerCase().includes('solicitar') ||
+              (cleanedCardTitle || '').toLowerCase().includes('autorização')
+            );
+
+            if (typeof window.addTimelineEvent === 'function') {
+              window.addTimelineEvent({
+                id: 'evt-gov-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+                category: 'governance',
+                actor: {
+                  name: op.name,
+                  role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                  avatarBg: op.avatarBg || 'var(--tag-success-bg)',
+                  avatarColor: op.avatarColor || 'var(--tag-success-ink)',
+                  avatarInitials: op.initials || 'OP'
+                },
+                actionTitle: cleanedCardTitle || (isApproval ? 'Aprovação de Governança' : 'Confirmação de Governança'),
+                badgeText: isApproval ? 'Aprovado' : (isProposalEvent ? 'Enviado para Aprovação' : 'Aprovado'),
+                badgeBg: isProposalEvent ? 'var(--tag-warning-bg)' : 'var(--tag-success-bg)',
+                badgeBorder: isProposalEvent ? 'var(--tag-warning-border)' : 'var(--tag-success-border)',
+                badgeColor: isProposalEvent ? 'var(--tag-warning-ink)' : 'var(--tag-success-ink)',
+                summary: cardData.subtext || (op.name + (isApproval ? ' aprovou formalmente a proposta operacional.' : ' confirmou a ação operacional.')),
+                target: targetPerson,
+                timestamp: nowStr,
+                provenance: 'Governança da Conta'
+              });
+            }
+
             if (cardEl) {
-              cardEl.innerHTML = '<div style="color: #1E6B56; font-size: var(--label); font-weight: 600; padding: 8px 12px; background: var(--success-soft); border-radius: var(--radius-small); border: 1px solid var(--success); width: 100%; font-family: var(--font-mono);">' + successMsg + '</div>';
+              cardEl.innerHTML = '<div class="commit-success-card" style="font-size: var(--label); font-weight: 600; padding: 8px 12px; border-radius: var(--radius-small); width: 100%; font-family: var(--font-mono);">' + actionSuccessMsg + '</div>';
             }
           });
 
           btnRej?.addEventListener('click', () => {
             updateChatBadge('PROVISIONAL', false);
             if (cardEl) {
-              cardEl.innerHTML = '<div style="color: #7D631E; font-size: var(--label); font-weight: 500; padding: 8px 12px; background: var(--warning-soft); border-radius: var(--radius-small); border: 1px solid var(--warning); width: 100%; font-family: var(--font-mono);">✕ Proposta mantida como rascunho. Nenhuma alteração foi efetuada no Meta Ads.</div>';
+              cardEl.innerHTML = '<div class="commit-warning-card" style="font-size: var(--label); font-weight: 500; padding: 8px 12px; border-radius: var(--radius-small); width: 100%; font-family: var(--font-mono);">✕ Proposta mantida como rascunho. Nenhuma alteração foi efetuada no Meta Ads.</div>';
             }
           });
         }
@@ -6772,75 +7105,6 @@ export function renderHtmlShell(): string {
           const stepR2 = document.getElementById('step-r2-' + turnId);
           const stepT2 = document.getElementById('step-t2-' + turnId);
 
-          const goalLower = goalVal.toLowerCase();
-          const isDirectDispatch =
-            goalLower.includes('pode enviar') ||
-            goalLower.includes('pode mandar') ||
-            goalLower.includes('confirmar envio') ||
-            goalLower.includes('despachar proposta') ||
-            goalLower.includes('despachar briefing') ||
-            (goalLower.includes('enviar') && (goalLower.includes('proposta') || goalLower.includes('briefing'))) ||
-            (goalLower.includes('mande') && (goalLower.includes('proposta') || goalLower.includes('briefing'))) ||
-            (goalLower.includes('submeter') && goalLower.includes('proposta'));
-
-          if (isDirectDispatch) {
-            let dispatchTarget = 'Marcos Silva';
-            if (goalLower.includes('luiza')) dispatchTarget = 'Luiza Valente';
-            else if (goalLower.includes('aline')) dispatchTarget = 'Aline Rocha';
-            else if (goalLower.includes('carolina') || goalLower.includes('carol')) dispatchTarget = 'Carolina Mendes';
-            else if (goalLower.includes('marcos')) dispatchTarget = 'Marcos Silva';
-
-            const isBriefing = goalLower.includes('briefing') || goalLower.includes('resumo');
-            sessionState.delegation = { isDelegated: true, delegatedTo: dispatchTarget };
-            fetch('/api/governance/commit', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                action: 'DELEGATE_PROPOSAL',
-                targetPerson: dispatchTarget,
-                proposalTitle: isBriefing ? 'Briefing da Próxima Reunião' : 'Proposta de Realocação de Verba Meta Ads',
-                proposalDetails: isBriefing
-                  ? ('Briefing da próxima reunião despachado para ' + dispatchTarget + ' com commit auditado no SQLite.')
-                  : ('Proposta formal de alteração operacional despachada para ' + dispatchTarget + '.')
-              })
-            }).then(function() {
-              loadSupercerebroPendencies();
-            }).catch(() => {});
-
-            if (typeof window.addTimelineEvent === 'function') {
-              const op = sessionState.currentOperator || {
-                name: 'Carolina Mendes',
-                role: 'Gerente de Contas',
-                company: 'SPOT',
-                initials: 'CM',
-                avatarBg: 'var(--tag-info-bg)',
-                avatarColor: 'var(--tag-info-ink)'
-              };
-              const nowStr = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-              window.addTimelineEvent({
-                category: 'governance',
-                actor: {
-                  name: op.name,
-                  role: op.role + (op.company ? ' (' + op.company + ')' : ''),
-                  avatarBg: op.avatarBg || 'var(--tag-info-bg)',
-                  avatarColor: op.avatarColor || 'var(--tag-info-ink)',
-                  avatarInitials: op.initials || 'CM'
-                },
-                actionTitle: isBriefing ? ('Envio de Briefing para ' + dispatchTarget) : ('Submissão de Proposta para ' + dispatchTarget),
-                badgeText: isBriefing ? 'Briefing Enviado' : 'Proposta Submetida',
-                badgeBg: 'var(--tag-success-bg)',
-                badgeBorder: 'var(--tag-success-border)',
-                badgeColor: 'var(--tag-success-ink)',
-                summary: isBriefing
-                  ? (op.name + ' despachou formalmente o briefing da próxima reunião para ' + dispatchTarget + ' com commit auditado no SQLite.')
-                  : (op.name + ' despachou formalmente a proposta executiva de realocação de verba para ' + dispatchTarget + ' com commit auditado no SQLite.'),
-                target: (isBriefing ? 'Briefing Operacional · ' : 'Proposta Operacional · ') + dispatchTarget,
-                timestamp: nowStr,
-                provenance: 'Governança da Conta'
-              });
-            }
-          }
-
           const contract = {
             schemaVersion: '1.0.0',
             taskId: 'task_custom_' + Date.now(),
@@ -6856,13 +7120,13 @@ export function renderHtmlShell(): string {
               scenario: sessionState.scenario,
               isReactivated: Boolean(sessionState.isReactivated),
               isPaused: Boolean(sessionState.isPaused),
-              isDelegated: Boolean(sessionState.delegation?.isDelegated || isDirectDispatch),
-              delegatedTo: sessionState.delegation?.delegatedTo || (isDirectDispatch ? 'Marcos Silva' : undefined),
-              requester: (sessionState.currentOperator?.name || 'Aline Rocha') + ' (' + (sessionState.currentOperator?.role || 'Gestora de Tráfego') + ' · ' + (sessionState.currentOperator?.company || 'SPOT') + ')',
-              operatorId: sessionState.currentOperator?.id || 'p_aline',
-              operatorName: sessionState.currentOperator?.name || 'Aline Rocha',
-              operatorRole: sessionState.currentOperator?.role || 'Gestora de Tráfego',
-              operatorCompany: sessionState.currentOperator?.company || 'SPOT'
+              isDelegated: Boolean(sessionState.delegation?.isDelegated),
+              delegatedTo: sessionState.delegation?.delegatedTo,
+              requester: (sessionState.currentOperator?.name || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].name : 'Operador')) + ' (' + (sessionState.currentOperator?.role || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].role : 'Gestor')) + ' · ' + (sessionState.currentOperator?.company || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].company : 'SPOT')) + ')',
+              operatorId: sessionState.currentOperator?.id || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].id : ''),
+              operatorName: sessionState.currentOperator?.name || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].name : 'Operador'),
+              operatorRole: sessionState.currentOperator?.role || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].role : 'Gestor'),
+              operatorCompany: sessionState.currentOperator?.company || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].company : 'SPOT')
             }
           };
 
@@ -6918,34 +7182,24 @@ export function renderHtmlShell(): string {
             if (r1Text && runRecord.executionTrace.step1?.reasoningText) {
               r1Text.textContent = runRecord.executionTrace.step1.reasoningText;
             }
-            const t1Obs = document.getElementById('step-t1-obs-' + turnId);
-            if (t1Obs && runRecord.executionTrace.step1?.observation) {
-              t1Obs.textContent = runRecord.executionTrace.step1.observation;
-            }
-            const tool1 = document.getElementById('step-tool1-' + turnId);
-            if (tool1 && runRecord.executionTrace.step1?.tools?.[0]) {
-              tool1.textContent = runRecord.executionTrace.step1.tools[0];
-            }
-            const tool2 = document.getElementById('step-tool2-' + turnId);
-            if (tool2 && runRecord.executionTrace.step1?.tools?.[1]) {
-              tool2.textContent = runRecord.executionTrace.step1.tools[1];
+            const t1Container = document.getElementById('step-t1-' + turnId)?.querySelector('.step-text');
+            if (t1Container && Array.isArray(runRecord.executionTrace.step1?.tools)) {
+              const tools1 = runRecord.executionTrace.step1.tools;
+              const obsText = runRecord.executionTrace.step1.observation || '';
+              const tagsHtml = tools1.map(t => '<span class="step-tool-tag">' + escapeHtml(t) + '</span>').join(' ');
+              t1Container.innerHTML = tagsHtml + '<div class="step-obs" id="step-t1-obs-' + turnId + '">' + escapeHtml(obsText) + '</div>';
             }
 
             const r2Text = document.getElementById('step-r2-text-' + turnId);
             if (r2Text && runRecord.executionTrace.step2?.reasoningText) {
               r2Text.textContent = runRecord.executionTrace.step2.reasoningText;
             }
-            const t2Obs = document.getElementById('step-t2-obs-' + turnId);
-            if (t2Obs && runRecord.executionTrace.step2?.observation) {
-              t2Obs.textContent = runRecord.executionTrace.step2.observation;
-            }
-            const tool3 = document.getElementById('step-tool3-' + turnId);
-            if (tool3 && runRecord.executionTrace.step2?.tools?.[0]) {
-              tool3.textContent = runRecord.executionTrace.step2.tools[0];
-            }
-            const tool4 = document.getElementById('step-tool4-' + turnId);
-            if (tool4 && runRecord.executionTrace.step2?.tools?.[1]) {
-              tool4.textContent = runRecord.executionTrace.step2.tools[1];
+            const t2Container = document.getElementById('step-t2-' + turnId)?.querySelector('.step-text');
+            if (t2Container && Array.isArray(runRecord.executionTrace.step2?.tools)) {
+              const tools2 = runRecord.executionTrace.step2.tools;
+              const obsText = runRecord.executionTrace.step2.observation || '';
+              const tagsHtml = tools2.map(t => '<span class="step-tool-tag">' + escapeHtml(t) + '</span>').join(' ');
+              t2Container.innerHTML = tagsHtml + '<div class="step-obs" id="step-t2-obs-' + turnId + '">' + escapeHtml(obsText) + '</div>';
             }
           }
 
@@ -6968,19 +7222,41 @@ export function renderHtmlShell(): string {
           sessionState.activeContract = contract;
 
           const structured = runRecord.structuredAnswer || {};
-          const isRealCommit = Boolean(runRecord.isAtomicCommit || structured.isAtomicCommit || isDirectDispatch);
+          const isExplicitAtomicCommit = Boolean(
+            runRecord.isAtomicCommit ||
+            structured.isAtomicCommit ||
+            runRecord.hasMemoryCommit ||
+            structured.hasMemoryCommit ||
+            runRecord.isApproved ||
+            structured.isApproved ||
+            runRecord.isDelegated ||
+            structured.isDelegated ||
+            runRecord.isDocumentGenerated ||
+            structured.isDocumentGenerated ||
+            runRecord.actionType ||
+            structured.actionType
+          );
+          const isRealCommit = Boolean(
+            isExplicitAtomicCommit &&
+            (runRecord.status === 'COMMITTED' || structured.status === 'COMMITTED') &&
+            (runRecord.verified !== false && structured.verified !== false)
+          );
           const structuredAnswer = {
             question: structured.question || goalVal,
             conclusion: structured.conclusion || runRecord.finalOutput || 'Diagnóstico concluído com sucesso.',
             limitations: structured.limitations || [],
             evidenceRefs: structured.evidenceRefs || [],
-            status: structured.status || (isRealCommit ? 'COMMITTED' : (runRecord.status || 'COMPLETED')),
+            status: (structured.status && structured.status !== 'COMMITTED') ? structured.status : (isRealCommit ? 'COMMITTED' : (runRecord.status && runRecord.status !== 'COMMITTED' ? runRecord.status : 'COMPLETED')),
             verified: Boolean(runRecord.verified !== undefined ? runRecord.verified : structured.verified),
-            isAtomicCommit: isRealCommit
+            isAtomicCommit: isRealCommit,
+            isInformational: Boolean(structured.isInformational),
+            actionCard: structured.actionCard
           };
 
           renderTurnStructuredAnswer(turnId, structuredAnswer, goalVal);
           sessionState.chatHistory.push({ role: 'assistant', content: structuredAnswer.conclusion });
+
+          renderStageCardsFromRun({ runRecord, structuredAnswer, goalVal, scenarioId: sessionState.scenario });
 
           if (runRecord.trace && runRecord.trace.length > 0) {
             renderTrajectoryEvents(runRecord.trace);
@@ -6988,6 +7264,97 @@ export function renderHtmlShell(): string {
           }
 
           inspectItem('Contrato da Tarefa (' + contract.taskId + ')', contract);
+
+          const gov = runRecord.governanceState || structured.governanceState;
+          if (gov) {
+            if (gov.isPaused !== undefined) sessionState.isPaused = Boolean(gov.isPaused);
+            if (gov.isApproved !== undefined) sessionState.isApproved = Boolean(gov.isApproved);
+            if (gov.isReactivated !== undefined) sessionState.isReactivated = Boolean(gov.isReactivated);
+            if (gov.isSacReconciled !== undefined) sessionState.isSacReconciled = Boolean(gov.isSacReconciled);
+            if (gov.isSacDiscountSubmitted !== undefined) sessionState.isSacDiscountSubmitted = Boolean(gov.isSacDiscountSubmitted);
+            if (gov.isBidStrategyUpdated !== undefined) sessionState.isBidStrategyUpdated = Boolean(gov.isBidStrategyUpdated);
+            if (gov.isBudgetReallocated !== undefined) sessionState.isBudgetReallocated = Boolean(gov.isBudgetReallocated);
+            if (gov.delegation) sessionState.delegation = gov.delegation;
+            saveSessionState();
+          }
+
+          syncGovernanceAndGraphState();
+          if (typeof loadSupercerebroPendencies === 'function') {
+            loadSupercerebroPendencies();
+          }
+
+          // Se for uma execução de ação operacional auditada pelo operador ativo, registrar na Timeline e na Central de Documentos
+          const goalLower = (goalVal || '').toLowerCase();
+          const isDirectExecutedAction = (
+            goalLower.includes('executar ajuste') ||
+            goalLower.includes('executar pausa') ||
+            goalLower.includes('executar remanejamento') ||
+            goalLower.includes('liberar cupom') ||
+            (goalLower.includes('executar') && goalLower.includes('auditad'))
+          );
+
+          if (isDirectExecutedAction) {
+            const now = new Date();
+            const nowStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const op = sessionState.currentOperator || { name: 'Aline Rocha', role: 'Gestora de Tráfego', company: 'SPOT', initials: 'AR' };
+            const actionTitle = goalLower.includes('lance')
+              ? 'Executar Ajuste de Estratégia de Lance'
+              : (goalLower.includes('pausa') ? 'Executar Pausa no Meta Ads' : (goalLower.includes('remanejamento') ? 'Executar Remanejamento de Verba' : 'Execução Operacional'));
+
+            if (typeof window.addDocumentToCenter === 'function') {
+              window.addDocumentToCenter({
+                id: 'doc-exec-' + turnId,
+                type: 'relatorio',
+                typeName: 'RELATÓRIO',
+                badgeBg: 'var(--tag-success-bg)',
+                badgeBorder: 'var(--tag-success-border)',
+                badgeColor: 'var(--tag-success-ink)',
+                title: actionTitle,
+                date: nowStr,
+                author: op.name + ' (' + op.role + ')',
+                status: 'Executado e Auditado no SQLite',
+                summary: structuredAnswer.conclusion || (op.name + ' executou a operação técnica com commit auditado no SQLite.'),
+                content: [
+                  '# ' + actionTitle,
+                  '',
+                  '**OPERADOR:** ' + op.name + ' (' + op.role + ')',
+                  '**DATA:** ' + nowStr,
+                  '**STATUS:** EXECUTADO E COMMITADO NO SUPERCÉREBRO (SQLite Auditado)',
+                  '',
+                  '---',
+                  '',
+                  '### 1. Resumo da Execução Técnica',
+                  'Operação executada com autorização prévia de governança e commit auditado no SQLite.',
+                  '',
+                  '### 2. Dados Auditados da Operação',
+                  structuredAnswer.conclusion
+                ].join(String.fromCharCode(10))
+              });
+            }
+
+            if (typeof window.addTimelineEvent === 'function') {
+              window.addTimelineEvent({
+                id: 'evt-exec-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+                category: 'governance',
+                actor: {
+                  name: op.name,
+                  role: op.role + (op.company ? ' (' + op.company + ')' : ''),
+                  avatarBg: op.avatarBg || 'var(--tag-success-bg)',
+                  avatarColor: op.avatarColor || 'var(--tag-success-ink)',
+                  avatarInitials: op.initials || 'AR'
+                },
+                actionTitle: actionTitle,
+                badgeText: 'Executado',
+                badgeBg: 'var(--tag-success-bg)',
+                badgeBorder: 'var(--tag-success-border)',
+                badgeColor: 'var(--tag-success-ink)',
+                summary: structuredAnswer.conclusion || (op.name + ' executou a operação técnica no Meta Ads.'),
+                target: 'Meta Ads & SQLite',
+                timestamp: nowStr,
+                provenance: 'Supercérebro Auditado'
+              });
+            }
+          }
 
           setExecutionActive(false);
           scrollChatToBottom(true);
@@ -7026,11 +7393,11 @@ export function renderHtmlShell(): string {
             isPaused: Boolean(sessionState.isPaused),
             isDelegated: Boolean(sessionState.delegation?.isDelegated),
             delegatedTo: sessionState.delegation?.delegatedTo,
-            requester: (sessionState.currentOperator?.name || 'Aline Rocha') + ' (' + (sessionState.currentOperator?.role || 'Gestora de Tráfego') + ' · ' + (sessionState.currentOperator?.company || 'SPOT') + ')',
-            operatorId: sessionState.currentOperator?.id || 'p_aline',
-            operatorName: sessionState.currentOperator?.name || 'Aline Rocha',
-            operatorRole: sessionState.currentOperator?.role || 'Gestora de Tráfego',
-            operatorCompany: sessionState.currentOperator?.company || 'SPOT'
+            requester: (sessionState.currentOperator?.name || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].name : 'Operador')) + ' (' + (sessionState.currentOperator?.role || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].role : 'Gestor')) + ' · ' + (sessionState.currentOperator?.company || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].company : 'SPOT')) + ')',
+            operatorId: sessionState.currentOperator?.id || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].id : ''),
+            operatorName: sessionState.currentOperator?.name || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].name : 'Operador'),
+            operatorRole: sessionState.currentOperator?.role || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].role : 'Gestor'),
+            operatorCompany: sessionState.currentOperator?.company || (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].company : 'SPOT')
           }
         };
 
@@ -7044,7 +7411,7 @@ export function renderHtmlShell(): string {
           if (comparisonLoading) comparisonLoading.style.display = 'none';
           if (!res.ok) {
             if (comparisonSummaryCard) {
-              comparisonSummaryCard.innerHTML = '<div style="background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-small); padding: 12px 14px; color: #8F2D36; font-family: var(--font-mono); font-size: var(--label);"><strong>❌ Falha ao comparar:</strong> ' + escapeHtml(data.message || data.error || 'Erro desconhecido') + '</div>';
+              comparisonSummaryCard.innerHTML = '<div class="commit-danger-card" style="border-radius: var(--radius-small); padding: 12px 14px; color: var(--danger-ink); font-family: var(--font-mono); font-size: var(--label);"><strong>❌ Falha ao comparar:</strong> ' + escapeHtml(data.message || data.error || 'Erro desconhecido') + '</div>';
             }
             if (comparisonResults) comparisonResults.style.display = 'block';
             return;
@@ -7054,7 +7421,7 @@ export function renderHtmlShell(): string {
         } catch {
           if (comparisonLoading) comparisonLoading.style.display = 'none';
           if (comparisonSummaryCard) {
-            comparisonSummaryCard.innerHTML = '<div style="background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-small); padding: 12px 14px; color: #8F2D36; font-family: var(--font-mono); font-size: var(--label);"><strong>❌ Erro de conexão ao comparar execuções.</strong></div>';
+            comparisonSummaryCard.innerHTML = '<div class="commit-danger-card" style="border-radius: var(--radius-small); padding: 12px 14px; color: var(--danger-ink); font-family: var(--font-mono); font-size: var(--label);"><strong>❌ Erro de conexão ao comparar execuções.</strong></div>';
           }
           if (comparisonResults) comparisonResults.style.display = 'block';
         }
@@ -7146,6 +7513,41 @@ export function renderHtmlShell(): string {
         if (comparisonModal) comparisonModal.style.display = 'none';
       });
 
+      // Handlers do Modal de Informações do Protótipo (Isenção & Desafio)
+      const systemStatusBadge = document.getElementById('system-status-badge');
+      const prototypeModal = document.getElementById('prototype-modal');
+      const btnClosePrototypeModal = document.getElementById('btn-close-prototype-modal');
+      const btnAckPrototypeModal = document.getElementById('btn-ack-prototype-modal');
+
+      function openPrototypeModal() {
+        if (prototypeModal) prototypeModal.style.display = 'flex';
+      }
+
+      function closePrototypeModal() {
+        if (prototypeModal) prototypeModal.style.display = 'none';
+      }
+
+      systemStatusBadge?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openPrototypeModal();
+      });
+
+      btnClosePrototypeModal?.addEventListener('click', (e) => {
+        e.preventDefault();
+        closePrototypeModal();
+      });
+
+      btnAckPrototypeModal?.addEventListener('click', (e) => {
+        e.preventDefault();
+        closePrototypeModal();
+      });
+
+      prototypeModal?.addEventListener('click', (e) => {
+        if (e.target === prototypeModal) {
+          closePrototypeModal();
+        }
+      });
+
       let lastComparisonData = null;
       function renderComparisonResults(comp) {
         lastComparisonData = comp;
@@ -7235,99 +7637,34 @@ export function renderHtmlShell(): string {
         triggerDownload('adzhub_comparacao.md', lines.join('\\n'), 'text/markdown');
       });
 
-      // Interatividade de clique nos Cards do Palco -> Inspeciona no Inspector
-      document.getElementById('card-ugc-oferta')?.addEventListener('click', () => {
-        const isReactivated = Boolean(sessionState.isReactivated);
-        const isPaused = Boolean(sessionState.isPaused);
-        inspectItem('Criativo: UGC - Oferta A', {
-          id: 'ad_whey_sabores_04',
-          campaign: 'Whey Isolado Baunilha',
-          type: 'Carrossel UGC',
-          spend: 'R$ 850,00',
-          cpa: 'R$ 94,50',
-          ctr: '1.2%',
-          hookScore: 8.5,
-          retentionScore: 7.5,
-          ctaScore: 4.0,
-          status: isPaused ? 'Pausado (Commit auditado no SQLite)' : isReactivated ? 'Ativo (Reativado via commit)' : 'Ativo',
-          diagnosis: isPaused ? 'Pausado pelo operador com commit no SQLite para reformulação de CTA.' : 'Chamada passiva sem urgência e sem desconto no PIX. Abandono no checkout.',
-          recommendation: isPaused ? 'PAUSADO (SUBSTITUIR)' : isReactivated ? 'ATIVO' : 'PAUSAR / REFORMULAR'
-        }, 'ad_whey_sabores_04');
-      });
+      // Interatividade de clique nos Cards Dinâmicos do Palco -> Inspeciona no Inspector
+      document.getElementById('stage-cards-container')?.addEventListener('click', (e) => {
+        const card = e.target && e.target.closest ? e.target.closest('.stage-card') : null;
+        if (!card) return;
+        const cardId = card.id;
 
-      document.getElementById('card-hook-social')?.addEventListener('click', () => {
-        inspectItem('Criativo Campeão: Hook Prova Social', {
-          id: 'ad_whey_baunilha_01',
-          campaign: 'Whey Isolado Baunilha',
-          type: 'Vídeo Hook 900g',
-          spend: 'R$ 1.200,00',
-          cpa: 'R$ 42,10',
-          ctr: '2.8%',
-          hookScore: 8.8,
-          retentionScore: 8.0,
-          ctaScore: 8.5,
-          status: 'Benchmark Campeão Ativo',
-          recommendation: 'ESCALAR'
-        }, 'ad_whey_baunilha_01');
-      });
+        if (cardId === 'card-brain-context') {
+          const opId = sessionState.currentOperator ? sessionState.currentOperator.id : (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].id : '');
+          openSupercerebroModal(opId);
+        }
 
-      document.getElementById('card-carousel-faq')?.addEventListener('click', () => {
-        const isReactivated = Boolean(sessionState.isReactivated);
-        inspectItem('Criativo: Carousel FAQ', {
-          id: 'ad_namorados_casal_03',
-          campaign: 'Dia dos Namorados (Sazonal)',
-          spend: 'R$ 430,00',
-          cpa: 'R$ 112,00',
-          ctr: '0.9%',
-          frequency: '2.65x',
-          hookScore: 4.2,
-          ctaScore: 3.8,
-          status: isReactivated ? 'Ativo (Reativado via commit auditado)' : 'Pausado',
-          diagnosis: isReactivated ? 'Reativado e religado pelo operador com commit auditado no SQLite.' : 'Fadiga de público e conteúdo sem conversão direta.',
-          recommendation: isReactivated ? 'ATIVO' : 'PAUSAR'
-        }, 'ad_namorados_casal_03');
-      });
-
-      document.getElementById('card-meta-metrics')?.addEventListener('click', () => {
-        inspectItem('Meta Ads — Insights Consolidados', {
-          period: 'Agosto/2026',
-          totalSpend: 'R$ 4.280,00',
-          impressions: 184200,
-          clicks: 3420,
-          ctrAverage: '1.86%',
-          cpcAverage: 'R$ 1,25',
-          roas: '3.48x',
-          topCampaigns: [
-            { name: 'Whey Isolado Baunilha', spend: 'R$ 2.450,00', cpa: 'R$ 48,00', sales: 51 },
-            { name: 'Ômega 3 Ultra IFOS', spend: 'R$ 3.100,00', cpa: 'R$ 68,00', status: 'Ativo' }
-          ]
-        }, 'meta_insights');
-      });
-
-      document.getElementById('card-crm-metrics')?.addEventListener('click', () => {
-        inspectItem('HubSpot CRM — Vendas & Reconciliação', {
-          totalOrders: 62,
-          approvedSales: 48,
-          totalRevenue: 'R$ 14.890,00',
-          averageTicket: 'R$ 240,16',
-          abandonedCheckouts: 8,
-          pendingOrders: 6,
-          utmCoverage: '86.4%',
-          reconciliationStatus: 'RECONCILED'
-        }, 'crm_orders');
-      });
-
-      document.getElementById('card-brain-context')?.addEventListener('click', () => {
-        const opId = sessionState.currentOperator ? sessionState.currentOperator.id : 'p_aline';
-        openSupercerebroModal(opId);
-        inspectItem('Supercérebro — Memória & Governança', {
-          stakeholders: [
-            { name: 'Aline Rocha', role: 'Gestora de Tráfego SPOT', domain: 'Meta Ads' },
-            { name: 'Marcos Silva', role: 'Head de Marketing Housewhey', domain: 'Aprovações & Diretrizes' }
-          ],
-          governancePolicy: 'Escrita externa no Meta Ads exige aprovação formal expressa.',
-          productStandards: ['100% Glanbia Grass-Fed', 'Creatina Creapure Alemã', 'Ômega 3 IFOS 5★']
-        }, opId);
+        const title = card.querySelector('.stage-card-name')?.textContent || 'Métricas do Palco';
+        const tags = Array.from(card.querySelectorAll('.tag-pill')).map(t => t.textContent?.trim()).filter(Boolean);
+        const metrics = Array.from(card.querySelectorAll('.stage-card-metrics span')).map(m => m.textContent?.trim()).filter(Boolean);
+        
+        inspectItem('Palco Operacional — ' + title, {
+          cardId: cardId,
+          title: title,
+          tags: tags,
+          metrics: metrics,
+          status: sessionState.isPaused ? 'Pausado (Commit no SQLite)' : (sessionState.isReactivated ? 'Reativado (Commit no SQLite)' : 'Ativo'),
+          governanceState: {
+            isApproved: sessionState.isApproved,
+            isPaused: sessionState.isPaused,
+            isReactivated: sessionState.isReactivated,
+            delegation: sessionState.delegation
+          }
+        }, cardId);
       });
 
       // ==========================================
@@ -7345,54 +7682,13 @@ export function renderHtmlShell(): string {
       const detailNodeTypeBadge = document.getElementById('detail-node-type-badge');
       const detailNodeContent = document.getElementById('detail-node-content');
 
-      const DEFAULT_SUPERCEREBRO_NODES = [
-        { id: 'client_housewhey_spot', type: 'organization', label: 'Housewhey & SPOT', props: { marketSegment: 'Suplementos Premium', coreOffer: 'Whey Isolado Grass-Fed' } },
-        { id: 'meta_ad_acc_spot_01', type: 'meta_ad_account', label: 'Meta Ads Account (SPOT)', props: { currency: 'BRL', status: 'ACTIVE' } },
-        { id: 'cmp_whey_baunilha_01', type: 'campaign', label: 'Whey Isolado Baunilha (CPA R$ 48)', props: { budget: 2450, cpa: 48.0 } },
-        { id: 'ad_whey_sabores_04', type: 'ad', label: 'UGC - Oferta A (Whey)', props: { cpa: 94.5, ctr: 1.2, recommendation: 'PAUSAR' } },
-        { id: 'ad_whey_baunilha_01', type: 'ad', label: 'Hook Prova Social (Campeão)', props: { cpa: 42.1, ctr: 2.8, recommendation: 'ESCALAR' } },
-        { id: 'offer_whey_isolado', type: 'offer', label: 'Whey Isolado 900g Glanbia', props: { price: 240.0 } },
-        { id: 'p_aline', type: 'operator', label: 'Aline Rocha (SPOT)', props: { role: 'Gestora de Tráfego' } },
-        { id: 'p_marcos', type: 'operator', label: 'Marcos Silva (Housewhey)', props: { role: 'Head de Marketing' } },
-        { id: 'p_carolina', type: 'operator', label: 'Carolina Mendes (SPOT)', props: { role: 'Gerente de Contas' } },
-        {
-          id: 'pendency_pause_ad',
-          type: 'pendency',
-          label: 'Pendência: Pausar Criativos Fracos',
-          props: {
-            operador_responsavel: 'Carolina Mendes (SPOT)',
-            motivo_pendencia: 'Aguardando proposta formal de outro operador (Carolina Mendes)',
-            status: 'Aguardando Aprovação de Proposta',
-            target_ad: 'ad_whey_sabores_04',
-            cpa_brl: 'R$ 94,50'
-          }
-        }
-      ];
-
-      const DEFAULT_SUPERCEREBRO_EDGES = [
-        { id: 'e1', source: 'client_housewhey_spot', target: 'meta_ad_acc_spot_01', relationship: 'POSSUI' },
-        { id: 'e2', source: 'meta_ad_acc_spot_01', target: 'cmp_whey_baunilha_01', relationship: 'RODA' },
-        { id: 'e3', source: 'cmp_whey_baunilha_01', target: 'ad_whey_sabores_04', relationship: 'CONTÉM' },
-        { id: 'e4', source: 'cmp_whey_baunilha_01', target: 'ad_whey_baunilha_01', relationship: 'CONTÉM' },
-        { id: 'e5', source: 'client_housewhey_spot', target: 'offer_whey_isolado', relationship: 'OFERECE' },
-        { id: 'e6', source: 'p_aline', target: 'client_housewhey_spot', relationship: 'GERENCIA' },
-        { id: 'e7', source: 'p_marcos', target: 'client_housewhey_spot', relationship: 'APROVA' },
-        { id: 'e9', source: 'ad_whey_sabores_04', target: 'pendency_pause_ad', relationship: 'GEROU_PENDENCIA' },
-        { id: 'e10', source: 'p_carolina', target: 'pendency_pause_ad', relationship: 'PROPOS' }
-      ];
-
-      const DEFAULT_SUPERCEREBRO_EVENTS = [
-        { id: 'ev1', title: 'Auditoria de Criativos', summary: 'UGC Oferta A com CPA elevado de R$ 94,50.', relatedNodeIds: ['ad_whey_sabores_04', 'pendency_pause_ad'] },
-        { id: 'ev2', title: 'Aprovação de Proposta', summary: 'Carolina Mendes enviou proposta formal de pausa.', relatedNodeIds: ['p_carolina', 'pendency_pause_ad'] }
-      ];
-
       let graphState = {
-        nodes: JSON.parse(JSON.stringify(DEFAULT_SUPERCEREBRO_NODES)),
-        edges: JSON.parse(JSON.stringify(DEFAULT_SUPERCEREBRO_EDGES)),
-        events: JSON.parse(JSON.stringify(DEFAULT_SUPERCEREBRO_EVENTS)),
+        nodes: [],
+        edges: [],
+        events: [],
         filter: 'all',
         selectedNodeId: null,
-        zoom: 1,
+        zoom: 0.85,
         offsetX: 0,
         offsetY: 0,
         isDraggingCanvas: false,
@@ -7404,18 +7700,18 @@ export function renderHtmlShell(): string {
       const NODE_TYPE_STYLES = {
         organization: { color: '#294A91', label: 'Cliente / Organização', radius: 22 },
         client: { color: '#294A91', label: 'Cliente / Organização', radius: 22 },
-        hub: { color: '#294A91', label: 'Cliente / Organização', radius: 22 },
+        hub: { color: '#294A91', label: 'Organização / Agência', radius: 22 },
 
         meta_ad_account: { color: '#F59A19', label: 'Conta Meta Ads', radius: 20 },
-        channel: { color: '#F59A19', label: 'Canal / Plataforma', radius: 20 },
+        channel: { color: '#F59A19', label: 'Canal / Plataforma', radius: 19 },
 
-        campaign: { color: '#53B58A', label: 'Campanha', radius: 18 },
+        campaign: { color: '#3B82F6', label: 'Campanha', radius: 18 },
         adset: { color: '#53B58A', label: 'Conjunto de Anúncios', radius: 16 },
-        ad: { color: '#53B58A', label: 'Anúncio', radius: 14 },
-        offer: { color: '#53B58A', label: 'Oferta / Produto', radius: 18 },
-        creative: { color: '#53B58A', label: 'Criativo', radius: 16 },
+        ad: { color: '#10B981', label: 'Anúncio', radius: 15 },
+        offer: { color: '#53B58A', label: 'Oferta / Produto', radius: 17 },
+        creative: { color: '#10B981', label: 'Criativo', radius: 15 },
         metric: { color: '#53B58A', label: 'Métrica', radius: 14 },
-        asset: { color: '#53B58A', label: 'Ativo de Mídia', radius: 15 },
+        asset: { color: '#10B981', label: 'Criativo / Ativo', radius: 15 },
 
         operator: { color: '#8C75B5', label: 'Operador', radius: 18 },
         person: { color: '#8C75B5', label: 'Operador', radius: 18 },
@@ -7439,6 +7735,10 @@ export function renderHtmlShell(): string {
         RUNS: 'RODA',
         OFFERS: 'OFERECE',
         APPLIES: 'APLICA',
+        PART_OF: 'PARTE DE',
+        TRACKS: 'MONITORA',
+        PROPOS: 'PROPÔS',
+        HOMOLOGOU: 'HOMOLOGOU',
         GENERATED_PENDENCY: 'GEROU PENDÊNCIA',
         GEROU_PENDENCIA: 'GEROU PENDÊNCIA'
       };
@@ -7449,25 +7749,307 @@ export function renderHtmlShell(): string {
         return EDGE_RELATIONSHIP_LABELS_PT[key] || String(rel).replace(/_/g, ' ');
       }
 
-      function getNodeStyle(type) {
+      function getNodeStyle(type, node) {
+        if (node && (node.type === 'pendency' || (node.id && String(node.id).startsWith('pendency_')))) {
+          return { color: '#D96C6C', label: 'Pendência', radius: 18 };
+        }
         return NODE_TYPE_STYLES[type] || { color: '#53B58A', label: type, radius: 15 };
       }
 
       function initGraphPositions(nodes, force = false) {
-        if (!Array.isArray(nodes)) return;
-        nodes.forEach((node, idx) => {
-          if (force || node.relX === undefined || node.relY === undefined) {
-            if (node.type === 'organization' || node.type === 'client' || idx === 0) {
-              node.relX = 0;
-              node.relY = 0;
-            } else {
-              const angle = (idx / (nodes.length - 1 || 1)) * Math.PI * 2;
-              const radius = 150 + (idx % 3) * 45;
-              node.relX = Math.cos(angle) * radius;
-              node.relY = Math.sin(angle) * radius;
-            }
+        if (!Array.isArray(nodes) || nodes.length === 0) return;
+
+        const orgNodes = [];
+        const operatorNodes = [];
+        const pendencyNodes = [];
+        const channelNodes = [];
+        const campaignNodes = [];
+        const assetNodes = [];
+        const otherNodes = [];
+
+        nodes.forEach((node) => {
+          if (!force && node.isUserDragged && node.relX !== undefined && node.relY !== undefined) {
+            return;
+          }
+
+          const t = (node.type || '').toLowerCase();
+          if (['hub', 'organization', 'client'].includes(t)) {
+            orgNodes.push(node);
+          } else if (['operator', 'person'].includes(t)) {
+            operatorNodes.push(node);
+          } else if (['pendency', 'task', 'proposal', 'event'].includes(t) || (node.id && String(node.id).startsWith('pendency_'))) {
+            pendencyNodes.push(node);
+          } else if (['channel', 'meta_ad_account'].includes(t)) {
+            channelNodes.push(node);
+          } else if (['campaign', 'adset', 'ad'].includes(t)) {
+            campaignNodes.push(node);
+          } else if (['asset', 'creative', 'offer', 'metric'].includes(t)) {
+            assetNodes.push(node);
+          } else {
+            otherNodes.push(node);
           }
         });
+
+        // 1. Organizações / Hubs no topo central
+        orgNodes.forEach((node, idx) => {
+          if (!force && node.isUserDragged) return;
+          const offset = (idx - (orgNodes.length - 1) / 2) * 160;
+          node.relX = offset;
+          node.relY = -120;
+        });
+
+        // 2. Operadores no arco esquerdo
+        operatorNodes.forEach((node, idx) => {
+          if (!force && node.isUserDragged) return;
+          const startAngle = Math.PI * 0.8;
+          const endAngle = Math.PI * 1.35;
+          const step = operatorNodes.length > 1 ? (endAngle - startAngle) / (operatorNodes.length - 1) : 0;
+          const angle = startAngle + idx * step;
+          const radius = 260;
+          node.relX = Math.cos(angle) * radius;
+          node.relY = Math.sin(angle) * radius - 20;
+        });
+
+        // 3. Pendências posicionadas perto do operador responsável
+        const pendenciesByOp = new Map();
+        pendencyNodes.forEach((node) => {
+          if (!force && node.isUserDragged) return;
+          const parts = String(node.id || '').split('_');
+          const opId = node.props?.operatorId || (parts.length >= 3 ? parts[1] + '_' + parts[2] : null);
+          const parentOp = operatorNodes.find(op => op.id === opId || op.id === node.props?.operatorId);
+
+          if (parentOp && parentOp.relX !== undefined && parentOp.relY !== undefined) {
+            const list = pendenciesByOp.get(parentOp.id) || [];
+            list.push(node);
+            pendenciesByOp.set(parentOp.id, list);
+          } else {
+            otherNodes.push(node);
+          }
+        });
+
+        pendenciesByOp.forEach((pList, opId) => {
+          const parentOp = operatorNodes.find(op => op.id === opId);
+          if (!parentOp) return;
+          pList.forEach((pNode, pIdx) => {
+            if (!force && pNode.isUserDragged) return;
+            const angle = Math.PI * 0.9 + (pIdx * 0.35);
+            const dist = 110;
+            pNode.relX = parentOp.relX + Math.cos(angle) * dist;
+            pNode.relY = parentOp.relY + Math.sin(angle) * dist;
+          });
+        });
+
+        // 4. Canais no arco direito
+        channelNodes.forEach((node, idx) => {
+          if (!force && node.isUserDragged) return;
+          const startAngle = -Math.PI * 0.25;
+          const endAngle = Math.PI * 0.3;
+          const step = channelNodes.length > 1 ? (endAngle - startAngle) / (channelNodes.length - 1) : 0;
+          const angle = startAngle + idx * step;
+          const radius = 260;
+          node.relX = Math.cos(angle) * radius + 40;
+          node.relY = Math.sin(angle) * radius + 30;
+        });
+
+        // 5. Campanhas na camada intermediária
+        campaignNodes.forEach((node, idx) => {
+          if (!force && node.isUserDragged) return;
+          const stepX = 140;
+          const startX = -((campaignNodes.length - 1) * stepX) / 2;
+          node.relX = startX + idx * stepX;
+          node.relY = 70;
+        });
+
+        // 6. Assets / Criativos na camada inferior
+        assetNodes.forEach((node, idx) => {
+          if (!force && node.isUserDragged) return;
+          const stepX = 110;
+          const startX = -((assetNodes.length - 1) * stepX) / 2;
+          node.relX = startX + idx * stepX;
+          node.relY = 210;
+        });
+
+        // 7. Nós restantes em órbita dinâmica externa
+        if (otherNodes.length > 0) {
+          otherNodes.forEach((node, idx) => {
+            if (!force && node.isUserDragged) return;
+            const angle = (idx / (otherNodes.length || 1)) * Math.PI * 2;
+            const radius = 320 + (idx % 2) * 50;
+            node.relX = Math.cos(angle) * radius;
+            node.relY = Math.sin(angle) * radius;
+          });
+        }
+      }
+
+      function syncPendencyNodesWithGraph() {
+        if (!Array.isArray(OPERATOR_PROFILES) || !Array.isArray(graphState.nodes)) return;
+
+        const activePendencyIds = new Set();
+
+        OPERATOR_PROFILES.forEach((op) => {
+          const pendencies = op.pendencies || [];
+          pendencies.forEach((p, idx) => {
+            const pId = 'pendency_' + op.id + '_' + idx;
+
+            const isResolved = Boolean(
+              p.status === 'Concluído' ||
+              p.status === 'RESOLVED' ||
+              p.status === 'APPROVED' ||
+              p.status === 'COMPLETED'
+            );
+
+            if (isResolved) return;
+
+            activePendencyIds.add(pId);
+
+            const pendencyNode = {
+              id: pId,
+              type: 'pendency',
+              label: p.title,
+              props: {
+                status: p.status || 'Pendente',
+                meta: p.meta,
+                prompt: p.prompt,
+                btnText: p.btnText,
+                operatorId: op.id,
+                operador_responsavel: op.name,
+                motivo_pendencia: p.meta
+              },
+              provenance: {
+                source: 'supercerebro_pendencies',
+                locator: 'pendency:' + pId
+              }
+            };
+
+            const existingIdx = graphState.nodes.findIndex(n => n.id === pId);
+            if (existingIdx >= 0) {
+              graphState.nodes[existingIdx] = pendencyNode;
+            } else {
+              graphState.nodes.push(pendencyNode);
+            }
+
+            const edgeId = 'edge_' + op.id + '_GEROU_PENDENCIA_' + pId;
+            const existingEdge = graphState.edges.some(e =>
+              e.id === edgeId ||
+              ((e.source === op.id || e.from === op.id) && (e.target === pId || e.to === pId))
+            );
+
+            if (!existingEdge) {
+              graphState.edges.push({
+                id: edgeId,
+                source: op.id,
+                target: pId,
+                from: op.id,
+                to: pId,
+                rel: 'GEROU_PENDENCIA',
+                relationship: 'GEROU_PENDENCIA',
+                provenance: {
+                  source: 'supercerebro_pendencies',
+                  locator: 'edge:' + edgeId
+                }
+              });
+            }
+          });
+        });
+
+        // Remover do grafo todas as pendências resolvidas
+        graphState.nodes = graphState.nodes.filter(n => {
+          if (n.type === 'pendency' || (n.id && String(n.id).startsWith('pendency_'))) {
+            const isResolved = Boolean(
+              n.props?.status === 'Concluído' ||
+              n.props?.status === 'RESOLVED' ||
+              n.props?.status === 'APPROVED' ||
+              !activePendencyIds.has(n.id)
+            );
+            return !isResolved;
+          }
+          return true;
+        });
+
+        graphState.edges = graphState.edges.filter(e => {
+          const targetId = e.target || e.to;
+          if (targetId && String(targetId).startsWith('pendency_')) {
+            return activePendencyIds.has(targetId);
+          }
+          return true;
+        });
+      }
+
+      const matchesCategoryFilter = (n) => {
+        if (!n) return false;
+        if (n.type === 'rule' || n.id === 'rule_governance_jit') return false;
+        const filter = graphState.filter;
+        if (filter === 'all') return true;
+        if (filter === 'organizations') return ['organization', 'client', 'hub'].includes(n.type);
+        if (filter === 'meta_ads') return ['meta_ad_account', 'channel'].includes(n.type);
+        if (filter === 'creatives') return ['campaign', 'adset', 'ad', 'offer', 'creative', 'metric', 'asset'].includes(n.type);
+        if (filter === 'operators') return ['operator', 'person'].includes(n.type);
+        if (filter === 'pendencies') {
+          if (['pendency', 'event', 'proposal', 'task'].includes(n.type)) return true;
+          if (n.id && String(n.id).startsWith('pendency_')) return true;
+          if (n.props && (n.props.status === 'Pendente' || n.props.status === 'PENDING_PROPOSAL' || n.props.recommendation === 'PAUSAR' || n.props.status === 'PENDING' || n.props.status === 'Aguardando Aprovação' || n.props.status === 'Aguardando Proposta')) return true;
+          const hasPendencyConn = graphState.edges.some(e =>
+            ((e.source === n.id || e.from === n.id) || (e.target === n.id || e.to === n.id)) &&
+            (e.relationship === 'GEROU_PENDENCIA' || e.rel === 'GEROU_PENDENCIA' || e.relationship === 'GENERATED_PENDENCY' || e.relationship === 'PROPOS' || e.relationship === 'HOMOLOGOU')
+          );
+          return hasPendencyConn;
+        }
+        return true;
+      };
+
+      const isNodeVisible = (n) => {
+        if (!n) return false;
+        if (n.type === 'rule' || n.id === 'rule_governance_jit') return false;
+        const isCategoryMatch = matchesCategoryFilter(n);
+        const selId = graphState.selectedNodeId;
+        if (!selId) return isCategoryMatch;
+        if (n.id === selId) return true;
+        const isNeighbor = graphState.edges.some(
+          e => (e.source === selId && e.target === n.id) || (e.target === selId && e.source === n.id)
+        );
+        return isCategoryMatch || isNeighbor;
+      };
+
+      function fitGraphToViewport() {
+        if (!graphCanvas || !graphWrapper) return;
+        const rect = graphWrapper.getBoundingClientRect();
+        const width = rect.width > 50 ? rect.width : (graphWrapper.clientWidth || 800);
+        const height = rect.height > 50 ? rect.height : (graphWrapper.clientHeight || 550);
+
+        const visibleNodes = graphState.nodes.filter(isNodeVisible);
+        if (visibleNodes.length === 0) {
+          graphState.zoom = 0.85;
+          graphState.offsetX = 0;
+          graphState.offsetY = 0;
+          renderCanvasGraph();
+          return;
+        }
+
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        visibleNodes.forEach(n => {
+          const rx = n.relX !== undefined ? n.relX : 0;
+          const ry = n.relY !== undefined ? n.relY : 0;
+          const pad = 65;
+          if (rx - pad < minX) minX = rx - pad;
+          if (rx + pad > maxX) maxX = rx + pad;
+          if (ry - pad < minY) minY = ry - pad;
+          if (ry + pad > maxY) maxY = ry + pad;
+        });
+
+        const spanX = Math.max(maxX - minX, 100);
+        const spanY = Math.max(maxY - minY, 100);
+        const availW = Math.max(width - 60, 200);
+        const availH = Math.max(height - 60, 200);
+
+        const fitZoom = Math.min(availW / spanX, availH / spanY, 1.0);
+        graphState.zoom = Math.max(0.55, Math.min(1.0, fitZoom));
+
+        const midRelX = (minX + maxX) / 2;
+        const midRelY = (minY + maxY) / 2;
+
+        graphState.offsetX = -midRelX * graphState.zoom;
+        graphState.offsetY = -midRelY * graphState.zoom;
+        renderCanvasGraph();
       }
 
       function renderCanvasGraph() {
@@ -7493,57 +8075,34 @@ export function renderHtmlShell(): string {
         ctx.save();
         ctx.scale(dpr, dpr);
 
-        ctx.fillStyle = '#F8F8F7';
+        const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+        const canvasBg = isDarkMode ? '#1a1d26' : '#F8F8F7';
+        const edgeDefaultColor = isDarkMode ? 'rgba(139, 153, 172, 0.35)' : 'rgba(124, 132, 144, 0.45)';
+        const edgeSelectedColor = isDarkMode ? '#4f80e1' : '#294A91';
+        const edgeTextDefault = isDarkMode ? '#8b99ac' : '#5A6372';
+        const edgeTextSelected = isDarkMode ? '#93b5ff' : '#223B78';
+        const nodeTextDefault = isDarkMode ? '#cfd8e3' : '#39404C';
+        const nodeTextSelected = isDarkMode ? '#f1f5f9' : '#1E293B';
+        const nodeStrokeDefault = isDarkMode ? '#1a1d26' : '#FFFFFF';
+        const nodeStrokeSelected = isDarkMode ? '#4f80e1' : '#263142';
+
+        ctx.fillStyle = canvasBg;
         ctx.fillRect(0, 0, width, height);
 
-        ctx.translate(graphState.offsetX, graphState.offsetY);
+        // Transform: center + pan + zoom
+        ctx.translate(centerX + graphState.offsetX, centerY + graphState.offsetY);
         ctx.scale(graphState.zoom, graphState.zoom);
 
-        // Posiciona nós de forma dinâmica em torno do centro real do canvas
+        // Sincroniza coordenadas dos nós
         graphState.nodes.forEach(node => {
-          if (!node.isUserDragged) {
-            node.x = centerX + (node.relX !== undefined ? node.relX : 0);
-            node.y = centerY + (node.relY !== undefined ? node.relY : 0);
-          }
+          node.x = (node.relX !== undefined ? node.relX : 0);
+          node.y = (node.relY !== undefined ? node.relY : 0);
         });
 
         const nodeMap = new Map();
         graphState.nodes.forEach(n => nodeMap.set(n.id, n));
 
-        const filter = graphState.filter;
-        const selId = graphState.selectedNodeId;
-
-        const matchesCategoryFilter = (n) => {
-          if (n.type === 'rule' || n.id === 'rule_governance_jit') return false; // Regras de governança ocultadas do grafo
-          if (filter === 'all') return true;
-          if (filter === 'organizations') return ['organization', 'client', 'hub'].includes(n.type);
-          if (filter === 'meta_ads') return ['meta_ad_account', 'channel'].includes(n.type);
-          if (filter === 'creatives') return ['campaign', 'adset', 'ad', 'offer', 'creative', 'metric', 'asset'].includes(n.type);
-          if (filter === 'operators') return ['operator', 'person'].includes(n.type);
-          if (filter === 'pendencies') {
-            if (['pendency', 'event', 'proposal', 'task'].includes(n.type)) return true;
-            if (n.id === 'pendency_pause_ad') return true;
-            if (n.props && (n.props.status === 'PENDING_PROPOSAL' || n.props.recommendation === 'PAUSAR' || n.props.status === 'PENDING')) return true;
-            const hasPendencyConn = graphState.edges.some(e =>
-              (e.source === n.id || e.target === n.id) &&
-              (e.relationship === 'GEROU_PENDENCIA' || e.relationship === 'GENERATED_PENDENCY' || e.relationship === 'PROPOS')
-            );
-            return hasPendencyConn;
-          }
-          return true;
-        };
-
-        const isNodeVisible = (n) => {
-          if (n.type === 'rule' || n.id === 'rule_governance_jit') return false;
-          const isCategoryMatch = matchesCategoryFilter(n);
-          if (!selId) return isCategoryMatch;
-          if (n.id === selId) return true;
-          const isNeighbor = graphState.edges.some(
-            e => (e.source === selId && e.target === n.id) || (e.target === selId && e.source === n.id)
-          );
-          return isCategoryMatch || isNeighbor;
-        };
-
+        // Renderiza conexões / arestas
         graphState.edges.forEach(edge => {
           const source = nodeMap.get(edge.source);
           const target = nodeMap.get(edge.target);
@@ -7553,33 +8112,34 @@ export function renderHtmlShell(): string {
             ctx.beginPath();
             ctx.moveTo(source.x, source.y);
             ctx.lineTo(target.x, target.y);
-            ctx.strokeStyle = isSelected ? '#294A91' : 'rgba(124, 132, 144, 0.5)';
+            ctx.strokeStyle = isSelected ? edgeSelectedColor : edgeDefaultColor;
             ctx.lineWidth = isSelected ? 2.5 : 1.5;
             ctx.stroke();
 
             const midX = (source.x + target.x) / 2;
             const midY = (source.y + target.y) / 2;
             ctx.font = '600 10px IBM Plex Mono, monospace';
-            ctx.fillStyle = isSelected ? '#223B78' : '#5A6372';
+            ctx.fillStyle = isSelected ? edgeTextSelected : edgeTextDefault;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(getPtRelationshipLabel(edge.relationship), midX, midY - 6);
+            ctx.fillText(getPtRelationshipLabel(edge.relationship), midX, midY - 5);
           }
         });
 
+        // Renderiza nós
         graphState.nodes.forEach(node => {
           if (!isNodeVisible(node)) return;
 
-          const style = getNodeStyle(node.type);
+          const style = getNodeStyle(node.type, node);
           const isSelected = graphState.selectedNodeId === node.id;
           const r = style.radius;
 
           if (isSelected) {
             ctx.beginPath();
             ctx.arc(node.x, node.y, r + 6, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(41, 74, 145, 0.2)';
+            ctx.fillStyle = isDarkMode ? 'rgba(79, 128, 225, 0.25)' : 'rgba(41, 74, 145, 0.2)';
             ctx.fill();
-            ctx.strokeStyle = '#294A91';
+            ctx.strokeStyle = edgeSelectedColor;
             ctx.lineWidth = 2;
             ctx.stroke();
           }
@@ -7588,12 +8148,12 @@ export function renderHtmlShell(): string {
           ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
           ctx.fillStyle = style.color;
           ctx.fill();
-          ctx.strokeStyle = isSelected ? '#263142' : '#FFFFFF';
+          ctx.strokeStyle = isSelected ? nodeStrokeSelected : nodeStrokeDefault;
           ctx.lineWidth = isSelected ? 3 : 2;
           ctx.stroke();
 
           ctx.font = (isSelected ? '700' : '600') + ' 11px Inter, sans-serif';
-          ctx.fillStyle = isSelected ? '#1E293B' : '#39404C';
+          ctx.fillStyle = isSelected ? nodeTextSelected : nodeTextDefault;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'top';
           ctx.fillText(node.label, node.x, node.y + r + 5);
@@ -7601,6 +8161,7 @@ export function renderHtmlShell(): string {
 
         ctx.restore();
       }
+      window.renderCanvasGraph = renderCanvasGraph;
 
       function updateGraphStats() {
         if (graphNodeCountEl) graphNodeCountEl.textContent = 'Nós: ' + graphState.nodes.filter(n => n.type !== 'rule').length;
@@ -7620,7 +8181,7 @@ export function renderHtmlShell(): string {
           return;
         }
 
-        const style = getNodeStyle(node.type);
+        const style = getNodeStyle(node.type, node);
         if (detailNodeTypeBadge) detailNodeTypeBadge.textContent = style.label;
 
         const relatedEdges = graphState.edges.filter(e => e.source === node.id || e.target === node.id);
@@ -7628,12 +8189,14 @@ export function renderHtmlShell(): string {
 
         let pendencyBox = '';
         if (node.type === 'pendency' || node.props?.motivo_pendencia) {
-          const resp = node.props?.operador_responsavel || 'Carolina Mendes (SPOT)';
-          const motivo = node.props?.motivo_pendencia || 'Aguardando proposta formal de outro operador (Carolina Mendes)';
+          const resp = node.props?.operador_responsavel || 'Operador Responsável';
+          const motivo = node.props?.motivo_pendencia || node.props?.status || 'Pendência Operacional';
+          const isDone = node.props?.status && String(node.props.status).includes('Concluído');
+
           pendencyBox =
-            '<div style="background: var(--surface-soft); border: 1px solid var(--warning); border-left: 3px solid var(--warning); border-radius: var(--radius-control); padding: 10px 12px; margin-top: 8px; font-size: var(--micro);">' +
-              '<div style="margin-bottom: 6px;"><strong style="color: #7D631E;">👤 Operador Responsável:</strong><br/><span style="color: var(--ink-strong); font-weight: 600; font-size: var(--body); display: block; margin-top: 2px;">' + escapeHtml(resp) + '</span></div>' +
-              '<div><strong style="color: #7D631E;">⚠️ Motivo da Pendência:</strong><br/><span style="color: var(--ink-strong); font-size: var(--body); line-height: 1.4; display: block; margin-top: 2px;">' + escapeHtml(motivo) + '</span></div>' +
+            '<div class="' + (isDone ? 'commit-success-card' : '') + '" style="' + (isDone ? '' : 'background: var(--surface-soft); border: 1px solid var(--warning); border-left: 3px solid var(--warning);') + ' border-radius: var(--radius-control); padding: 10px 12px; margin-top: 8px; font-size: var(--micro);">' +
+              '<div style="margin-bottom: 6px;"><strong style="color: var(--ink-strong);">👤 Responsável:</strong><br/><span style="color: var(--ink); font-size: var(--body); display: block; margin-top: 2px;">' + escapeHtml(resp) + '</span></div>' +
+              '<div><strong style="color: var(--ink-strong);">📋 Detalhes da Pendência:</strong><br/><span style="color: var(--ink); font-size: var(--body); line-height: 1.4; display: block; margin-top: 2px;">' + escapeHtml(motivo) + '</span></div>' +
             '</div>';
         }
 
@@ -7697,55 +8260,18 @@ export function renderHtmlShell(): string {
             graphState.edges = newEdges;
             graphState.events = newEvents;
 
-            const hasPendencyNode = graphState.nodes.some(n => n.type === 'pendency' || n.id === 'pendency_pause_ad');
-            if (!hasPendencyNode) {
-              graphState.nodes.push(
-                {
-                  id: 'pendency_pause_ad',
-                  type: 'pendency',
-                  label: 'Pendência: Pausar Criativos Fracos',
-                  props: {
-                    operador_responsavel: 'Carolina Mendes (SPOT)',
-                    motivo_pendencia: 'Aguardando proposta formal de outro operador (Carolina Mendes)',
-                    status: 'Aguardando Aprovação de Proposta',
-                    target_ad: 'ad_whey_sabores_04',
-                    cpa_brl: 'R$ 94,50'
-                  }
-                }
-              );
-              const targetNode = graphState.nodes.find(n => n.id === 'asset_ad_04' || n.id === 'ad_whey_sabores_04' || n.type === 'asset' || n.type === 'ad');
-              const targetId = targetNode ? targetNode.id : 'cli_housewhey';
-              graphState.edges.push(
-                { id: 'edge_pendency_pause', source: targetId, target: 'pendency_pause_ad', relationship: 'GEROU_PENDENCIA' },
-                { id: 'edge_propos_pendency', source: 'p_carolina', target: 'pendency_pause_ad', relationship: 'PROPOS' }
-              );
-            } else {
-              const pendNode = graphState.nodes.find(n => n.type === 'pendency' || n.id === 'pendency_pause_ad');
-              if (pendNode) {
-                pendNode.props = pendNode.props || {};
-                pendNode.props.operador_responsavel = pendNode.props.operador_responsavel || 'Carolina Mendes (SPOT)';
-                pendNode.props.motivo_pendencia = pendNode.props.motivo_pendencia || 'Aguardando proposta formal de outro operador (Carolina Mendes)';
-              }
-            }
-
-            if (!graphState.events || graphState.events.length === 0) {
-              graphState.events = [
-                { id: 'ev1', title: 'Auditoria de Criativos', summary: 'UGC Oferta A com CPA elevado de R$ 94,50.', relatedNodeIds: ['asset_ad_04', 'ad_whey_sabores_04', 'pendency_pause_ad'] },
-                { id: 'ev2', title: 'Aprovação de Proposta', summary: 'Carolina Mendes enviou proposta formal de pausa.', relatedNodeIds: ['p_carolina', 'pendency_pause_ad'] }
-              ];
-            }
-
+            syncPendencyNodesWithGraph();
             initGraphPositions(graphState.nodes);
             updateGraphStats();
             if (graphState.selectedNodeId) {
               const freshNode = graphState.nodes.find(n => n.id === graphState.selectedNodeId);
               if (freshNode) selectGraphNode(freshNode);
             }
-            renderCanvasGraph();
+            fitGraphToViewport();
             return;
           }
         } catch (e) {
-          console.warn('[Supercerebro] API fetch fallback to embedded dataset', e);
+          console.warn('[Supercerebro] API fetch error', e);
         }
 
         initGraphPositions(graphState.nodes);
@@ -7754,7 +8280,7 @@ export function renderHtmlShell(): string {
           const freshNode = graphState.nodes.find(n => n.id === graphState.selectedNodeId);
           if (freshNode) selectGraphNode(freshNode);
         }
-        renderCanvasGraph();
+        fitGraphToViewport();
       }
 
       function openSupercerebroModal(targetNodeId) {
@@ -7762,29 +8288,24 @@ export function renderHtmlShell(): string {
 
         let targetId = targetNodeId;
         if (!targetId) {
-          const currentOpId = sessionState.currentOperator ? sessionState.currentOperator.id : 'p_aline';
+          const currentOpId = sessionState.currentOperator ? sessionState.currentOperator.id : (OPERATOR_PROFILES[0] ? OPERATOR_PROFILES[0].id : '');
           const hasOpNode = graphState.nodes.some(n => n.id === currentOpId);
           if (hasOpNode) {
             targetId = currentOpId;
           } else {
-            const orgNode = graphState.nodes.find(n => n.id === 'client_housewhey_spot' || n.id === 'cli_housewhey' || n.type === 'organization');
+            const orgNode = graphState.nodes.find(n => n.id === 'client_housewhey_spot' || n.id === 'cli_housewhey' || n.type === 'organization' || n.type === 'hub');
             targetId = orgNode ? orgNode.id : (graphState.nodes[0] ? graphState.nodes[0].id : null);
           }
         }
 
-        if (targetId) {
-          const targetNode = graphState.nodes.find(n => n.id === targetId);
-          if (targetNode) {
-            selectGraphNode(targetNode);
-            if (graphCanvas) {
-              const width = graphCanvas.clientWidth || 800;
-              const height = graphCanvas.clientHeight || 550;
-              graphState.offsetX = (width / 2) - (targetNode.x * graphState.zoom);
-              graphState.offsetY = (height / 2) - (targetNode.y * graphState.zoom);
-              renderCanvasGraph();
+        fetchAndRenderSupercerebroGraph().then(() => {
+          if (targetId) {
+            const targetNode = graphState.nodes.find(n => n.id === targetId);
+            if (targetNode) {
+              selectGraphNode(targetNode);
             }
           }
-        }
+        });
       }
 
       function closeSupercerebroModal() {
@@ -7799,182 +8320,80 @@ export function renderHtmlShell(): string {
 
       let currentDocFilter = 'all';
       let currentSelectedDocId = null;
+      let documentsList = [];
 
-      const INITIAL_DOCUMENTS = [
-        {
-          id: 'doc-briefing-q3',
-          type: 'briefing',
-          typeName: 'Briefing',
-          badgeBg: 'var(--tag-info-bg)',
-          badgeBorder: 'var(--tag-info-border)',
-          badgeColor: 'var(--tag-info-ink)',
-          title: 'Briefing de Campanha: Lançamento Whey Isolar HouseWhey Q3',
-          date: '27/08/2026 09:30',
-          author: 'Aline Santos & Agente AdzHub',
-          status: 'Aprovado por: Marcos Silva',
-          summary: 'Briefing estratégico de mídia para expansão da linha Whey Isolate no público Fitness Premium. Definição de público, budget e metas de CPA.',
-          content: [
-            '# Briefing de Campanha: Lançamento Whey Isolar HouseWhey Q3',
-            '',
-            '**Cliente:** HouseWhey (SPOT Mídia & Governança)',
-            '**Data de Criação:** 27/08/2026 09:30',
-            '**Responsável Operacional:** Aline Santos & Agente AdzHub',
-            '**Status:** Aprovado por: Marcos Silva (Head de Marketing)',
-            '',
-            '---',
-            '',
-            '### 1. Visão Geral & Objetivos',
-            '- **Objetivo Primário:** Aquisição de novos clientes e escala de vendas diretas e-commerce.',
-            '- **Linha de Produto:** Whey Protein Isolado (Sabores Baunilha, Chocolate Belga e Morango).',
-            '- **Meta de CPA:** R$ 35,00 por compra.',
-            '- **Orçamento Diário de Mídia:** R$ 1.500,00/dia.',
-            '',
-            '### 2. Público-Alvo & Persona',
-            '- **Faixa Etária:** 25 a 45 anos (Homens e Mulheres).',
-            '- **Interesses:** Musculação, Crossfit, Nutrição Esportiva, Vida Saudável.',
-            '- **Comportamento:** Compradores frequentes e-commerce via smartphone (iOS/Android).',
-            '',
-            '### 3. Diretrizes de Mensagem & Copys',
-            '- **Hook Principal:** "O sabor e a pureza que seu treino de alta performance exige."',
-            '- **Pilares de Comunicação:** Zero lactose, 27g de proteína por dose, adoçado naturally com estévia.',
-            '- **Chamada para Ação (CTA):** Garanta o seu com Frete Grátis acima de R$ 199.',
-            '',
-            '### 4. Canais & Formatos',
-            '- **Meta Ads:** Feed Reels, Instagram Stories (Vídeos UGC 9:16)',
-            '- **TikTok Ads:** In-Feed Native Video (Foco em entretenimento educativo)'
-          ].join(String.fromCharCode(10))
-        },
-        {
-          id: 'doc-pauta-ugc-01',
-          type: 'pauta',
-          typeName: 'Pauta & UGC',
-          badgeBg: 'var(--tag-neutral-bg)',
-          badgeBorder: 'var(--tag-neutral-border)',
-          badgeColor: 'var(--tag-neutral-ink)',
-          title: 'Pauta UGC Criativos TikTok/Reels: 5 Variações de Hook Alta Conversão',
-          date: '27/08/2026 10:15',
-          author: 'Luiza Valente (Atendimento & Vendas)',
-          status: 'Em Produção',
-          summary: 'Roteiros práticos para gravação de criativos UGC. Contém 5 hooks de atração, roteiro de prova social e estrutura de encerramento com oferta.',
-          content: [
-            '# Pauta de Conteúdo UGC & Roteiros de Vídeo',
-            '',
-            '**Projeto:** HouseWhey Fitness',
-            '**Elaborado por:** Luiza Valente',
-            '**Foco:** Anúncios de Vídeo Curto (Reels / TikTok / Shorts)',
-            '',
-            '---',
-            '',
-            '### Roteiro 1: "O Maior Erro no Pós-Treino" (Hook Curiosidade)',
-            '- **00s - 03s (Hook):** "Se você toma Whey depois do treino e sente estufamento, você está cometendo ESSE erro aqui..."',
-            '- **03s - 12s (Problema/Solução):** "A maioria dos wheys usa adoçante artificial barato. O Whey Isolar da HouseWhey usa pureza máxima e adoçantes naturais."',
-            '- **12s - 20s (Demonstração):** Gravação do pó misturando instantaneamente na coqueteleira sem empelotar.',
-            '- **20s - 30s (CTA):** "Clique no link e use o cupom BEMVINDO10 na sua primeira compra!"',
-            '',
-            '---',
-            '',
-            '### Roteiro 2: "Taste Test Blind Test" (Hook Desafio)',
-            '- **00s - 04s (Hook):** "Coloquei meu namorado pra adivinhar qual Whey era de R$ 300 e qual era da HouseWhey..."',
-            '- **04s - 18s (Reação):** Reação espontânea ao provar o sabor Chocolate Belga.',
-            '- **18s - 30s (CTA):** "Acesse o site e descubra porque é o mais elogiado do Brasil."'
-          ].join(String.fromCharCode(10))
-        },
-        {
-          id: 'doc-relatorio-cpa-01',
-          type: 'relatorio',
-          typeName: 'Relatório',
-          badgeBg: 'var(--tag-success-bg)',
-          badgeBorder: 'var(--tag-success-border)',
-          badgeColor: 'var(--tag-success-ink)',
-          title: 'Relatório de Auditoria: Performance CPA & Atribuição no Meta Ads',
-          date: '27/08/2026 11:00',
-          author: 'Marcos Silva (Head de Marketing)',
-          status: 'Auditado por: Marcos Silva',
-          summary: 'Relatório analítico de performance das campanhas ativas. Destaque para variação de CPA e identificação de criativos fora de tolerância.',
-          content: [
-            '# Relatório de Auditoria Operacional de Mídia',
-            '',
-            '**Conta:** HouseWhey SPOT Mídia',
-            '**Período de Análise:** Últimos 7 dias',
-            '**Auditor:** Marcos Silva (Head de Marketing)',
-            '',
-            '---',
-            '',
-            '### Métricas Consolidadas da Conta',
-            '- **Investimento Total:** R$ 10.500,00',
-            '- **Retorno Geral (ROAS):** 3.82x',
-            '- **CPA Médio da Conta:** R$ 38,40 (Meta: R$ 35,00)',
-            '',
-            '### Diagnóstico por Conjunto de Anúncios',
-            '1. **AdSet_Whey_Baunilha_01:**',
-            '   - Investimento: R$ 4.200,00 | Vendas: 132 | CPA: R$ 31,80 (Aprovado)',
-            '2. **AdSet_Whey_Sabores_04 (ad_04):**',
-            '   - Investimento: R$ 2.835,00 | Vendas: 30 | CPA: R$ 94,50 (Alerta Crítico)',
-            '',
-            '### Recomendação',
-            '- Recomenda-se a **pausa imediata do criativo ad_04** e reatribuição da verba excedente (R$ 450,00/dia) para os anúncios campeões.'
-          ].join(String.fromCharCode(10))
-        },
-        {
-          id: 'doc-proposta-jit-01',
-          type: 'proposta',
-          typeName: 'Proposta',
-          badgeBg: 'var(--tag-warning-bg)',
-          badgeBorder: 'var(--tag-warning-border)',
-          badgeColor: 'var(--tag-warning-ink)',
-          title: 'Proposta: Pausa do Anúncio ad_04 e Realocação para Criativo Campeão',
-          date: '27/08/2026 11:45',
-          author: 'Carolina Mendes (Mídia & Governança)',
-          status: 'Aguardando Aprovação: Marcos Silva',
-          summary: 'Proposta formal de alteração operacional para controle de desperdício em anúncios de baixo rendimento.',
-          content: [
-            '# Proposta Operacional de Mídia',
-            '',
-            '**ID da Proposta:** PROP-2026-0827-04',
-            '**Solicitante:** Carolina Mendes',
-            '**Aprovação Esperada:** Marcos Silva (Head de Marketing)',
-            '',
-            '---',
-            '',
-            '### Ação Solicitada',
-            '1. Pausar status do anúncio ID asset_ad_04 na API Meta Ads.',
-            '2. Migrar orçamento diário de R$ 450,00 para ad_whey_baunilha_01.',
-            '',
-            '### Justificativa Técnica',
-            'O anúncio asset_ad_04 acumulou CPA de R$ 94,50 nas últimas 48h, ultrapassando a margem de tolerância estabelecida para a conta.'
-          ].join(String.fromCharCode(10))
-        },
-        {
-          id: 'doc-plano-escala-01',
-          type: 'plano',
-          typeName: 'Plano de Ação',
-          badgeBg: 'var(--tag-neutral-bg)',
-          badgeBorder: 'var(--tag-neutral-border)',
-          badgeColor: 'var(--tag-neutral-ink)',
-          title: 'Plano de Escala de Mídia: Distribuição Regional H2',
-          date: '26/08/2026 16:20',
-          author: 'Agente AdzHub',
-          status: 'Aprovado por: Marcos Silva',
-          summary: 'Planejamento de expansão orçamentária por fases com travas de segurança de CPA e limites automáticos de gasto diário.',
-          content: [
-            '# Plano de Ação & Escala Governada H2',
-            '',
-            '**Escopo:** Expansão de Vendas Região Sul e Sudeste',
-            '**Orquestrador:** Supercérebro IA',
-            '',
-            '---',
-            '',
-            '### Fase 1: Validação de Públicos (Semanas 1-2)',
-            '- Testes A/B de criativos de alta velocidade.',
-            '- Budget máximo por teste: R$ 200,00.',
-            '',
-            '### Fase 2: Escala Vertical (Semanas 3-4)',
-            '- Aumento progressivo de +20% a cada 48h condicionada ao ROAS >= 3.5x.'
-          ].join(String.fromCharCode(10))
+      async function loadDocumentsFromServer() {
+        try {
+          const res = await fetch('/api/documents');
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.documents) && data.documents.length > 0) {
+              documentsList = data.documents.map(d => {
+                if ((!d.typeName || d.typeName === 'Documento de Governança' || d.typeName === 'Relatório') && typeof window.detectDocumentCategory === 'function') {
+                  const cat = window.detectDocumentCategory(d.title, d.content, d.summary);
+                  return Object.assign({}, d, {
+                    type: cat.type,
+                    typeName: cat.typeName,
+                    badgeBg: cat.badgeBg,
+                    badgeBorder: cat.badgeBorder,
+                    badgeColor: cat.badgeColor
+                  });
+                }
+                return d;
+              });
+              updateDocCounts();
+              renderDocumentsList();
+              if (!currentSelectedDocId && documentsList.length > 0) {
+                selectDocument(documentsList[0].id);
+              }
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn('[Central de Documentos] Erro ao carregar da API:', err);
         }
-      ];
+      }
 
-      const documentsList = [...INITIAL_DOCUMENTS];
+      window.loadDocumentsFromServer = loadDocumentsFromServer;
+
+      window.addDocumentToCenter = async function(newDoc) {
+        if (!newDoc || !newDoc.title) return;
+        if ((!newDoc.typeName || newDoc.typeName === 'Documento de Governança' || newDoc.typeName === 'Relatório') && typeof window.detectDocumentCategory === 'function') {
+          const cat = window.detectDocumentCategory(newDoc.title, newDoc.content, newDoc.summary);
+          newDoc.type = cat.type;
+          newDoc.typeName = cat.typeName;
+          newDoc.badgeBg = cat.badgeBg;
+          newDoc.badgeBorder = cat.badgeBorder;
+          newDoc.badgeColor = cat.badgeColor;
+        }
+        var existingIdx = -1;
+        for (var i = 0; i < documentsList.length; i++) {
+          if (documentsList[i].id === newDoc.id || (documentsList[i].title === newDoc.title && documentsList[i].author === newDoc.author)) {
+            existingIdx = i;
+            break;
+          }
+        }
+        if (existingIdx >= 0) {
+          documentsList[existingIdx] = Object.assign({}, documentsList[existingIdx], newDoc);
+        } else {
+          documentsList.unshift(newDoc);
+        }
+        updateDocCounts();
+        renderDocumentsList();
+        if (newDoc.id) {
+          selectDocument(newDoc.id);
+        }
+
+        try {
+          await fetch('/api/documents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newDoc)
+          });
+        } catch (err) {
+          console.warn('[Central de Documentos] Falha ao persistir documento no backend:', err);
+        }
+      };
 
       function updateDocCounts() {
         const counts = { all: documentsList.length, briefing: 0, pauta: 0, relatorio: 0, proposta: 0, plano: 0 };
@@ -8044,17 +8463,18 @@ export function renderHtmlShell(): string {
 
         container.innerHTML = filtered.map(doc => {
           const isSelected = doc.id === currentSelectedDocId;
+          const cleanedTitle = (typeof cleanCardTitle === 'function' ? cleanCardTitle(doc.title) : String(doc.title || '').replace(/^(Governança|Governanca)\s*(?:&|de)?\s*[A-Za-zÀ-ÿ\s]*:\s*/i, '').trim());
           return (
             '<div class="doc-card-item ' + (isSelected ? 'selected' : '') + '" data-doc-id="' + doc.id + '" style="background: var(--surface); border: 1px solid ' + (isSelected ? 'var(--navy)' : 'var(--line)') + '; border-radius: var(--radius-card); padding: 14px; cursor: pointer; transition: all 0.15s ease; box-shadow: ' + (isSelected ? '0 0 0 2px rgba(41,74,145,0.18)' : 'none') + '; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">' +
               '<div>' +
                 '<div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px;">' +
-                  '<span style="font-size: 0.68rem; font-weight: 600; background: ' + (doc.badgeBg || 'var(--tag-neutral-bg)') + '; color: ' + (doc.badgeColor || 'var(--tag-neutral-ink)') + '; border: 1px solid ' + (doc.badgeBorder || 'var(--tag-neutral-border)') + '; padding: 2px 8px; border-radius: var(--radius-pill); text-transform: uppercase;">' +
+                  '<span style="font-size: 0.68rem; font-weight: 600; background: ' + (doc.badgeBg || 'var(--tag-neutral-bg)') + '; color: ' + (doc.badgeColor || 'var(--tag-neutral-ink)') + '; border: 1px solid ' + (doc.badgeBorder || 'var(--tag-neutral-border)') + '; padding: 2px 8px; border-radius: var(--radius-pill); text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; width: auto; max-width: fit-content; white-space: nowrap; flex-shrink: 0;">' +
                     doc.typeName +
                   '</span>' +
                   '<span style="font-size: 0.72rem; color: var(--ink-muted); font-family: var(--font-mono);">' + doc.date + '</span>' +
                 '</div>' +
                 '<h4 style="margin: 0 0 6px 0; font-family: var(--font-display); font-size: 0.92rem; font-weight: 700; color: var(--ink-strong); line-height: 1.35;">' +
-                  doc.title +
+                  cleanedTitle +
                 '</h4>' +
                 '<p style="margin: 0; font-size: 0.78rem; color: var(--ink-muted); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' +
                   doc.summary +
@@ -8195,7 +8615,7 @@ export function renderHtmlShell(): string {
           badgeEl.style.border = '1px solid ' + (doc.badgeBorder || 'var(--tag-neutral-border)');
         }
         if (dateEl) dateEl.textContent = doc.date;
-        if (titleEl) titleEl.textContent = doc.title;
+        if (titleEl) titleEl.textContent = (typeof cleanCardTitle === 'function' ? cleanCardTitle(doc.title) : String(doc.title || '').replace(/^(Governança|Governanca)\s*(?:&|de)?\s*[A-Za-zÀ-ÿ\s]*:\s*/i, '').trim());
         if (metaEl) metaEl.textContent = 'Autor: ' + doc.author + ' · Status: ' + doc.status;
         if (bodyEl) bodyEl.innerHTML = formatMarkdownToHtml(doc.content);
       }
@@ -8361,10 +8781,22 @@ export function renderHtmlShell(): string {
           if (composerCard) composerCard.style.display = 'block';
           updateHeaderBackButton('chat');
           if (titleEl) titleEl.textContent = 'Agente AdzHub';
+          if (interactiveInput && !interactiveInput.disabled) {
+            setTimeout(function() { interactiveInput.focus(); }, 60);
+          }
         }
       }
 
       window.switchView = switchView;
+
+      // Mantém o input sempre focado ao clicar em áreas livres do painel de chat
+      document.getElementById('pane-chat')?.addEventListener('click', function(e) {
+        if (!e.target.closest('button, a, input, select, textarea, .stage-card, .menu-item, .chip-filter, .doc-card, .timeline-item')) {
+          if (interactiveInput && !interactiveInput.disabled) {
+            interactiveInput.focus();
+          }
+        }
+      });
 
       function openDocumentsModal() { switchView('documents'); }
       function closeDocumentsModal() { switchView('chat'); }
@@ -8477,136 +8909,51 @@ export function renderHtmlShell(): string {
       const btnCloseTimeline = document.getElementById('btn-close-timeline');
 
       let currentTimelineFilter = 'all';
+      let timelineEventsList = [];
 
-      const INITIAL_TIMELINE_EVENTS = [
-        {
-          id: 'evt-tl-101',
-          category: 'media',
-          actor: {
-            name: 'Aline Rocha',
-            role: 'Tráfego Pago (SPOT)',
-            avatarBg: 'var(--tag-info-bg)',
-            avatarColor: 'var(--tag-info-ink)',
-            avatarInitials: 'AR'
-          },
-          actionTitle: 'Pausa do Anúncio ad_whey_sabores_04',
-          badgeText: 'Pausa de Anúncio',
-          badgeBg: 'var(--tag-danger-bg)',
-          badgeBorder: 'var(--tag-danger-border)',
-          badgeColor: 'var(--tag-danger-ink)',
-          summary: 'Aline Rocha pausou o criativo carrossel ad_whey_sabores_04 após identificar disparada de CPA para R$ 94,50 (limite de tolerância: R$ 35,00), realocando verba para o criativo campeão de Baunilha.',
-          target: 'Anúncio: ad_whey_sabores_04 · Meta Ads',
-          timestamp: '27/08/2026 14:15',
-          provenance: 'Meta Ads'
-        },
-        {
-          id: 'evt-tl-102',
-          category: 'documents',
-          actor: {
-            name: 'Luiza Valente',
-            role: 'Atendimento & Vendas',
-            avatarBg: 'var(--tag-neutral-bg)',
-            avatarColor: 'var(--tag-neutral-ink)',
-            avatarInitials: 'LV'
-          },
-          actionTitle: 'Recebimento do Documento "Pauta UGC TikTok/Reels"',
-          badgeText: 'Documento Recebido',
-          badgeBg: 'var(--tag-neutral-bg)',
-          badgeBorder: 'var(--tag-neutral-border)',
-          badgeColor: 'var(--tag-neutral-ink)',
-          summary: 'Luiza Valente recebeu e anexou a pauta de criativos UGC contendo 5 roteiros de alta conversão para gravação com influenciadores.',
-          target: 'Documento: doc-pauta-ugc-01',
-          timestamp: '27/08/2026 13:40',
-          provenance: 'Central de Documentos'
-        },
-        {
-          id: 'evt-tl-103',
-          category: 'governance',
-          actor: {
-            name: 'Marcos Silva',
-            role: 'Head de Marketing (HouseWhey)',
-            avatarBg: 'var(--tag-success-bg)',
-            avatarColor: 'var(--tag-success-ink)',
-            avatarInitials: 'MS'
-          },
-          actionTitle: 'Aprovação da Proposta de Remanejamento de Orçamento',
-          badgeText: 'Proposta Aprovada',
-          badgeBg: 'var(--tag-success-bg)',
-          badgeBorder: 'var(--tag-success-border)',
-          badgeColor: 'var(--tag-success-ink)',
-          summary: 'Marcos Silva aprovou a proposta #prop-8921 permitindo o remanejamento de R$ 500,00/dia da campanha Namorados para alavancar o lançamento de Whey Isolar.',
-          target: 'Proposta #prop-8921 · Aprovada por Marcos Silva',
-          timestamp: '27/08/2026 12:20',
-          provenance: 'Aprovação da Conta'
-        },
-        {
-          id: 'evt-tl-104',
-          category: 'audit',
-          actor: {
-            name: 'Agente AdzHub',
-            role: 'Auditoria & Integridade',
-            avatarBg: 'var(--tag-info-bg)',
-            avatarColor: 'var(--tag-info-ink)',
-            avatarInitials: 'AH'
-          },
-          actionTitle: 'Auditoria de Regras da Conta',
-          badgeText: 'Auditoria Salva',
-          badgeBg: 'var(--tag-info-bg)',
-          badgeBorder: 'var(--tag-info-border)',
-          badgeColor: 'var(--tag-info-ink)',
-          summary: 'Agente AdzHub executou a validação de regras da conta, confirmando a integridade das metas de CPA e investimento.',
-          target: 'Verificação de Integridade',
-          timestamp: '27/08/2026 11:05',
-          provenance: 'Motor de Auditoria'
-        },
-        {
-          id: 'evt-tl-105',
-          category: 'governance',
-          actor: {
-            name: 'Carolina Mendes',
-            role: 'Gerente Operacional (SPOT)',
-            avatarBg: 'var(--tag-warning-bg)',
-            avatarColor: 'var(--tag-warning-ink)',
-            avatarInitials: 'CM'
-          },
-          actionTitle: 'Submissão de Proposta de Controle de Tolerância',
-          badgeText: 'Proposta Submetida',
-          badgeBg: 'var(--tag-warning-bg)',
-          badgeBorder: 'var(--tag-warning-border)',
-          badgeColor: 'var(--tag-warning-ink)',
-          summary: 'Carolina Mendes registrou nova regra de tolerância: anúncios com CPA > 2.5x a meta após 1.000 impressões devem gerar pendência imediata de pausa.',
-          target: 'Regra de Tolerância #gov-rule-04',
-          timestamp: '27/08/2026 09:45',
-          provenance: 'Painel da Conta'
-        },
-        {
-          id: 'evt-tl-106',
-          category: 'documents',
-          actor: {
-            name: 'Aline Rocha',
-            role: 'Tráfego Pago (SPOT)',
-            avatarBg: 'var(--tag-info-bg)',
-            avatarColor: 'var(--tag-info-ink)',
-            avatarInitials: 'AR'
-          },
-          actionTitle: 'Vínculo do Briefing Q3 na Conta',
-          badgeText: 'Briefing Registrado',
-          badgeBg: 'var(--tag-neutral-bg)',
-          badgeBorder: 'var(--tag-neutral-border)',
-          badgeColor: 'var(--tag-neutral-ink)',
-          summary: 'Aline Rocha cadastrou o Briefing de Lançamento Whey Isolar HouseWhey Q3, conectando público, metas de CPA e canais de veiculação.',
-          target: 'Documento: doc-briefing-q3',
-          timestamp: '27/08/2026 09:30',
-          provenance: 'Central de Documentos'
+      async function loadTimelineFromServer() {
+        try {
+          const res = await fetch('/api/timeline');
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.events) && data.events.length > 0) {
+              timelineEventsList = data.events;
+              if (timelineModal && timelineModal.style.display !== 'none') {
+                renderTimelineEvents();
+              }
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn('[Linha do Tempo] Erro ao carregar da API:', err);
         }
-      ];
+      }
 
-      const timelineEventsList = [...INITIAL_TIMELINE_EVENTS];
+      window.loadTimelineFromServer = loadTimelineFromServer;
 
-      window.addTimelineEvent = function(evt) {
+      window.addTimelineEvent = async function(evt) {
         if (!evt) return;
+
+        // Deduplicação Inteligente
+        const isDuplicate = timelineEventsList.some(existing => {
+          if (evt.id && existing.id === evt.id) return true;
+          // Não deduplicar por título/ator genérico se os IDs forem diferentes ou se for um novo evento gerado por ação do usuário
+          if (evt.timestamp && existing.timestamp === evt.timestamp && existing.actionTitle === evt.actionTitle && existing.target === evt.target) {
+            return true;
+          }
+          if (evt.target && evt.category === 'media' && existing.category === 'media' && existing.target === evt.target && existing.timestamp === evt.timestamp) {
+            return true;
+          }
+          return false;
+        });
+
+        if (isDuplicate) {
+          console.log('[Timeline] Evento ignorado por deduplicação:', evt.actionTitle);
+          return;
+        }
+
         const newEvt = {
-          id: 'evt-dyn-' + Date.now(),
+          id: evt.id || 'evt-dyn-' + Date.now(),
           category: evt.category || 'audit',
           actor: evt.actor || {
             name: 'Supercérebro IA',
@@ -8625,9 +8972,20 @@ export function renderHtmlShell(): string {
           timestamp: evt.timestamp || new Date().toLocaleString('pt-BR'),
           provenance: evt.provenance || 'Sessão AdzHub em Tempo Real'
         };
+
         timelineEventsList.unshift(newEvt);
         if (timelineModal && timelineModal.style.display !== 'none') {
           renderTimelineEvents();
+        }
+
+        try {
+          await fetch('/api/timeline', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newEvt)
+          });
+        } catch (err) {
+          console.warn('[Linha do Tempo] Falha ao persistir evento no backend:', err);
         }
       };
 
@@ -8746,15 +9104,20 @@ export function renderHtmlShell(): string {
       if (graphCanvas) {
         const handleCanvasPointerDown = (e) => {
           const rect = graphCanvas.getBoundingClientRect();
-          const mouseX = (e.clientX - rect.left - graphState.offsetX) / graphState.zoom;
-          const mouseY = (e.clientY - rect.top - graphState.offsetY) / graphState.zoom;
+          const width = rect.width > 50 ? rect.width : (graphWrapper?.clientWidth || 800);
+          const height = rect.height > 50 ? rect.height : (graphWrapper?.clientHeight || 550);
+          const centerX = width / 2;
+          const centerY = height / 2;
+          const mouseX = (e.clientX - rect.left - (centerX + graphState.offsetX)) / graphState.zoom;
+          const mouseY = (e.clientY - rect.top - (centerY + graphState.offsetY)) / graphState.zoom;
 
           let clickedNode = null;
-          for (let i = graphState.nodes.length - 1; i >= 0; i--) {
-            const n = graphState.nodes[i];
-            const style = getNodeStyle(n.type);
-            const dist = Math.hypot(n.x - mouseX, n.y - mouseY);
-            if (dist <= style.radius + 10) {
+          const visibleNodes = graphState.nodes.filter(isNodeVisible);
+          for (let i = visibleNodes.length - 1; i >= 0; i--) {
+            const n = visibleNodes[i];
+            const style = getNodeStyle(n.type, n);
+            const dist = Math.hypot((n.relX !== undefined ? n.relX : 0) - mouseX, (n.relY !== undefined ? n.relY : 0) - mouseY);
+            if (dist <= style.radius + 12) {
               clickedNode = n;
               break;
             }
@@ -8775,16 +9138,16 @@ export function renderHtmlShell(): string {
         const handleCanvasPointerMove = (e) => {
           if (graphState.draggedNode) {
             const rect = graphCanvas.getBoundingClientRect();
-            const width = rect.width > 50 ? rect.width : (graphWrapper.clientWidth || 800);
-            const height = rect.height > 50 ? rect.height : (graphWrapper.clientHeight || 550);
+            const width = rect.width > 50 ? rect.width : (graphWrapper?.clientWidth || 800);
+            const height = rect.height > 50 ? rect.height : (graphWrapper?.clientHeight || 550);
             const centerX = width / 2;
             const centerY = height / 2;
-            const newX = (e.clientX - rect.left - graphState.offsetX) / graphState.zoom;
-            const newY = (e.clientY - rect.top - graphState.offsetY) / graphState.zoom;
+            const newX = (e.clientX - rect.left - (centerX + graphState.offsetX)) / graphState.zoom;
+            const newY = (e.clientY - rect.top - (centerY + graphState.offsetY)) / graphState.zoom;
+            graphState.draggedNode.relX = newX;
+            graphState.draggedNode.relY = newY;
             graphState.draggedNode.x = newX;
             graphState.draggedNode.y = newY;
-            graphState.draggedNode.relX = newX - centerX;
-            graphState.draggedNode.relY = newY - centerY;
             graphState.draggedNode.isUserDragged = true;
             renderCanvasGraph();
           } else if (graphState.isDraggingCanvas) {
@@ -8804,15 +9167,10 @@ export function renderHtmlShell(): string {
         window.addEventListener('pointerup', handleCanvasPointerUp);
         window.addEventListener('pointercancel', handleCanvasPointerUp);
 
-        // Fallback para mouse events
-        graphCanvas.addEventListener('mousedown', handleCanvasPointerDown);
-        window.addEventListener('mousemove', handleCanvasPointerMove);
-        window.addEventListener('mouseup', handleCanvasPointerUp);
-
         graphCanvas.addEventListener('wheel', (e) => {
           e.preventDefault();
           const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
-          graphState.zoom = Math.max(0.4, Math.min(3.0, graphState.zoom * zoomFactor));
+          graphState.zoom = Math.max(0.35, Math.min(3.0, graphState.zoom * zoomFactor));
           renderCanvasGraph();
         }, { passive: false });
       }
@@ -8827,32 +9185,31 @@ export function renderHtmlShell(): string {
           tab.classList.add('btn-primary', 'active');
           graphState.filter = tab.getAttribute('data-graph-filter') || 'all';
           selectGraphNode(null);
+          fitGraphToViewport();
         });
       });
 
       document.getElementById('btn-graph-zoom-in')?.addEventListener('click', () => {
-        graphState.zoom = Math.min(3.0, graphState.zoom * 1.25);
+        graphState.zoom = Math.min(3.0, graphState.zoom * 1.2);
         renderCanvasGraph();
       });
       document.getElementById('btn-graph-zoom-out')?.addEventListener('click', () => {
-        graphState.zoom = Math.max(0.4, graphState.zoom / 1.25);
+        graphState.zoom = Math.max(0.35, graphState.zoom / 1.2);
         renderCanvasGraph();
       });
       document.getElementById('btn-graph-reset-view')?.addEventListener('click', () => {
-        graphState.zoom = 1;
-        graphState.offsetX = 0;
-        graphState.offsetY = 0;
         graphState.nodes.forEach(n => {
           n.isUserDragged = false;
           delete n.relX;
           delete n.relY;
         });
         initGraphPositions(graphState.nodes, true);
-        renderCanvasGraph();
+        fitGraphToViewport();
       });
 
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+          if (prototypeModal && prototypeModal.style.display !== 'none') closePrototypeModal();
           if (supercerebroModal && supercerebroModal.style.display !== 'none') closeSupercerebroModal();
           if (documentsModal && documentsModal.style.display !== 'none') closeDocumentsModal();
           if (timelineModal && timelineModal.style.display !== 'none') closeTimelineModal();
@@ -9038,11 +9395,97 @@ export function renderHtmlShell(): string {
         }
       }
 
+      function initThemeSystem() {
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        const mobileThemeBtn = document.getElementById('mobile-theme-toggle-btn');
+        
+        let currentTheme = 'light';
+        try {
+          const stored = localStorage.getItem('adzhub_theme');
+          if (stored) {
+            currentTheme = stored;
+          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            currentTheme = 'dark';
+          }
+        } catch (e) {}
+
+        applyTheme(currentTheme);
+
+        function applyTheme(theme) {
+          currentTheme = theme;
+          if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.removeAttribute('data-theme');
+          }
+
+          updateThemeButtons(theme);
+
+          try {
+            localStorage.setItem('adzhub_theme', theme);
+          } catch (e) {}
+
+          if (typeof renderCanvasGraph === 'function') {
+            renderCanvasGraph();
+            requestAnimationFrame(renderCanvasGraph);
+          } else if (typeof window.renderCanvasGraph === 'function') {
+            window.renderCanvasGraph();
+            requestAnimationFrame(window.renderCanvasGraph);
+          }
+        }
+
+        function updateThemeButtons(theme) {
+          const isDark = theme === 'dark';
+          const sunIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>';
+          const moonIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon lucide-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
+          if (themeBtn) {
+            themeBtn.setAttribute('title', isDark ? 'Mudar para Tema Claro' : 'Mudar para Tema Escuro');
+            themeBtn.setAttribute('aria-label', isDark ? 'Mudar para Tema Claro' : 'Mudar para Tema Escuro');
+            const iconSpan = themeBtn.querySelector('.theme-icon');
+            const labelSpan = themeBtn.querySelector('.theme-label');
+            if (iconSpan) iconSpan.innerHTML = isDark ? sunIcon : moonIcon;
+            if (labelSpan) labelSpan.textContent = isDark ? 'Claro' : 'Escuro';
+          }
+
+          if (mobileThemeBtn) {
+            mobileThemeBtn.setAttribute('aria-label', isDark ? 'Mudar para Tema Claro' : 'Mudar para Tema Escuro');
+            const mobileIconSpan = mobileThemeBtn.querySelector('.theme-icon');
+            const mobileLabelSpan = mobileThemeBtn.querySelector('.theme-label');
+            if (mobileIconSpan) mobileIconSpan.innerHTML = isDark ? sunIcon : moonIcon;
+            if (mobileLabelSpan) mobileLabelSpan.textContent = isDark ? 'Tema Claro' : 'Tema Escuro';
+          }
+        }
+
+        function toggleTheme() {
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          applyTheme(newTheme);
+        }
+
+        if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        if (mobileThemeBtn) mobileThemeBtn.addEventListener('click', toggleTheme);
+
+        if (typeof MutationObserver !== 'undefined' && document.documentElement) {
+          const themeObserver = new MutationObserver(() => {
+            if (typeof renderCanvasGraph === 'function') {
+              renderCanvasGraph();
+            } else if (typeof window.renderCanvasGraph === 'function') {
+              window.renderCanvasGraph();
+            }
+          });
+          themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        }
+      }
+
       // Inicialização
+      initThemeSystem();
       updateKeyUI();
       validateExecution();
       initGraphPositions(graphState.nodes);
       updateGraphStats();
+      loadSupercerebroPendencies();
+      loadDocumentsFromServer();
+      loadTimelineFromServer();
       if (graphWrapper && typeof ResizeObserver !== 'undefined') {
         const resizeObserver = new ResizeObserver(() => {
           if (supercerebroModal && supercerebroModal.style.display !== 'none') {

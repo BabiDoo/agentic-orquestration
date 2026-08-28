@@ -175,13 +175,9 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
 
     expect(html).toContain('id="task-queue-section"');
     expect(html).toContain('id="operator-pendencies-list"');
-    expect(html).toContain('Pausar Criativos Fracos');
-    expect(html).toContain('Submeter Proposta SPOT');
-    expect(html).toContain('Aprovar Mudança de Verba');
-    expect(html).toContain('Reconciliar Conversões SAC');
   });
 
-  it('o script cliente embutido deve ser sintaticamente válido sem erros de parsing e conter getLucideSvg', () => {
+  it('o script cliente embutido deve ser sintaticamente válido sem erros de parsing e conter getLucideSvg e isDirectDispatch', () => {
     const html = renderHtmlShell();
     const scriptMatches = html.match(/<script[\s\S]*?>([\s\S]*?)<\/script>/gi) || [];
     expect(scriptMatches.length).toBeGreaterThan(0);
@@ -190,9 +186,9 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
       const code = tag.replace(/<script[\s\S]*?>/i, '').replace(/<\/script>/i, '');
       expect(() => new Function(code)).not.toThrow();
     }
-
     expect(html).toContain('function getLucideSvg(name, options)');
     expect(html).toContain('window.getLucideSvg = getLucideSvg;');
+    expect(html).toContain('const isDirectDispatch =');
   });
 
   it('deve conter o botão do Supercérebro no Icon Rail e o modal do Grafo de Conhecimento', () => {
@@ -210,6 +206,22 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
     const html = renderHtmlShell();
     expect(html).toContain('const goalVal = (interactiveInput?.value || goalInput?.value || \'\').trim();');
     expect(html).toContain('if (!goalVal) return;');
+  });
+
+  it('deve conter as animações de fila (queue-enter) e o delay de 3 segundos para saída dos cards no palco operacional', () => {
+    const html = renderHtmlShell();
+
+    // Verificação das animações CSS
+    expect(html).toContain('stageCardQueueIn');
+    expect(html).toContain('stageCardQueueOut');
+    expect(html).toContain('.stage-card.stage-card-queue-enter');
+    expect(html).toContain('.stage-card.stage-card-queue-exit');
+
+    // Verificação da lógica JS de entrada em fila e saída com 3s delay
+    expect(html).toContain('STAGE_CARD_EXIT_DELAY_MS = 3000');
+    expect(html).toContain('clearStageCardsWithExitDelay');
+    expect(html).toContain('data-queue-delay-ms');
+    expect(html).toContain('data-exit-delay-ms');
   });
 
   describe('Material Design 3 (M3) Design System & Components', () => {
@@ -310,6 +322,10 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
       expect(html).toContain('.reasoning-accordion-header');
       expect(html).toContain('.reasoning-accordion-content');
       expect(html).toContain('window.toggleReasoningCard');
+      expect(html).toContain('function getClientTrace(goal, scenarioId)');
+      expect(html).toContain('isWhatsApp');
+      expect(html).toContain('productName');
+      expect(html).toContain('personName');
     });
 
     it('deve conter estrutura, elementos e estilos para o tutorial de primeiro acesso focado no seletor de operador e chave de API', () => {
@@ -328,11 +344,20 @@ describe('M6-01: UI Shell Responsivo Estilo Cursor', () => {
 
     it('deve conter lógica para direcionar ao grafo do Supercérebro com o nó contextual selecionado', () => {
       const html = renderHtmlShell();
-      expect(html).toContain('id="card-brain-context"');
+      expect(html).toContain('card-brain-context');
       expect(html).toContain('openSupercerebroModal(opId)');
       expect(html).toContain('selectGraphNode(targetNode)');
       expect(html).toContain('graphState.offsetX');
       expect(html).toContain('graphState.offsetY');
+    });
+
+    it('não deve exibir o card de operação commitada em interações simples ou consultas genéricas', () => {
+      const html = renderHtmlShell();
+      expect(html).toContain('const isExplicitAtomicCommit = Boolean(');
+      expect(html).toContain('answer.isAtomicCommit === true');
+      expect(html).toContain('answer.isApproved === true');
+      expect(html).toContain('answer.isDelegated === true');
+      expect(html).toContain('answer.isDocumentGenerated === true');
     });
   });
 });

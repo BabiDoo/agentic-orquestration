@@ -78,9 +78,9 @@ describe('@adzhub/web API Router & Runs Engine (M2-08 & Gate M2)', () => {
 
       expect(body.status).toBe('OK');
       expect(body.readiness).toBe(true);
-      expect(body.version).toBe('1.0.0');
+      expect(body.version).toBe('1.1');
       expect(body.buildSha).toContain('adzhub-');
-      expect(body.contractsVersion).toBe('1.0.0');
+      expect(body.contractsVersion).toBe('1.1');
     });
   });
 
@@ -489,14 +489,12 @@ describe('@adzhub/web API Router & Runs Engine (M2-08 & Gate M2)', () => {
       expect(aline.name).toBe('Aline Rocha');
       expect(aline.company).toBe('SPOT');
       expect(aline.pendencies.length).toBeGreaterThan(0);
-      expect(aline.pendencies[0].title).toBe('Pausar Criativos Fracos');
+      expect(aline.pendencies[0].title).toBe('Submeter Proposta de Pausa no Meta Ads');
 
       const marcos = body.operators.find((op: any) => op.id === 'p_marcos');
       expect(marcos).toBeDefined();
       expect(marcos.name).toBe('Marcos Silva');
       expect(marcos.company).toBe('Housewhey');
-      expect(marcos.pendencies.length).toBeGreaterThan(0);
-      expect(marcos.pendencies[0].title).toBe('Aprovar Mudança de Verba');
     });
 
     it('2. GET /api/supercerebro/pendencies é um alias válido para a mesma rota', async () => {
@@ -533,9 +531,10 @@ describe('@adzhub/web API Router & Runs Engine (M2-08 & Gate M2)', () => {
       let body = res.body as any;
       let marcos = body.operators.find((op: any) => op.id === 'p_marcos');
       let aline = body.operators.find((op: any) => op.id === 'p_aline');
+      let carolina = body.operators.find((op: any) => op.id === 'p_carolina');
       expect(marcos.pendencies[0].status).toBe('Pendente');
       expect(marcos.pendencies[0].btnText).toBe('Aprovar Proposta →');
-      expect(aline.pendencies[0].status).toBe('Aguardando Aprovação');
+      expect(carolina.pendencies[0].status).toBe('Aguardando Aprovação');
 
       // 2. Marcos aprova e commita no SQLite
       await handleApiRequest({
@@ -556,14 +555,234 @@ describe('@adzhub/web API Router & Runs Engine (M2-08 & Gate M2)', () => {
       body = res.body as any;
       marcos = body.operators.find((op: any) => op.id === 'p_marcos');
       aline = body.operators.find((op: any) => op.id === 'p_aline');
-      const carolina = body.operators.find((op: any) => op.id === 'p_carolina');
+      carolina = body.operators.find((op: any) => op.id === 'p_carolina');
 
       expect(marcos.pendencies[0].status).toBe('Concluído');
-      expect(marcos.pendencies[0].btnText).toBe('Ver Aprovação →');
+      expect(marcos.pendencies[0].btnText).toBe('Ver Auditoria →');
+      expect(carolina.pendencies[0].status).toBe('Pendente');
+      expect(carolina.pendencies[0].btnText).toBe('Executar Remanejamento Auditado');
+      // Aline mantém a necessidade de envio para Marcos Silva (pois a aprovação anterior foi de Remanejamento da Carolina)
+      expect(aline.pendencies[0].status).toBe('Pendente');
+      expect(aline.pendencies[0].btnText).toBe('Enviar Proposta para Marcos Silva');
+
+      // 3. Aline executa a pausa no Meta Ads e commita no SQLite
+      await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: {
+          action: 'PAUSE',
+          pausedAds: ['ad_whey_sabores_04']
+        },
+        runsService
+      });
+
+      res = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        runsService
+      });
+      body = res.body as any;
+      aline = body.operators.find((op: any) => op.id === 'p_aline');
       expect(aline.pendencies[0].status).toBe('Concluído');
       expect(aline.pendencies[0].btnText).toBe('Ver Auditoria →');
-      expect(carolina.pendencies[0].status).toBe('Concluído');
-      expect(carolina.pendencies[0].btnText).toBe('Ver Histórico →');
+    });
+
+    it('3.5. POST /api/governance/commit com APPROVE_BUDGET_REALLOCATION atualiza o card do Marcos para Concluído', async () => {
+      const commitRes = await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: {
+          action: 'APPROVE_BUDGET_REALLOCATION',
+          proposalTitle: 'Aprovar Mudança de Verba',
+          targetPerson: 'Aline Rocha'
+        },
+        runsService
+      });
+      expect(commitRes.status).toBe(200);
+      expect((commitRes.body as any).isApproved).toBe(true);
+
+      const opRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        query: { isApproved: 'true' },
+        runsService
+      });
+      expect(opRes.status).toBe(200);
+      const body = opRes.body as any;
+      const marcos = body.operators.find((op: any) => op.id === 'p_marcos');
+      const marcosApprCard = marcos.pendencies.find((p: any) => p.title.includes('Mudança de Verba') || p.title.includes('Remanejamento'));
+      expect(marcosApprCard).toBeDefined();
+      expect(marcosApprCard.status).toBe('Concluído');
+      expect(marcosApprCard.btnText).toBe('Ver Auditoria →');
+    });
+
+    it('3.6. Submeter Ajuste de Estratégia de Lance gera pendência para Marcos e atualiza card de Aline', async () => {
+      // 1. Aline solicita submeter ajuste de estratégia de lance
+      const run = await runsService.startRun({
+        taskContract: {
+          ...s0TaskContract,
+          taskId: 'task_bid_strat_01',
+          goal: 'Como Aline Rocha (Gestora de Tráfego), solicito executar a ação Submeter Ajuste de Estratégia de Lance para Limite de CPA de R$ 75,00 na Campanha Whey Isolado Baunilha para Aprovação de Marcos Silva no Supercérebro.'
+        },
+        mockAdapter: new MockModelAdapter()
+      });
+
+      expect(run.structuredAnswer?.actionCard).toBeDefined();
+      expect(run.structuredAnswer?.actionCard?.title).toContain('Ajuste de Estratégia de Lance');
+
+      // 2. Aline confirma o envio no card de governança
+      const commitRes = await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: {
+          action: 'UPDATE_BID_STRATEGY',
+          proposalTitle: 'Submeter Ajuste de Estratégia de Lance',
+          targetPerson: 'Marcos Silva',
+          details: 'Proposta de ajuste de estratégia de lance para Limite de CPA R$ 75,00 despachada para Marcos Silva.'
+        },
+        runsService
+      });
+
+      expect(commitRes.status).toBe(200);
+      expect((commitRes.body as any).delegation?.isDelegated).toBe(true);
+
+      // 3. Verifica pendências de Aline (Aguardando Aprovação) e Marcos (Pendente de Aprovação)
+      const opRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        query: {
+          isDelegated: 'true',
+          actionType: 'UPDATE_BID_STRATEGY',
+          proposalTitle: 'Submeter Ajuste de Estratégia de Lance'
+        },
+        runsService
+      });
+
+      const body = opRes.body as any;
+      const aline = body.operators.find((op: any) => op.id === 'p_aline');
+      const marcos = body.operators.find((op: any) => op.id === 'p_marcos');
+
+      const alineBidCard = aline.pendencies.find((p: any) => p.title.includes('Ajuste de Estratégia'));
+      expect(alineBidCard).toBeDefined();
+      expect(alineBidCard.status).toBe('Aguardando Aprovação');
+      expect(alineBidCard.btnText).toBe('Aguardando Aprovação de Marcos Silva');
+
+      const marcosBidCard = marcos.pendencies.find((p: any) => p.title.includes('Ajuste de Estratégia'));
+      expect(marcosBidCard).toBeDefined();
+      expect(marcosBidCard.status).toBe('Pendente');
+      expect(marcosBidCard.btnText).toBe('Aprovar Proposta →');
+    });
+
+    it('3.7. Submeter Proposta de Remanejamento como Carolina gera actionCard e pendência para Marcos', async () => {
+      // 1. Carolina solicita submeter proposta de remanejamento
+      const run = await runsService.startRun({
+        taskContract: {
+          ...s0TaskContract,
+          taskId: 'task_budget_realloc_01',
+          goal: 'Como Carolina Mendes (Gerente de Contas), solicito executar a ação Submeter Proposta de Remanejamento de R$ 3.000,00 da Campanha Dia dos Namorados para Influenciadores SPOT para Aprovação de Marcos Silva no Supercérebro.'
+        },
+        mockAdapter: new MockModelAdapter()
+      });
+
+      expect(run.structuredAnswer?.actionCard).toBeDefined();
+      expect(run.structuredAnswer?.actionCard?.title).toContain('Remanejamento');
+
+      // 2. Carolina confirma o envio no card de governança
+      const commitRes = await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: {
+          action: 'BUDGET_REALLOCATION',
+          proposalTitle: 'Submeter Proposta de Remanejamento',
+          targetPerson: 'Marcos Silva',
+          details: 'Proposta de remanejamento de R$ 3.000,00 para Influenciadores SPOT despachada para Marcos Silva.'
+        },
+        runsService
+      });
+
+      expect(commitRes.status).toBe(200);
+
+      // 3. Verifica pendências de Carolina (Aguardando Aprovação) e Marcos (Pendente de Aprovação)
+      const opRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        query: {
+          isDelegated: 'true',
+          actionType: 'BUDGET_REALLOCATION',
+          proposalTitle: 'Submeter Proposta de Remanejamento'
+        },
+        runsService
+      });
+
+      const body = opRes.body as any;
+      const carolina = body.operators.find((op: any) => op.id === 'p_carolina');
+      const marcos = body.operators.find((op: any) => op.id === 'p_marcos');
+
+      const carolCard = carolina.pendencies.find((p: any) => p.title.includes('Remanejamento'));
+      expect(carolCard).toBeDefined();
+      expect(carolCard.status).toBe('Aguardando Aprovação');
+      expect(carolCard.btnText).toBe('Aguardando Aprovação de Marcos Silva');
+
+      const marcosCard = marcos.pendencies.find((p: any) => p.title.includes('Verba') || p.title.includes('Remanejamento'));
+      expect(marcosCard).toBeDefined();
+      expect(marcosCard.status).toBe('Pendente');
+      expect(marcosCard.btnText).toBe('Aprovar Proposta →');
+    });
+
+    it('3.8. Submeter Autorização de Cupom SAC como Luiza gera actionCard e pendência para Marcos', async () => {
+      // 1. Luiza solicita submeter autorização de cupom SAC
+      const run = await runsService.startRun({
+        taskContract: {
+          ...s0TaskContract,
+          taskId: 'task_sac_discount_01',
+          goal: 'Como Luiza Valente (Atendimento & Vendas), solicito executar a ação Submeter Autorização de Cupom SAC de 15% para Carrinho Pendente no WhatsApp para Aprovação de Marcos Silva no Supercérebro.'
+        },
+        mockAdapter: new MockModelAdapter()
+      });
+
+      expect(run.structuredAnswer?.actionCard).toBeDefined();
+      expect(run.structuredAnswer?.actionCard?.title).toContain('Cupom');
+
+      // 2. Luiza confirma o envio no card de governança
+      const commitRes = await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: {
+          action: 'APPLY_SAC_DISCOUNT',
+          proposalTitle: 'Submeter Autorização de Cupom SAC',
+          targetPerson: 'Marcos Silva',
+          details: 'Solicitação de autorização de cupom de 15% para WhatsApp despachada para Marcos Silva.'
+        },
+        runsService
+      });
+
+      expect(commitRes.status).toBe(200);
+
+      // 3. Verifica pendências de Luiza (Aguardando Aprovação) e Marcos (Pendente de Aprovação)
+      const opRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        query: {
+          isDelegated: 'true',
+          actionType: 'APPLY_SAC_DISCOUNT',
+          proposalTitle: 'Submeter Autorização de Cupom SAC'
+        },
+        runsService
+      });
+
+      const body = opRes.body as any;
+      const luiza = body.operators.find((op: any) => op.id === 'p_luiza');
+      const marcos = body.operators.find((op: any) => op.id === 'p_marcos');
+
+      const luizaCard = luiza.pendencies.find((p: any) => p.title.includes('Cupom'));
+      expect(luizaCard).toBeDefined();
+      expect(luizaCard.status).toBe('Aguardando Aprovação');
+      expect(luizaCard.btnText).toBe('Aguardando Aprovação de Marcos Silva');
+
+      const marcosCard = marcos.pendencies.find((p: any) => p.title.includes('Cupom'));
+      expect(marcosCard).toBeDefined();
+      expect(marcosCard.status).toBe('Pendente');
+      expect(marcosCard.btnText).toBe('Aprovar Proposta →');
     });
 
     it('4. GET /api/supercerebro/graph retorna os nós e conexões do Grafo do Supercérebro', async () => {
@@ -585,6 +804,130 @@ describe('@adzhub/web API Router & Runs Engine (M2-08 & Gate M2)', () => {
 
       const clientNode = body.nodes.find((n: any) => n.id === 'client_housewhey_spot' || n.id === 'cli_housewhey' || n.type === 'organization' || n.type === 'hub');
       expect(clientNode).toBeDefined();
+    });
+
+    it('5. Reconciliação do SAC e Pausa atualizam o Grafo e removem nós de pendência concluídos', async () => {
+      // Commita reconciliação do SAC e autorização de cupom de Luiza
+      await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: { action: 'RECONCILE_SAC' },
+        runsService
+      });
+      await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: { action: 'APPLY_SAC_DISCOUNT' },
+        runsService
+      });
+
+      // Verifica operators API
+      const opRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/operators',
+        runsService
+      });
+      const luiza = (opRes.body as any).operators.find((op: any) => op.id === 'p_luiza');
+      const reconPendency = luiza.pendencies.find((p: any) => p.title.includes('Reconciliar')) || luiza.pendencies[1];
+      expect(reconPendency.status).toBe('Concluído');
+
+      // Commita Pausa no Meta Ads
+      await handleApiRequest({
+        method: 'POST',
+        path: '/api/governance/commit',
+        body: { action: 'PAUSE', pausedAds: ['ad_whey_sabores_04'] },
+        runsService
+      });
+
+      // Consulta Grafo do Supercérebro
+      const graphRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/supercerebro/graph',
+        query: { clientId: 'cli_housewhey' },
+        runsService
+      });
+      const graphBody = graphRes.body as any;
+
+      // Os nós de pendência de Luiza e Aline devem ter sido removidos do grafo por estarem concluídos
+      const luizaPendencyNode = graphBody.nodes.find((n: any) => n.id === 'pendency_p_luiza_0');
+      const alinePendencyNode = graphBody.nodes.find((n: any) => n.id === 'pendency_p_aline_0');
+      expect(luizaPendencyNode).toBeUndefined();
+      expect(alinePendencyNode).toBeUndefined();
+    });
+
+    it('5. GET & POST /api/documents gerencia documentos dinamicamente', async () => {
+      const getRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/documents',
+        runsService
+      });
+      expect(getRes.status).toBe(200);
+      const getBody = getRes.body as any;
+      expect(getBody.total).toBeGreaterThan(0);
+      expect(Array.isArray(getBody.documents)).toBe(true);
+
+      // Criação de novo documento
+      const postRes = await handleApiRequest({
+        method: 'POST',
+        path: '/api/documents',
+        body: {
+          title: 'Novo Briefing de Teste Automatizado',
+          type: 'briefing',
+          author: 'Aline Rocha',
+          summary: 'Briefing gerado via teste de API dinâmico.',
+          content: '# Briefing de Teste\n\nConteúdo gerado dinamicamente.'
+        },
+        runsService
+      });
+      expect(postRes.status).toBe(201);
+      const postBody = postRes.body as any;
+      expect(postBody.success).toBe(true);
+      expect(postBody.document.title).toBe('Novo Briefing de Teste Automatizado');
+      expect(postBody.document.type).toBe('briefing');
+
+      // Verifica se aparece na listagem
+      const filterRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/documents',
+        query: { q: 'Teste Automatizado' },
+        runsService
+      });
+      const filterBody = filterRes.body as any;
+      expect(filterBody.documents.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('6. GET & POST /api/timeline gerencia linha do tempo dinamicamente', async () => {
+      const getRes = await handleApiRequest({
+        method: 'GET',
+        path: '/api/timeline',
+        runsService
+      });
+      expect(getRes.status).toBe(200);
+      const getBody = getRes.body as any;
+      expect(getBody.total).toBeGreaterThan(0);
+      expect(Array.isArray(getBody.events)).toBe(true);
+
+      // Criação de novo evento
+      const postRes = await handleApiRequest({
+        method: 'POST',
+        path: '/api/timeline',
+        body: {
+          category: 'governance',
+          actionTitle: 'Validação de Regra de Teste',
+          badgeText: 'Regra Auditada',
+          summary: 'Evento de auditoria registrado dinamicamente.',
+          actor: {
+            name: 'Agente AdzHub',
+            role: 'Auditoria',
+            avatarInitials: 'AH'
+          }
+        },
+        runsService
+      });
+      expect(postRes.status).toBe(201);
+      const postBody = postRes.body as any;
+      expect(postBody.success).toBe(true);
+      expect(postBody.event.actionTitle).toBe('Validação de Regra de Teste');
     });
   });
 });

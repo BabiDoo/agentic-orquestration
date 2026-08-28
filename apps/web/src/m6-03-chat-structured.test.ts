@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MockModelAdapter } from '@adzhub/runtime';
-import { RunsService } from './runs-service.js';
+import { RunsService, processLLMOutput } from './runs-service.js';
 import { getCanonicalScenario } from './canonical-scenarios.js';
 import { renderHtmlShell } from './ui-shell.js';
 
@@ -133,5 +133,66 @@ describe('M6-03: Chat e Resposta Estruturada', () => {
     // Script de renderização estruturada
     expect(html).toContain('renderStructuredAnswer');
     expect(html).toContain('updateChatBadge');
+  });
+
+  it('respostas genéricas (oi) e consultas de tarefas pendentes NÃO devem gerar status COMMITTED nem card de commit', async () => {
+    const greetingRun = await runsService.startRun({
+      taskContract: {
+        schemaVersion: '1.0.0',
+        taskId: 'task_greeting_test',
+        clientId: 'cli_housewhey',
+        tenantId: 'hub_spot',
+        goal: 'oi',
+        timeframe: { since: '2026-08-01T00:00:00.000Z', until: '2026-08-20T23:59:59.000Z', timezone: 'America/Sao_Paulo' },
+        effects: { allowed: ['read:memory', 'read:meta', 'read:crm', 'read:app', 'write:staging', 'write:insight'], forbidden: ['external_write'] },
+        budgets: { maxSteps: 15, maxToolCalls: 10, maxTokens: 8000, maxCostBrl: 2.5, timeoutMs: 30000 },
+        successCriteria: { minEvidenceCoverage: 0.8, requireVerifiedClaims: true },
+        approvalPolicy: { externalWritesRequireApproval: true, autoApproveReadOnly: true },
+        metadata: { isPaused: true } // Simula sessão em que uma pausa já ocorreu anteriormente
+      },
+      mode: 'GOVERNED_PEVC',
+      mockAdapter: new MockModelAdapter()
+    });
+
+    expect(greetingRun.status).toBe('COMPLETED');
+    expect(greetingRun.structuredAnswer?.status).toBe('COMPLETED');
+    expect(greetingRun.structuredAnswer?.isAtomicCommit).toBe(false);
+
+    const taskInquiryRun = await runsService.startRun({
+      taskContract: {
+        schemaVersion: '1.0.0',
+        taskId: 'task_inquiry_test',
+        clientId: 'cli_housewhey',
+        tenantId: 'hub_spot',
+        goal: 'o que eu tenho de tarefas pendentes?',
+        timeframe: { since: '2026-08-01T00:00:00.000Z', until: '2026-08-20T23:59:59.000Z', timezone: 'America/Sao_Paulo' },
+        effects: { allowed: ['read:memory', 'read:meta', 'read:crm', 'read:app', 'write:staging', 'write:insight'], forbidden: ['external_write'] },
+        budgets: { maxSteps: 15, maxToolCalls: 10, maxTokens: 8000, maxCostBrl: 2.5, timeoutMs: 30000 },
+        successCriteria: { minEvidenceCoverage: 0.8, requireVerifiedClaims: true },
+        approvalPolicy: { externalWritesRequireApproval: true, autoApproveReadOnly: true },
+        metadata: { isApproved: true } // Simula sessão em que aprovação já ocorreu
+      },
+      mode: 'GOVERNED_PEVC',
+      mockAdapter: new MockModelAdapter()
+    });
+
+    expect(taskInquiryRun.status).toBe('COMPLETED');
+    expect(taskInquiryRun.structuredAnswer?.status).toBe('COMPLETED');
+    expect(taskInquiryRun.structuredAnswer?.isAtomicCommit).toBe(false);
+  });
+
+  it('processLLMOutput não deve truncar textos contendo Conclusão: nem truncar após dois pontos ou quebras de parágrafo', () => {
+    const rawProposal = `Prezado Marcos Silva,
+
+Assunto: Proposta Executiva de Remanejamento Orçamentário - Meta Ads
+
+Conclusão:
+
+Propomos a realocação da verba diária do anúncio "Vídeo Namorados Casal Suplementação" ( ad_namorados_casal_03 ), que apresentou alta queima orçamentária e CPA elevado de R$ 112,00.`;
+
+    const res = processLLMOutput(rawProposal, 'stop');
+    expect(res.conclusionText).toContain('Propomos a realocação da verba diária do anúncio');
+    expect(res.conclusionText).toContain('CPA elevado de R$ 112,00.');
+    expect(res.isTruncatedFlag).toBe(false);
   });
 });

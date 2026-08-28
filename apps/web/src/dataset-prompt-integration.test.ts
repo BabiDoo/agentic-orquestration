@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateAuditedDatasetResponse } from './runs-service.js';
+import { generateAuditedDatasetResponse } from './offline-dataset-responses.js';
 import { createSearchConversationsTool } from '@adzhub/tools';
 import { RAW_CONVERSAS_DATA } from '@adzhub/data';
 
@@ -93,18 +93,18 @@ describe('Dataset & Prompt Integration Tests', () => {
     expect(response).toContain('Status de Governança: COMMITTED');
   });
 
-  it('deve gerar o documento formal de devolutiva de Marcos Silva aprovando a pausa e delegando para Carolina Mendes', () => {
+  it('deve gerar o documento formal de devolutiva de Marcos Silva aprovando a pausa e delegando a execução para Aline Rocha', () => {
     const prompt = 'escreva o documento de devolutiva confirmando a pausa dos anuncios que foram pedidos';
     const response = generateAuditedDatasetResponse(prompt);
 
     expect(response).toContain('DOCUMENTO DE DEVOLUTIVA E APROVAÇÃO FORMAL DE PAUSA OPERACIONAL');
-    expect(response).toContain('PARA: Carolina Mendes, Gerente de Contas SPOT');
+    expect(response).toContain('PARA: Aline Rocha, Gestora de Tráfego SPOT');
     expect(response).toContain('DE: Marcos Silva, Head de Marketing Housewhey');
     expect(response).toContain('ASSUNTO: Devolutiva de Aprovação Expressa para Pausa de Anúncios e Realocação de Verba');
     expect(response).toContain('ad_namorados_casal_03');
     expect(response).toContain('ad_whey_sabores_04');
     expect(response).toContain('Devolução & Delegação Operacional');
-    expect(response).toContain('Carolina Mendes');
+    expect(response).toContain('Aline Rocha');
   });
 
   it('deve confirmar que Marcos recebeu a proposta quando a proposta já foi commitada no sistema', () => {
@@ -158,6 +158,21 @@ describe('Dataset & Prompt Integration Tests', () => {
     expect(response).toContain('ad_namorados_casal_03');
     expect(response).toContain('ad_whey_sabores_04');
     expect(response).toContain('card de governança abaixo');
+  });
+
+  it('deve exigir aprovação prévia de Marcos Silva para Aline Rocha pausar anúncios e liberar tarefa para execução após aprovação', () => {
+    const question = 'pausar criativo ad_whey_sabores_04';
+
+    // Sem aprovação prévia: Aline não possui autorização para pausa direta sem aprovação de Marcos
+    const unapprovedResponse = generateAuditedDatasetResponse(question, undefined, false, undefined, false, 'p_aline', 'Aline Rocha', false);
+    expect(unapprovedResponse).toContain('não possui autorização para pausar anúncios diretamente sem aprovação formal prévia de Marcos Silva');
+    expect(unapprovedResponse).toContain('Enviar Proposta de Pausa para Aprovação de Marcos Silva');
+
+    // Com aprovação prévia de Marcos Silva: Tarefa liberada para execução de acordo com a governança
+    const approvedResponse = generateAuditedDatasetResponse(question, undefined, false, undefined, false, 'p_aline', 'Aline Rocha', true);
+    expect(approvedResponse).toContain('formalmente aprovada por Marcos Silva');
+    expect(approvedResponse).toContain('liberada para execução');
+    expect(approvedResponse).toContain('executar a pausa auditada');
   });
 
   it('deve confirmar despacho com commit no SQLite ao receber o comando direto pode enviar', () => {

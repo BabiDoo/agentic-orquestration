@@ -40,22 +40,21 @@ export class GoogleGeminiAdapter implements ModelAdapter {
     return getAllowedModelsList();
   }
 
+  private static cachedWorkingEndpoint: { model: string; apiVersion: string } | null = null;
+
   private normalizeGeminiModel(model: string): string {
     const clean = model.replace('google/', '').trim();
-    if (clean === 'gemini-2.5-flash' || clean === 'gemini-2.0-flash' || clean === 'gemini-2.0-flash-001') {
-      return 'gemini-2.5-flash';
+    if (clean === 'gemini-2.5-flash' || clean === 'gemini-2.5-flash-latest' || clean === 'gemini-2.0-flash' || clean === 'gemini-2.0-flash-001') {
+      return 'gemini-2.0-flash';
     }
-    if (clean === 'gemini-1.5-flash' || clean === 'gemini-1.5-flash-001' || clean === 'gemini-1.5-flash-002') {
+    if (clean === 'gemini-1.5-flash' || clean === 'gemini-1.5-flash-001' || clean === 'gemini-1.5-flash-002' || clean === 'gemini-1.5-flash-latest') {
       return 'gemini-1.5-flash';
     }
-    if (clean === 'gemini-1.5-pro' || clean === 'gemini-1.5-pro-001' || clean === 'gemini-1.5-pro-002') {
+    if (clean === 'gemini-1.5-pro' || clean === 'gemini-1.5-pro-001' || clean === 'gemini-1.5-pro-002' || clean === 'gemini-1.5-pro-latest' || clean === 'gemini-2.5-pro' || clean === 'gemini-2.0-pro') {
       return 'gemini-1.5-pro';
     }
-    if (clean === 'gemini-2.5-pro' || clean === 'gemini-2.5-pro-001') {
-      return 'gemini-2.5-pro';
-    }
     if (!clean.startsWith('gemini-')) {
-      return 'gemini-2.5-flash';
+      return 'gemini-2.0-flash';
     }
     return clean;
   }
@@ -166,31 +165,36 @@ export class GoogleGeminiAdapter implements ModelAdapter {
         ],
         generationConfig: {
           temperature: request.temperature ?? 0.3,
-          maxOutputTokens: request.maxTokens ?? 4096
+          maxOutputTokens: request.maxTokens ?? 2048
         }
       };
 
-      // 1. Modelos candidatos modernos e suportados (sem gemini-pro obsoleto)
+      // 1. Modelos candidatos priorizados por velocidade e disponibilidade ativa na API
       const candidateModels = [
         targetModel,
-        'gemini-2.5-flash',
         'gemini-2.0-flash',
         'gemini-1.5-flash',
-        'gemini-2.5-pro',
-        'gemini-1.5-pro',
-        'gemini-2.0-flash-001',
-        'gemini-1.5-flash-latest',
-        'gemini-1.5-pro-latest'
+        'gemini-1.5-pro'
       ];
 
-      // Remove duplicatas mantendo a ordem
+      // Se temos endpoint em cache que funcionou recentemente, testa ele primeiro
+      if (GoogleGeminiAdapter.cachedWorkingEndpoint) {
+        candidateModels.unshift(GoogleGeminiAdapter.cachedWorkingEndpoint.model);
+      }
+
+      // Remove duplicatas mantendo a ordem prioritária
       const uniqueCandidates = Array.from(new Set(candidateModels));
       let lastErrorText = '';
       let lastStatus = 500;
       let primaryErrorText = '';
 
       for (const candidate of uniqueCandidates) {
-        for (const apiVersion of ['v1beta', 'v1']) {
+        const versionsToTry = (GoogleGeminiAdapter.cachedWorkingEndpoint?.model === candidate && GoogleGeminiAdapter.cachedWorkingEndpoint.apiVersion)
+          ? [GoogleGeminiAdapter.cachedWorkingEndpoint.apiVersion, 'v1beta', 'v1']
+          : ['v1beta', 'v1'];
+        const uniqueVersions = Array.from(new Set(versionsToTry));
+
+        for (const apiVersion of uniqueVersions) {
           const candidateUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${candidate}:generateContent?key=${encodeURIComponent(apiKey)}`;
           try {
             const res = await this.fetchFn(candidateUrl, {
@@ -227,6 +231,9 @@ export class GoogleGeminiAdapter implements ModelAdapter {
               } else if (rawFinish === 'SAFETY' || rawFinish === 'RECITATION') {
                 finishReason = 'content_filter';
               }
+
+              // Salva endpoint vencedor em cache para chamadas subsequentes instantâneas
+              GoogleGeminiAdapter.cachedWorkingEndpoint = { model: candidate, apiVersion };
 
               console.log(`[GoogleGeminiAdapter] Sucesso com ${candidate} (${apiVersion}, ${latencyMs}ms, finishReason: ${finishReason})!`);
               return {

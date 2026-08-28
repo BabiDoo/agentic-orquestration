@@ -7,7 +7,13 @@ import {
   createGetLeadsTool,
   createSearchClientContextTool,
   createRunAppAnaliseCriativosTool,
-  createGetMapaSolucaoTool
+  createGetMapaSolucaoTool,
+  createRunAppDataQualityAttributionTool,
+  createRunAppPerformanceReconciliationTool,
+  createRunAppAccountDiagnosisTool,
+  createRunAppActionRecommendationTool,
+  createRunAppCreativeBriefTool,
+  createRunAppMeetingAgendaTool
 } from '@adzhub/tools';
 import { PevcPlan, PlanStep } from './dag-planner.js';
 import { FailureCategory, PevcErrorDiagnostic } from './pevc-state-machine.js';
@@ -90,7 +96,10 @@ export interface SchedulerOptions {
 /**
  * Cria um registry padrão de ferramentas governadas do ecossistema AdzHub.
  */
-export function createDefaultToolResolver(): ToolResolver {
+export function createDefaultToolResolver(options?: {
+  scenario?: string;
+  crmUnavailable?: boolean;
+}): ToolResolver {
   const tools = new Map<string, GovernedTool<any, any>>();
 
   const memoryContextTool = createSearchClientContextTool();
@@ -102,7 +111,10 @@ export function createDefaultToolResolver(): ToolResolver {
   const adInsights = createGetAdInsightsTool();
   tools.set(adInsights.name, adInsights);
 
-  const crmLeads = createGetLeadsTool();
+  const crmLeads = createGetLeadsTool({
+    scenario: options?.scenario as any,
+    crmUnavailable: options?.crmUnavailable ?? (options?.scenario === 'S1')
+  });
   tools.set(crmLeads.name, crmLeads);
   tools.set('get_crm_leads', crmLeads);
 
@@ -112,6 +124,24 @@ export function createDefaultToolResolver(): ToolResolver {
   const mapaSolucao = createGetMapaSolucaoTool();
   tools.set(mapaSolucao.name, mapaSolucao);
   tools.set('run_app_mapa_solucao', mapaSolucao);
+
+  const dataQuality = createRunAppDataQualityAttributionTool();
+  tools.set(dataQuality.name, dataQuality);
+
+  const perfRecon = createRunAppPerformanceReconciliationTool();
+  tools.set(perfRecon.name, perfRecon);
+
+  const accountDiag = createRunAppAccountDiagnosisTool();
+  tools.set(accountDiag.name, accountDiag);
+
+  const actionRec = createRunAppActionRecommendationTool();
+  tools.set(actionRec.name, actionRec);
+
+  const creativeBrief = createRunAppCreativeBriefTool();
+  tools.set(creativeBrief.name, creativeBrief);
+
+  const meetingAgenda = createRunAppMeetingAgendaTool();
+  tools.set(meetingAgenda.name, meetingAgenda);
 
   return (toolName: string) => tools.get(toolName);
 }

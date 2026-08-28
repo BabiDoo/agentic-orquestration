@@ -46,10 +46,7 @@ export class OpenRouterAdapter implements ModelAdapter {
     if (model === 'anthropic/claude-3-5-sonnet') {
       return 'anthropic/claude-3.5-sonnet';
     }
-    if (model === 'google/gemini-2.5-flash') {
-      return 'google/gemini-2.5-flash';
-    }
-    if (model === 'google/gemini-2.0-flash') {
+    if (model === 'google/gemini-2.5-flash' || model === 'google/gemini-2.0-flash') {
       return 'google/gemini-2.0-flash-001';
     }
     if (model === 'google/gemini-1.5-flash') {

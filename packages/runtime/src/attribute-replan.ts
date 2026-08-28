@@ -1,4 +1,4 @@
-import { TaskContract, RuntimeErrorCode, Recoverability, Observation } from '@adzhub/contracts';
+import { TaskContract, RuntimeErrorCode, Recoverability, Observation, TraceEvent } from '@adzhub/contracts';
 import {
   PevcMachineState,
   pevcReducer,
@@ -305,16 +305,27 @@ export async function executeGovernedPevcTask(params: {
   toolResolver?: ToolResolver;
   maxReplans?: number;
   signal?: AbortSignal;
+  onEvent?: (event: TraceEvent) => void;
+  onStepStart?: (step: PlanStep) => void;
+  onStepComplete?: (step: PlanStep, result: StepExecutionResult) => void;
 }): Promise<GovernedExecutionResult> {
   const { contract, maxReplans = 2 } = params;
   const runId = params.runId ?? `run_gov_${Date.now()}`;
-  const toolResolver = params.toolResolver ?? createDefaultToolResolver();
+  const scenario =
+    (contract.metadata?.['scenario'] as string) ||
+    (contract.taskId.toLowerCase().includes('s1') ? 'S1' : undefined);
+  const toolResolver = params.toolResolver ?? createDefaultToolResolver({ scenario });
   const now = new Date().toISOString();
 
   // 1. Inicializa subsistemas
   const eventLog = new AppendOnlyEventLog();
   const checkpointManager = new CheckpointManager();
   const budgetLedger = new BudgetLedger(contract.budgets);
+
+  const appendEvent = (evt: TraceEvent) => {
+    eventLog.append(evt);
+    params.onEvent?.(evt);
+  };
 
   let machineState: PevcMachineState = createInitialPevcState({
     taskId: contract.taskId,
@@ -325,7 +336,7 @@ export async function executeGovernedPevcTask(params: {
   // INITIALIZE (PLAN)
   const initTrans = pevcReducer(machineState, { type: 'INITIALIZE', timestamp: now });
   machineState = initTrans.nextState;
-  eventLog.append(initTrans.event);
+  appendEvent(initTrans.event);
   checkpointManager.saveCheckpoint(createCheckpoint(machineState));
 
   // Geração do Plano Canônico Inicial
@@ -347,7 +358,7 @@ export async function executeGovernedPevcTask(params: {
     timestamp: new Date().toISOString()
   });
   machineState = planTrans.nextState;
-  eventLog.append(planTrans.event);
+  appendEvent(planTrans.event);
   checkpointManager.saveCheckpoint(createCheckpoint(machineState));
 
   let lastAttribution: CausalAttributionEvidence | undefined;
@@ -391,7 +402,7 @@ export async function executeGovernedPevcTask(params: {
         timestamp: new Date().toISOString()
       });
       machineState = replanTrans.nextState;
-      eventLog.append(replanTrans.event);
+      appendEvent(replanTrans.event);
       checkpointManager.saveCheckpoint(createCheckpoint(machineState));
     }
 
@@ -401,7 +412,9 @@ export async function executeGovernedPevcTask(params: {
       contract,
       runId,
       toolResolver,
-      signal: params.signal
+      signal: params.signal,
+      onStepStart: params.onStepStart,
+      onStepComplete: params.onStepComplete
     }).execute();
 
     finalObservations = schedulerResult.observations;
@@ -414,7 +427,7 @@ export async function executeGovernedPevcTask(params: {
         timestamp: new Date().toISOString()
       });
       machineState = execTrans.nextState;
-      eventLog.append(execTrans.event);
+      appendEvent(execTrans.event);
       checkpointManager.saveCheckpoint(createCheckpoint(machineState));
       break;
     } else {
@@ -461,7 +474,7 @@ export async function executeGovernedPevcTask(params: {
         timestamp: new Date().toISOString()
       });
       machineState = failStepTrans.nextState;
-      eventLog.append(failStepTrans.event);
+      appendEvent(failStepTrans.event);
       checkpointManager.saveCheckpoint(createCheckpoint(machineState));
 
       // ATTRIBUTE: análise causal
@@ -490,7 +503,7 @@ export async function executeGovernedPevcTask(params: {
         timestamp: new Date().toISOString()
       });
       machineState = attrTrans.nextState;
-      eventLog.append(attrTrans.event);
+      appendEvent(attrTrans.event);
       checkpointManager.saveCheckpoint(createCheckpoint(machineState));
 
       if (machineState.currentPhase === 'FAILED' || machineState.currentPhase === 'BLOCKED') {
@@ -508,7 +521,7 @@ export async function executeGovernedPevcTask(params: {
       timestamp: new Date().toISOString()
     });
     machineState = verifyTrans.nextState;
-    eventLog.append(verifyTrans.event);
+    appendEvent(verifyTrans.event);
     checkpointManager.saveCheckpoint(createCheckpoint(machineState));
 
     // Commit Atômico
@@ -525,7 +538,7 @@ export async function executeGovernedPevcTask(params: {
       timestamp: new Date().toISOString()
     });
     machineState = commitTrans.nextState;
-    eventLog.append(commitTrans.event);
+    appendEvent(commitTrans.event);
     checkpointManager.saveCheckpoint(createCheckpoint(machineState));
 
     // Reconcilia orçamento
