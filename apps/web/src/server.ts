@@ -35,7 +35,7 @@ const server = http.createServer(async (req, res) => {
     };
 
     if (isBodyAllowed && bodyBuffer && bodyBuffer.length > 0) {
-      requestInit.body = bodyBuffer;
+      requestInit.body = new Uint8Array(bodyBuffer);
       requestInit.duplex = 'half';
     }
 

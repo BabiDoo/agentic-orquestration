@@ -13,5 +13,6 @@
     { "path": "../../packages/tools" },
     { "path": "../../packages/data" }
   ],
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts", "**/*.test.ts"]
 }
