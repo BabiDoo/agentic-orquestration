@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc -b",
+    "build": "npx tsc -b",
     "start": "node dist/server.js",
     "dev": "node --import tsx src/server.ts",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
