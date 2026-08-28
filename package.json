@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "npm run dev -w @adzhub/web",
     "start": "npm run start -w @adzhub/web",
-    "build": "npx tsc --build tsconfig.json",
+    "build": "tsc --build tsconfig.json",
     "typecheck": "tsc --build tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",

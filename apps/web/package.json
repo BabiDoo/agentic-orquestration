@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "npx tsc -b",
+    "build": "tsc -b",
     "start": "node dist/server.js",
     "dev": "node --import tsx src/server.ts",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
@@ -19,6 +19,7 @@
     "@adzhub/verify": "*",
     "@adzhub/creative-analysis": "*",
     "@adzhub/tools": "*",
-    "@adzhub/data": "*"
+    "@adzhub/data": "*",
+    "typescript": "^5.3.3"
   }
 }
