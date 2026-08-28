@@ -3,6 +3,7 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install --production=false",
   "framework": null,
+  "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/(.*)",
