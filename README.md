@@ -22,14 +22,13 @@ O **Microkernel PEV-C** (*Plan → Execute → Verify → Commit*) introduz uma 
 
 ```mermaid
 flowchart TD
-    subgraph Microkernel PEV-C
-        A["🧠 1. PLAN (Planejamento)"] -->|"Gera DAG de Sub-tarefas"| B["⚡ 2. EXECUTE (Execução Sandbox)"]
-        B -->|"Evidências Provisórias"| C["🛡️ 3. VERIFY (Auditoria & Guardrails)"]
-        C -->|"Verificação Aprovada?"| D{"Decisão de Governança"}
-        D -->|"Sim (Score > 0.85)"| E["💾 4. COMMIT (Gravação Atômica / SQLite)"]
-        D -->|"Não (Alucinação / Falha CRM)"| F["🔄 REPLAN & ATTRIBUTE (Registra Limitação)"]
-        D -->|"Ação Crítica (Pausa / Verba)"| G["👤 HUMAN-IN-THE-LOOP (Aprovação de Gestor)"]
-    end
+    A["🧠 1. PLAN<br/><i>Decompõe em DAG determinístico</i>"] --> B["⚡ 2. EXECUTE<br/><i>Sandbox somente-leitura (ReAct)</i>"]
+    B --> C["🛡️ 3. VERIFY<br/><i>Scoring de evidências & Guardrails</i>"]
+    C --> D{"Decisão de<br/>Governança"}
+    
+    D -->|"✅ Aprovado (Score ≥ 0.85)"| E["💾 4. COMMIT<br/><i>Gravação Atômica no SQLite</i>"]
+    D -->|"❌ Divergência / Falha"| F["🔄 REPLAN & ATTRIBUTE<br/><i>Atribuição causal sem alucinar</i>"]
+    D -->|"⚠️ Ação Crítica"| G["👤 HUMAN-IN-THE-LOOP<br/><i>Aprovação formal do Gestor</i>"]
 ```
 
 ### As 4 Fases no Código do Projeto:
