@@ -344,7 +344,7 @@ export function renderHtmlShell(): string {
     (function() {
       try {
         var t = localStorage.getItem('adzhub_theme');
-        if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (t === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
         }
       } catch(e){}
@@ -9402,10 +9402,8 @@ export function renderHtmlShell(): string {
         let currentTheme = 'light';
         try {
           const stored = localStorage.getItem('adzhub_theme');
-          if (stored) {
+          if (stored === 'dark' || stored === 'light') {
             currentTheme = stored;
-          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            currentTheme = 'dark';
           }
         } catch (e) {}
 
