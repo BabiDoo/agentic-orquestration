@@ -375,6 +375,12 @@ export function addTimelineEventToStore(evt: TimelineEventItem): TimelineEventIt
   return evt;
 }
 
+/** Restaura os documentos e a timeline exibidos ao dataset canônico inicial. */
+export function resetUiStores(): void {
+  dynamicDocumentsStore = [...INITIAL_DOCUMENTS_STORE];
+  dynamicTimelineStore = [...INITIAL_TIMELINE_STORE];
+}
+
 const BUILD_SHA = 'adzhub-demo-v1.0.0-sha';
 const apiRateLimiter = new InMemoryRateLimiter({ windowMs: 60000, maxRequests: 120 });
 
@@ -496,6 +502,41 @@ export async function handleApiRequest(context: ApiRequestContext): Promise<ApiR
         buildSha: BUILD_SHA,
         contractsVersion: CONTRACTS_VERSION,
         timestamp: new Date().toISOString()
+      }
+    };
+  }
+
+  // 1.1 POST /api/reset: retorna o ambiente demonstrativo ao dataset canônico inicial.
+  // Exige confirmação explícita para evitar a perda acidental dos registros em memória.
+  if (path === '/api/reset') {
+    if (method !== 'POST') {
+      return {
+        status: 405,
+        headers: defaultHeaders,
+        body: { error: 'Method Not Allowed', allowed: ['POST'] }
+      };
+    }
+
+    const body = (context.body ?? {}) as Record<string, unknown>;
+    if (body.confirm !== 'RESET') {
+      return {
+        status: 400,
+        headers: defaultHeaders,
+        body: { error: 'Bad Request', message: 'Confirmação inválida para reset.' }
+      };
+    }
+
+    resetUiStores();
+    runsService.resetToInitialState();
+
+    return {
+      status: 200,
+      headers: defaultHeaders,
+      body: {
+        success: true,
+        message: 'Dataset restaurado ao estado inicial.',
+        documents: getDocumentsStore().length,
+        timelineEvents: getTimelineStore().length
       }
     };
   }

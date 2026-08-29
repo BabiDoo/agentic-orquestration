@@ -4017,11 +4017,14 @@ export function renderHtmlShell(): string {
               </div>
             </div>
 
-            <!-- Action Buttons: Comparar -->
+            <!-- Action Buttons: Comparar e resetar o dataset demonstrativo -->
             <div class="controls-action-box">
-              <div style="display: flex; width: 100%;">
-                <button id="btn-compare" class="btn-primary" type="button" aria-label="Comparar Basic vs Governed" style="width: 100%; justify-content: center; padding: 7px 10px; font-size: var(--label); font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <div style="display: flex; width: 100%; gap: 6px;">
+                <button id="btn-compare" class="btn-primary" type="button" aria-label="Comparar Basic vs Governed" style="flex: 1; justify-content: center; padding: 7px 10px; font-size: var(--label); font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
                   ${getLucideSvg('scale', { size: 14 })} Comparar
+                </button>
+                <button id="btn-reset-dataset" class="btn-danger" type="button" aria-label="Restaurar dataset inicial" title="Apaga os dados gerados nesta sessão e restaura o dataset inicial" style="flex: 1; justify-content: center; padding: 7px 10px; font-size: var(--label); font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                  ${getLucideSvg('rotate-ccw', { size: 14 })} Resetar
                 </button>
               </div>
             </div>
@@ -4995,6 +4998,7 @@ export function renderHtmlShell(): string {
       const interactiveInput = document.getElementById('chat-interactive-input');
       const btnChatSend = document.getElementById('btn-chat-send');
       const btnCompare = document.getElementById('btn-compare');
+      const btnResetDataset = document.getElementById('btn-reset-dataset');
       const btnChatBack = document.getElementById('btn-chat-back');
       const apiKeyInput = document.getElementById('api-key-input');
       const btnForgetKey = document.getElementById('btn-forget-key');
@@ -5015,6 +5019,32 @@ export function renderHtmlShell(): string {
       const comparisonHighlightsCard = document.getElementById('comparison-highlights-card');
       const trajectoryList = document.getElementById('trajectory-list');
       const trajectoryMetrics = document.getElementById('trajectory-metrics');
+
+      btnResetDataset?.addEventListener('click', async () => {
+        const confirmed = window.confirm(
+          'Resetar o ambiente? Os documentos, histórico, timeline e execuções gerados nesta sessão serão removidos e o dataset inicial será restaurado.'
+        );
+        if (!confirmed) return;
+
+        btnResetDataset.disabled = true;
+        const originalContent = btnResetDataset.innerHTML;
+        btnResetDataset.textContent = 'Resetando…';
+        try {
+          const response = await fetch('/api/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ confirm: 'RESET' })
+          });
+          if (!response.ok) throw new Error('Não foi possível restaurar o dataset.');
+
+          localStorage.removeItem('adzhub_session_state');
+          window.location.reload();
+        } catch (error) {
+          window.alert(error instanceof Error ? error.message : 'Não foi possível restaurar o dataset.');
+          btnResetDataset.disabled = false;
+          btnResetDataset.innerHTML = originalContent;
+        }
+      });
 
       function cleanCardTitle(title) {
         if (!title) return '';
@@ -7557,7 +7587,20 @@ export function renderHtmlShell(): string {
         const evaluatedPrompt = comp.evaluatedGoal || comp.taskGoal || 'Audite as métricas de performance da conta Housewhey';
 
         if (comparisonSummaryCard) {
-          const winnerText = comp.observedWinner === 'GOVERNED_PEVC' ? '🏆 Governed PEV-C' : comp.observedWinner === 'BASIC_REACT' ? 'Basic ReAct' : 'Empate';
+          const isBlockedWrite = comp.governedRun?.status === 'BLOCKED' && (comp.highlights?.unverifiedWrites || []).length > 0;
+          const isTemporalRejection = comp.governedRun?.status === 'FAILED' && (comp.highlights?.postconditionViolations || []).length > 0;
+          const isQuarantined = Boolean(comp.governedRun?.quarantined);
+          const winnerText = isBlockedWrite
+            ? '🛡️ Governed PEV-C — bloqueio preventivo'
+            : isTemporalRejection
+            ? '⏱️ Governed PEV-C — divergência temporal rejeitada'
+            : isQuarantined
+            ? '🔎 Governed PEV-C — dados em quarentena'
+            : comp.observedWinner === 'GOVERNED_PEVC'
+            ? '🏆 Governed PEV-C — execução auditada'
+            : comp.observedWinner === 'BASIC_REACT'
+            ? 'Basic ReAct'
+            : 'Empate';
           const criteriaList = (comp.winnerCriteria || []).map(function(c) { return '<li>' + escapeHtml(c) + '</li>'; }).join('');
           comparisonSummaryCard.innerHTML =
             '<div style="background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.22); border-radius: var(--radius-small); padding: 12px 14px; margin-bottom: 12px;">' +

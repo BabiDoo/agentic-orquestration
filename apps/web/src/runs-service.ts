@@ -1760,6 +1760,16 @@ Sempre elabore a resposta em texto corrido e formatado em Markdown legível em P
       winnerCriteria.push('Menor overhead de tokens através de execução determinística em DAG.');
     }
 
+    const conclusionSummary = isUnauthorizedWriteAttempt && governedSummary.status === 'BLOCKED'
+      ? 'Para este pedido, o Governed PEV-C bloqueou preventivamente a escrita externa sem aprovação. O Basic ReAct não aplicou a política e manteve uma tentativa de alteração sem verificação formal.'
+      : isTemporalMismatch && governedSummary.status === 'FAILED'
+      ? 'Para este pedido, o Governed PEV-C rejeitou a execução por divergência entre o período solicitado e os dados disponíveis. O Basic ReAct não sinalizou essa pós-condição temporal.'
+      : governedSummary.quarantined
+      ? 'Para este pedido, o Governed PEV-C colocou os dados de baixa confiabilidade em quarentena antes de concluir a análise. O Basic ReAct seguiu sem essa proteção de qualidade.'
+      : governedSummary.verified
+      ? `Para este pedido, o Governed PEV-C concluiu uma execução auditada com ${governedSummary.evidenceRefsCount} EvidenceRefs e commit atômico no SQLite; o Basic ReAct respondeu sem verificação formal.`
+      : `Para este pedido, não houve evidência suficiente para declarar vencedor: Governed PEV-C terminou como ${governedSummary.status} e Basic ReAct como ${basicSummary.status}.`;
+
     const comparison: RunComparisonResult = {
       comparisonId,
       taskGoal: contract.goal,
@@ -1859,7 +1869,7 @@ Sempre elabore a resposta em texto corrido e formatado em Markdown legível em P
       },
       observedWinner,
       winnerCriteria,
-      conclusionSummary: `Governed PEV-C superou o baseline ReAct em integridade de dados e auditoria formal: produziu ${governedSummary.evidenceRefsCount} EvidenceRefs criptográficas com SHA-256 e ${governedSummary.hasAtomicCommit ? 'commit atômico no SQLite' : 'enforcement estrito de políticas'}, enquanto o Basic ReAct gerou respostas sem verificações determinísticas.`
+      conclusionSummary
     };
 
     return comparison;
@@ -2087,6 +2097,48 @@ Sempre elabore a resposta em texto corrido e formatado em Markdown legível em P
 
   public clearAllRuns(): void {
     this.runs.clear();
+  }
+
+  /**
+   * Restaura o estado volátil do ambiente demonstrativo.
+   * O banco SQLite em memória é recriado, removendo commits e eventos gerados
+   * durante a operação e mantendo apenas o dataset canônico do código.
+   */
+  public resetToInitialState(): void {
+    for (const run of this.runs.values()) {
+      run.abortController.abort();
+    }
+    this.runs.clear();
+    this.isReactivatedStore = false;
+    this.isPausedStore = false;
+    this.isApprovedStore = false;
+    this.isSacReconciledStore = false;
+    this.isSacDiscountSubmittedStore = false;
+    this.isBidStrategyUpdatedStore = false;
+    this.isBudgetReallocatedStore = false;
+    this.delegatedActions = {};
+    this.approvedActions = {};
+    this.pauseStore = {
+      isPaused: false,
+      pausedAds: ['ad_namorados_casal_03', 'ad_whey_sabores_04'],
+      details: 'Pausa operacional de criativos saturados formalizada e commitada no SQLite.'
+    };
+    this.delegationStore = {
+      isDelegated: false,
+      delegatedTo: 'Aline Rocha',
+      personId: 'p_aline',
+      proposalTitle: 'Pausa do Criativo ad_namorados_casal_03 e Realocação de Verba',
+      proposalDetails: 'Solicitação de aprovação formal para pausa do criativo ad_namorados_casal_03 e realocação de verba.'
+    };
+
+    this.db.close();
+    this.db = createDatabase(':memory:');
+    this.tools = [
+      ...Object.values(createMemoryTools({ database: this.db })),
+      ...Object.values(createMarketingTools()),
+      ...Object.values(createAppTools())
+    ];
+    this.traversalEngine = new SupercerebroTraversalEngine(this.db);
   }
 
   private emitEvent(
