@@ -8,34 +8,46 @@
 
 > **Harness Runtime e Cognitive Microkernel com Governança Determinística para Agentes Autônomos de Marketing e CRM.**
 
+<p align="center">
+  <img src="public/adzhub-demo.gif" alt="AdzHub Microkernel PEV-C Demo" width="100%" style="border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);" />
+</p>
+
 ---
 
-## 1. Visão Geral
+## 1. Visão Geral & Metodologia PEV-C
 
-Agentes convencionais baseados em **ReAct puro** confiam cegamente nos dados observados (*Optimistic Truth*), ficando sujeitos a alucinar métricas de CRM, gravar memórias incorretas ou executar ações destrutivas sem autorização.
+Agentes convencionais baseados em [ReAct puro](https://arxiv.org/abs/2210.03629) confiam cegamente nos dados observados (*Optimistic Truth*), ficando sujeitos a alucinar métricas de CRM, gravar memórias incorretas ou executar mutações destrutivas sem autorização.
 
-O **Microkernel PEV-C** (*Propose → Execute → Verify → Commit*) introduz governança determinística e auditável ao ciclo agêntico:
+O **Microkernel PEV-C** (*Plan → Execute → Verify → Commit*) introduz uma arquitetura de governança formal em 4 fases determinísticas:
 
-- **Capability Broker (deny-by-default):** Nenhuma mutação externa é executada sem alçada e autorização prévia;
-- **Verificação Formal:** Checagem estrita de schemas (Zod), pós-condições e integridade temporal de datas;
-- **Rastreabilidade Criptográfica:** Evidências auditadas com hashes SHA-256 e score de confiança;
-- **Commit Atômico no SQLite:** Persistência imutável ACID com suporte a rollback e proteção anti-TOCTOU.
-
-```text
-┌─────────────────┐       ┌────────────────────┐       ┌────────────────────────┐
-│  Task Contract  ├──────►│ PROPOSE (DAG Plan) ├──────►│ EXECUTE (Tool Sandbox) │
-└─────────────────┘       └────────────────────┘       └───────────┬────────────┘
-                                                                   │ Observations
-                                                                   ▼
-┌──────────────────┐      ┌────────────────────┐       ┌────────────────────────┐
-│ COMMITTED MEMORY │◄─────┤ COMMIT (ACID SQLite│◄──────┤ VERIFY (Scorer & Post) │
-└──────────────────┘      └────────────────────┘       └───────────┬────────────┘
-                                                                   │ (Falha)
-                                                                   ▼
-                                                       ┌────────────────────────┐
-                                                       │ ATTRIBUTE ──► REPLAN   │
-                                                       └────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Microkernel PEV-C
+        A["🧠 1. PLAN (Planejamento)"] -->|"Gera DAG de Sub-tarefas"| B["⚡ 2. EXECUTE (Execução Sandbox)"]
+        B -->|"Evidências Provisórias"| C["🛡️ 3. VERIFY (Auditoria & Guardrails)"]
+        C -->|"Verificação Aprovada?"| D{"Decisão de Governança"}
+        D -->|"Sim (Score > 0.85)"| E["💾 4. COMMIT (Gravação Atômica / SQLite)"]
+        D -->|"Não (Alucinação / Falha CRM)"| F["🔄 REPLAN & ATTRIBUTE (Registra Limitação)"]
+        D -->|"Ação Crítica (Pausa / Verba)"| G["👤 HUMAN-IN-THE-LOOP (Aprovação de Gestor)"]
+    end
 ```
+
+### As 4 Fases no Código do Projeto:
+
+| Fase | Pacote Responsável | O que faz na prática? |
+| :--- | :--- | :--- |
+| **P — Plan** | [`@adzhub/runtime`](packages/runtime) | Decompõe o objetivo do usuário em um **DAG (Grafo Acíclico Dirigido)** de sub-etapas determinísticas. |
+| **E — Execute** | [`@adzhub/tools`](packages/tools) | Executa ferramentas em **Sandbox de Somente-Leitura** ([ReAct Loop](https://arxiv.org/abs/2210.03629)). O LLM propõe ações, mas não pode alterar o mundo externo diretamente. |
+| **V — Verify** | [`@adzhub/verify`](packages/verify) & [`@adzhub/policy`](packages/policy) | Aplica *Scoring de Evidências*, *Prompt Injection Guard* e *Policy Gates*. Rejeita divergências e força a atribuição causal (`ATTRIBUTE`). |
+| **C — Commit** | [`@adzhub/data`](packages/data) | Persiste transações no banco ACID ([SQLite](https://nodejs.org/api/sqlite.html) / Supercérebro) ou solicita autorização humana (*Human-in-the-Loop*) para ações externas. |
+
+### 🏛️ Arquiteturas Correlatas no Mercado e na Pesquisa:
+
+- **[Microkernel / Plugin Architecture](https://martinfowler.com/articles/patterns-of-distributed-systems/) (Martin Fowler & Mark Richards):** Núcleo desacoplado onde ferramentas e habilidades operam como plugins isolados.
+- **[Two-Phase Commit (2PC) & WAL](https://en.wikipedia.org/wiki/Two-phase_commit_protocol) (Bancos de Dados Distribuídos):** Evidências e observações são estagiadas e auditadas antes do *commit* atômico.
+- **[Temporal.io & Durable Execution](https://temporal.io/):** Orquestração resiliente com *Event Log* monotônico para rastreamento e capacidade de *replay*.
+- **[Reflexion & Self-Correction](https://arxiv.org/abs/2303.11366) (MIT / Princeton — Shinn et al., 2023):** Ciclo agêntico com auto-reflexão, auditoria de invariantes e replanejamento automático.
+- **[Guardrails AI](https://www.guardrailsai.com/) & [NVIDIA NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails):** Camada independente de validação semântica e proteção contra injeções.
 
 ---
 
